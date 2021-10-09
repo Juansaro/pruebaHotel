@@ -28,12 +28,14 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
     }
     
     @Override
-    public boolean crearHabitacion(String bod_nombre, String bod_direccion, String bod_telefono) {
+    public boolean crearHabitacion(Habitacion h, int fk_tipo_habitacion) {
         try {
-            Query c = em.createNativeQuery("INSERT INTO tbl_bodega (bdg_nombre,bdg_direccion,bdg_telefono) VALUES (?,?,?)");
-            c.setParameter(1, bod_nombre);
-            c.setParameter(2, bod_direccion );
-            c.setParameter(3, bod_telefono );
+            Query c = em.createNativeQuery("INSERT INTO habitacion (bano, calefaccion, telefono, estado, tipo_habitacion_id_tipo_habitacion) VALUES (?,?,?,?,?)");
+            c.setParameter(1, h.getBano());
+            c.setParameter(2, h.getCalefaccion());
+            c.setParameter(3, h.getTelefono());
+            c.setParameter(4, h.getEstado());
+            c.setParameter(5, fk_tipo_habitacion);
             c.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -43,10 +45,10 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
     
     
     @Override
-    public boolean eliminarBodega(int bod_id){
+    public boolean eliminarHabitacion(int hab_id){
         try {
-            Query c = em.createNativeQuery("DELETE FROM tbl_bodega WHERE (bdg_bodegaid = ?)");
-            c.setParameter(1, bod_id);
+            Query c = em.createNativeQuery("DELETE FROM habitacion WHERE (id_habitacion = ?)");
+            c.setParameter(1, hab_id);
             c.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -57,11 +59,11 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
     
     
     @Override
-    public Bodega validarSiExiste(String nombreIn){
+    public Habitacion validarSiExiste(String nombreIn){
         try {
-            Query q = em.createQuery("SELECT b FROM Bodega b WHERE b.bdgNombre LIKE CONCAT('%',:nombreIn,'%')");
+            Query q = em.createQuery("SELECT h FROM habitacion h WHERE h LIKE CONCAT('%',:nombreIn,'%')");
             q.setParameter("nombreIn", nombreIn);
-            return (Bodega) q.getSingleResult();
+            return (Habitacion) q.getSingleResult();
         } catch (Exception e) {
             return  null;
         }

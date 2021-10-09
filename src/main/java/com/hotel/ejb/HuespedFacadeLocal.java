@@ -25,5 +25,11 @@ public interface HuespedFacadeLocal {
     List<Huesped> findRange(int[] range);
 
     int count();
+
+    public boolean registrarHuesped(Huesped huesIn, int fk_ciudad);
+
+    public boolean actualizarHuesped(Huesped huesIn, int fk_ciudad);
+
+    public boolean eliminarHuesped(int hues_id);
     
 }

@@ -24,12 +24,21 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-
+/**
+ *
+ * @author juan
+ */
 @Entity
 @Table(name = "hotel")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Hotel.findAll", query = "SELECT h FROM Hotel h")})
+    @NamedQuery(name = "Hotel.findAll", query = "SELECT h FROM Hotel h"),
+    @NamedQuery(name = "Hotel.findByIdHotel", query = "SELECT h FROM Hotel h WHERE h.idHotel = :idHotel"),
+    @NamedQuery(name = "Hotel.findByNombre", query = "SELECT h FROM Hotel h WHERE h.nombre = :nombre"),
+    @NamedQuery(name = "Hotel.findByHotelFoto", query = "SELECT h FROM Hotel h WHERE h.hotelFoto = :hotelFoto")})
 public class Hotel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,9 +61,9 @@ public class Hotel implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Ciudad fkCiudad;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkHotel", fetch = FetchType.LAZY)
-    private Collection<Telefonos> telefonosCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkHotel", fetch = FetchType.LAZY)
     private Collection<Reserva> reservaCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hotelIdHotel", fetch = FetchType.LAZY)
+    private Collection<Telefono> telefonoCollection;
 
     public Hotel() {
     }
@@ -92,6 +101,7 @@ public class Hotel implements Serializable {
         this.hotelFoto = hotelFoto;
     }
 
+    @XmlTransient
     public Collection<Habitacion> getHabitacionCollection() {
         return habitacionCollection;
     }
@@ -108,20 +118,22 @@ public class Hotel implements Serializable {
         this.fkCiudad = fkCiudad;
     }
 
-    public Collection<Telefonos> getTelefonosCollection() {
-        return telefonosCollection;
-    }
-
-    public void setTelefonosCollection(Collection<Telefonos> telefonosCollection) {
-        this.telefonosCollection = telefonosCollection;
-    }
-
+    @XmlTransient
     public Collection<Reserva> getReservaCollection() {
         return reservaCollection;
     }
 
     public void setReservaCollection(Collection<Reserva> reservaCollection) {
         this.reservaCollection = reservaCollection;
+    }
+
+    @XmlTransient
+    public Collection<Telefono> getTelefonoCollection() {
+        return telefonoCollection;
+    }
+
+    public void setTelefonoCollection(Collection<Telefono> telefonoCollection) {
+        this.telefonoCollection = telefonoCollection;
     }
 
     @Override

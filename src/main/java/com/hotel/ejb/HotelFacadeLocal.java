@@ -9,7 +9,10 @@ import com.hotel.model.Hotel;
 import java.util.List;
 import javax.ejb.Local;
 
-
+/**
+ *
+ * @author juan
+ */
 @Local
 public interface HotelFacadeLocal {
 
@@ -26,5 +29,11 @@ public interface HotelFacadeLocal {
     List<Hotel> findRange(int[] range);
 
     int count();
+
+    public boolean registrarHotel(Hotel hotIn, int fk_ciudad);
+
+    public boolean actualizarHotel(Hotel hotIn, int fk_hotel);
+
+    public boolean eliminarHotel(int hot_id);
     
 }

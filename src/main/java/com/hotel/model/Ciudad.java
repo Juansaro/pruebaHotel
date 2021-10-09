@@ -21,12 +21,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-
+/**
+ *
+ * @author juan
+ */
 @Entity
 @Table(name = "ciudad")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Ciudad.findAll", query = "SELECT c FROM Ciudad c")})
+    @NamedQuery(name = "Ciudad.findAll", query = "SELECT c FROM Ciudad c"),
+    @NamedQuery(name = "Ciudad.findByIdCiudad", query = "SELECT c FROM Ciudad c WHERE c.idCiudad = :idCiudad"),
+    @NamedQuery(name = "Ciudad.findByDescripcion", query = "SELECT c FROM Ciudad c WHERE c.descripcion = :descripcion")})
 public class Ciudad implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,7 +48,7 @@ public class Ciudad implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "descripcion")
     private String descripcion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkCiudad", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ciudadIdCiudad", fetch = FetchType.LAZY)
     private Collection<Huesped> huespedCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkCiudad", fetch = FetchType.LAZY)
     private Collection<Hotel> hotelCollection;
@@ -73,6 +81,7 @@ public class Ciudad implements Serializable {
         this.descripcion = descripcion;
     }
 
+    @XmlTransient
     public Collection<Huesped> getHuespedCollection() {
         return huespedCollection;
     }
@@ -81,6 +90,7 @@ public class Ciudad implements Serializable {
         this.huespedCollection = huespedCollection;
     }
 
+    @XmlTransient
     public Collection<Hotel> getHotelCollection() {
         return hotelCollection;
     }

@@ -27,4 +27,10 @@ public interface HabitacionFacadeLocal {
 
     int count();
     
+    public boolean eliminarHabitacion(int hab_id);
+
+    public Habitacion validarSiExiste(String nombreIn);
+
+    public boolean crearHabitacion(Habitacion h, int fk_tipo_habitacion);
+    
 }

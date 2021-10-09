@@ -22,12 +22,20 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
-
+/**
+ *
+ * @author juan
+ */
 @Entity
 @Table(name = "reserva")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Reserva.findAll", query = "SELECT r FROM Reserva r")})
+    @NamedQuery(name = "Reserva.findAll", query = "SELECT r FROM Reserva r"),
+    @NamedQuery(name = "Reserva.findByIdReserva", query = "SELECT r FROM Reserva r WHERE r.idReserva = :idReserva"),
+    @NamedQuery(name = "Reserva.findByFechaIngreso", query = "SELECT r FROM Reserva r WHERE r.fechaIngreso = :fechaIngreso"),
+    @NamedQuery(name = "Reserva.findByFechaSalida", query = "SELECT r FROM Reserva r WHERE r.fechaSalida = :fechaSalida")})
 public class Reserva implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,7 +52,10 @@ public class Reserva implements Serializable {
     @Column(name = "fecha_salida")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaSalida;
-    @JoinColumn(name = "fk_habitacion", referencedColumnName = "id_habitacion")
+    @JoinColumn(name = "estado_reserva_id_estado_reserva", referencedColumnName = "id_estado_reserva")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private EstadoReserva estadoReservaIdEstadoReserva;
+    @JoinColumn(name = "fk_habitacion", referencedColumnName = "numero_habitacion")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Habitacion fkHabitacion;
     @JoinColumn(name = "fk_hotel", referencedColumnName = "id_hotel")
@@ -91,6 +102,14 @@ public class Reserva implements Serializable {
 
     public void setFechaSalida(Date fechaSalida) {
         this.fechaSalida = fechaSalida;
+    }
+
+    public EstadoReserva getEstadoReservaIdEstadoReserva() {
+        return estadoReservaIdEstadoReserva;
+    }
+
+    public void setEstadoReservaIdEstadoReserva(EstadoReserva estadoReservaIdEstadoReserva) {
+        this.estadoReservaIdEstadoReserva = estadoReservaIdEstadoReserva;
     }
 
     public Habitacion getFkHabitacion() {

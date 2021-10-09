@@ -9,7 +9,10 @@ import com.hotel.model.Ciudad;
 import java.util.List;
 import javax.ejb.Local;
 
-
+/**
+ *
+ * @author juan
+ */
 @Local
 public interface CiudadFacadeLocal {
 

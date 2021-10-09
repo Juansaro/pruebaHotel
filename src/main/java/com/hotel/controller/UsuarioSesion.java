@@ -39,6 +39,7 @@ public class UsuarioSesion implements Serializable{
     
     private Usuario usuReg = new Usuario();
     private Usuario usuLog = new Usuario();
+    private Usuario usuTemporal = new Usuario();
 
     @PostConstruct
     public void init(){
@@ -50,8 +51,23 @@ public class UsuarioSesion implements Serializable{
         if(usuarioFacadeLocal.registrarUsuario(usuReg, fk_rol)){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario registrado", "Usuario registrado"));
             usuReg = new Usuario();
+            usuarios = usuarioFacadeLocal.findAll();
         }else{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
+        }
+    }
+    
+    public void guardarTemporal(Usuario u){
+        usuTemporal = u;
+        fk_rol = u.getFkRol().getIdRol();
+    }
+    
+    public void actualizarUsuario(){
+        try {
+            usuarioFacadeLocal.actualizarUsuario(usuTemporal, fk_rol);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario editado", "Usuario editado"));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de edición", "Error de edición"));
         }
     }
     
@@ -101,6 +117,14 @@ public class UsuarioSesion implements Serializable{
 
     public void setFk_rol(int fk_rol) {
         this.fk_rol = fk_rol;
+    }
+
+    public Usuario getUsuTemporal() {
+        return usuTemporal;
+    }
+
+    public void setUsuTemporal(Usuario usuTemporal) {
+        this.usuTemporal = usuTemporal;
     }
     
 }

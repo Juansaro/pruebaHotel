@@ -23,11 +23,25 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ *
+ * @author juan
+ */
 @Entity
 @Table(name = "huesped")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Huesped.findAll", query = "SELECT h FROM Huesped h")})
+    @NamedQuery(name = "Huesped.findAll", query = "SELECT h FROM Huesped h"),
+    @NamedQuery(name = "Huesped.findByIdHuesped", query = "SELECT h FROM Huesped h WHERE h.idHuesped = :idHuesped"),
+    @NamedQuery(name = "Huesped.findByDocumento", query = "SELECT h FROM Huesped h WHERE h.documento = :documento"),
+    @NamedQuery(name = "Huesped.findByNombre", query = "SELECT h FROM Huesped h WHERE h.nombre = :nombre"),
+    @NamedQuery(name = "Huesped.findByApellido", query = "SELECT h FROM Huesped h WHERE h.apellido = :apellido"),
+    @NamedQuery(name = "Huesped.findByCorreo", query = "SELECT h FROM Huesped h WHERE h.correo = :correo"),
+    @NamedQuery(name = "Huesped.findByDireccion", query = "SELECT h FROM Huesped h WHERE h.direccion = :direccion"),
+    @NamedQuery(name = "Huesped.findByBarrio", query = "SELECT h FROM Huesped h WHERE h.barrio = :barrio")})
 public class Huesped implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -61,9 +75,12 @@ public class Huesped implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "direccion")
     private String direccion;
-    @JoinColumn(name = "fk_ciudad", referencedColumnName = "id_ciudad")
+    @Size(max = 45)
+    @Column(name = "barrio")
+    private String barrio;
+    @JoinColumn(name = "ciudad_id_ciudad", referencedColumnName = "id_ciudad")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Ciudad fkCiudad;
+    private Ciudad ciudadIdCiudad;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkHuesped", fetch = FetchType.LAZY)
     private Collection<Reserva> reservaCollection;
 
@@ -131,14 +148,23 @@ public class Huesped implements Serializable {
         this.direccion = direccion;
     }
 
-    public Ciudad getFkCiudad() {
-        return fkCiudad;
+    public String getBarrio() {
+        return barrio;
     }
 
-    public void setFkCiudad(Ciudad fkCiudad) {
-        this.fkCiudad = fkCiudad;
+    public void setBarrio(String barrio) {
+        this.barrio = barrio;
     }
 
+    public Ciudad getCiudadIdCiudad() {
+        return ciudadIdCiudad;
+    }
+
+    public void setCiudadIdCiudad(Ciudad ciudadIdCiudad) {
+        this.ciudadIdCiudad = ciudadIdCiudad;
+    }
+
+    @XmlTransient
     public Collection<Reserva> getReservaCollection() {
         return reservaCollection;
     }

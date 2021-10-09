@@ -12,7 +12,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-
 @Stateless
 public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFacadeLocal {
 
@@ -27,9 +26,9 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     public UsuarioFacade() {
         super(Usuario.class);
     }
-    
+
     @Override
-    public boolean registrarUsuario(Usuario usuIn, int rolIn){
+    public boolean registrarUsuario(Usuario usuIn, int rolIn) {
         try {
             Query qr = em.createNativeQuery("INSERT INTO usuario (nombre, apellido, correo, contrasena, fk_rol) VALUES (?, ?, ?, ?, ?)");
             qr.setParameter(1, usuIn.getNombre());
@@ -42,10 +41,10 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         } catch (Exception e) {
             return false;
         }
-        
+
     }
-    
-     @Override
+
+    @Override
     public Usuario validarUsuario(String correoIn, String claveIn) {
 
         try {
@@ -59,5 +58,23 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         }
 
     }
-    
+
+    @Override
+    public boolean actualizarUsuario(Usuario usuIn, int rolIn) {
+        try {
+            Query qr = em.createNativeQuery("UPDATE usuario SET nombre = ?, apellido = ?, correo = ?, contrasena = ?, fk_rol = ? WHERE (id_usuario = ?)");
+            qr.setParameter(1, usuIn.getNombre());
+            qr.setParameter(2, usuIn.getApellido());
+            qr.setParameter(3, usuIn.getCorreo());
+            qr.setParameter(4, usuIn.getContrasena());
+            qr.setParameter(5, rolIn);
+            qr.setParameter(6, usuIn.getIdUsuario());
+            qr.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
 }

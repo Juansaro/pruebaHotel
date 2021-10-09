@@ -3,15 +3,18 @@ C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\Habit
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\HabitacionFacade.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\ReservaFacade.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\model\Habitacion.java
+C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\model\TipoHabitacion.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\model\Ciudad.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\ReservaFacadeLocal.java
+C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\model\Telefono.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\model\Hotel.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\model\Usuario.java
-C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\TelefonosFacadeLocal.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\controller\RolRequest.java
+C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\model\EstadoReserva.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\model\Rol.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\AbstractFacade.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\CiudadFacadeLocal.java
+C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\TelefonoFacade.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\RolFacadeLocal.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\RolFacade.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\model\Reserva.java
@@ -22,6 +25,5 @@ C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\Hotel
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\CiudadFacade.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\HotelFacadeLocal.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\UsuarioFacadeLocal.java
-C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\TelefonosFacade.java
-C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\model\Telefonos.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\model\Huesped.java
+C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\TelefonoFacadeLocal.java

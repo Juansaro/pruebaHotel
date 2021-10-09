@@ -31,5 +31,7 @@ public interface UsuarioFacadeLocal {
     public boolean registrarUsuario(Usuario usuIn, int rolIn);
 
     public Usuario validarUsuario(String correoIn, String claveIn);
+
+    public boolean actualizarUsuario(Usuario usuIn, int rolIn);
     
 }
