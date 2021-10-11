@@ -7,6 +7,7 @@ package com.hotel.ejb;
 
 import com.hotel.model.Hotel;
 import com.hotel.model.Usuario;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -68,6 +69,18 @@ public class HotelFacade extends AbstractFacade<Hotel> implements HotelFacadeLoc
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+    
+    @Override
+    public Hotel leerHotel(int idHot) {
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query qt = em.createQuery("SELECT h FROM Hotel h WHERE h.idHotel = :hotel");
+            qt.setParameter("hotel", idHot);
+            return (Hotel) qt.getSingleResult();
+        } catch (Exception e) {
+            return null;
         }
     }
     

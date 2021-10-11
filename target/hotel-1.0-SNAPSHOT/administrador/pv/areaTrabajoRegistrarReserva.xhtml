@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:html5="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition>
+        <p:growl id="growl" life="3000"/>
+        <div class="card container mt-3 mb-3" style="max-width: 21rem;" id="carta">
+            <div class="row">
+                <div class="col">
+                    <div class="card-body">
+                        <h5 class="card-title font-weight-bold text-white">Registrar reserva</h5>
+                        <hr class="bg-white"/>
+                        <h:form>
+                            Hotel
+                            <h:selectOneMenu class="form-control" id="hotel" value="#{reservaView.fk_hotel}" required="true">
+                                <f:selectItems value="#{hotelView.hoteles}" var="hot" itemLabel="#{hot.nombre}" itemValue="#{hot.idHotel}"/>
+                            </h:selectOneMenu>
+                            Habitacion
+                            <h:selectOneMenu class="form-control" id="habitacion" value="#{reservaView.fk_habitacion}" required="true">
+                                <f:selectItems value="#{habitacionView.habitaciones}" var="hab" itemLabel="#{hab.numeroHabitacion}" itemValue="#{hab.numeroHabitacion}"/>
+                            </h:selectOneMenu>
+                            Empleado
+                            <h:selectOneMenu class="form-control" id="empleado" value="#{reservaView.fk_usuario}" required="true">
+                                <f:selectItems value="#{usuarioSesion.usuarios}" var="emp" itemLabel="#{emp.correo}" itemValue="#{emp.idUsuario}"/>
+                            </h:selectOneMenu>
+                            Estado
+                            <h:selectOneMenu class="form-control" id="estado" value="#{reservaView.fk_estado}" required="true">
+                                <f:selectItems value="#{estadoRequest.estados}" var="est" itemLabel="#{est.descripcion}" itemValue="#{est.idEstadoReserva}"/>
+                            </h:selectOneMenu>
+
+                            <h:outputLabel class="card-text font-weight-bold text-white" value="Fecha de entrada" for="fechaSolicitud" />
+                            <br/>
+                            <p:calendar id="fechaSolicitud" value="#{reservaView.resReg.fechaIngreso}" pattern="MM/dd/yyyy HH:mm:ss"/>
+                            <br/>
+
+                            <p:dialog modal="true" resizable="false" header="Values" widgetVar="dlg" showEffect="fold">
+                                <h:outputText value="Datetime:"/>
+                                <h:outputText value="#{calendarView.date10}">
+                                    <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss"/>
+                                </h:outputText>
+                            </p:dialog>
+
+                            <h:outputLabel class="card-text font-weight-bold text-white" value="Fecha de salida" for="fechaSalida" />
+                            <br/>
+                            <p:calendar id="fechaSalida" value="#{reservaView.resReg.fechaSalida}" pattern="MM/dd/yyyy HH:mm:ss"/>
+                            <br/>
+
+                            <p:dialog modal="true" resizable="false" header="Values" widgetVar="dlg" showEffect="fold">
+                                <h:outputText value="Datetime:"/>
+                                <h:outputText value="#{calendarView.date10}">
+                                    <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss"/>
+                                </h:outputText>
+                            </p:dialog>
+
+                            <h:commandLink class="btn btn-success btn-lg btn-block text-white rounded-pill" action="#{reservaView.registrarReserva()}" value="Guardar" />
+                            <br />
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:composition>
+</html>

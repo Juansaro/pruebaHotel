@@ -35,5 +35,7 @@ public interface HotelFacadeLocal {
     public boolean actualizarHotel(Hotel hotIn, int fk_hotel);
 
     public boolean eliminarHotel(int hot_id);
+
+    public Hotel leerHotel(int idHot);
     
 }

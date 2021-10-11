@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:html5="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:composition>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                DataTable Example
+                
+                <h:link outcome="registrarReserva">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrar">
+                        Registrar usuario.
+                    </button>
+                </h:link>
+
+
+            </div>
+            <div class="card-body">
+                <h:form id="rootform" styleClass="jsfcrud_list_form">
+                    <p:growl id="growl" life="3000"/>
+
+
+
+                    <p:dataTable id="tabla" emptyMessage="Ninguna reserva registrada" value="#{reservaView.reservas}" 
+                                 var="r" paginator="true"  rows="10" rowSelectMode="add" paginatorPosition="bottom"
+                                 >
+
+                        <p:column headerText="Hotel" filterBy="#{r.fkHotel}" filterMatchMode="contains" >
+                            <h:outputText value="#{r.fkHotel}"  /> 
+                        </p:column>
+
+                        <p:column headerText="Habitacion" filterBy="#{r.fkHabitacion}" filterMatchMode="contains" >
+                            <h:outputText value="#{r.fkHotel}"  /> 
+                        </p:column>
+
+                        <p:column headerText="Huesped" filterBy="#{r.fkHuesped}" filterMatchMode="contains" >
+                            <h:outputText value="#{r.fkHuesped}"  /> 
+                        </p:column>
+
+                        <p:column headerText="Fecha ingreso" filterBy="#{r.fechaIngreso}" filterMatchMode="contains" >
+                            <h:outputText value="#{r.fechaIngreso}"  /> 
+                        </p:column>
+
+                        <p:column headerText="Fecha salida" filterBy="#{r.fechaSalida}" filterMatchMode="contains" >
+                            <h:outputText value="#{r.fechaSalida}"  /> 
+                        </p:column>
+
+                        <p:column headerText="Empleado" filterBy="#{r.fkEmpleado}" filterMatchMode="contains" >
+                            <h:outputText value="#{r.fkEmpleado}"  /> 
+                        </p:column>
+
+                        <p:column headerText=" " exportable="false" >
+
+                            <h:commandButton class="btn btn-warning rounded-pill"
+                                             html5:data-bs-toggle="modal"
+                                             html5:data-bs-target="#editar"
+                                             action="#{reservaView.guardarTemporal(r)}" 
+                                             value="Editar" >
+                            </h:commandButton>
+
+                        </p:column>
+
+                        <p:column headerText=" " exportable="false" >
+
+                            <h:commandLink class="btn btn-danger rounded-pill" action="#{reservaView.eliminarReserva(r)}" value="Eliminar"/>
+
+                        </p:column>  
+
+                    </p:dataTable>
+                </h:form>
+            </div>
+        </div>
+
+
+
+    </ui:composition>
+</html>
+
