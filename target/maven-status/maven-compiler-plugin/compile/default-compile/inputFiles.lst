@@ -1,8 +1,10 @@
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\UsuarioFacade.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\HabitacionFacadeLocal.java
+C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\controller\DFRootView.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\HabitacionFacade.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\ReservaFacade.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\controller\HabitacionView.java
+C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\TipoHabitacionFacade.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\model\Habitacion.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\model\TipoHabitacion.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\model\Ciudad.java
@@ -26,11 +28,14 @@ C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\controlle
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\HuespedFacade.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\HuespedFacadeLocal.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\HotelFacade.java
+C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\controller\CiudadRequest.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\CiudadFacade.java
+C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\TipoHabitacionFacadeLocal.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\controller\TelefonoView.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\HotelFacadeLocal.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\UsuarioFacadeLocal.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\model\Huesped.java
+C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\controller\TipoHabitaciones.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\ejb\TelefonoFacadeLocal.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\controller\ReservaView.java
 C:\Users\juan\Documents\NetBeansProjects\hotel\src\main\java\com\hotel\controller\HotelView.java
