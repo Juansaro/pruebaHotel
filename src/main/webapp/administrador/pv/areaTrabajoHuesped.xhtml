@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:html5="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:composition>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                DataTable Example
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrar">
+                Registrar usuario.
+            </button>
+            </div>
+            <div class="card-body">
+                <h:form id="frmPrincipal" styleClass="jsfcrud_list_form">
+                    <p:growl id="growl" life="3000"/>
+                    <p:dataTable id="tabla" emptyMessage="Ningún huesped registrado" value="#{huespedView.huespedes}" 
+                                 var="h" paginator="true"  rows="10" rowSelectMode="add" paginatorPosition="bottom"
+                                 >
+                        <p:column headerText="Nombre" filterBy="#{h.nombre}" filterMatchMode="contains" >
+                            <h:outputText value="#{h.nombre}"  /> 
+                        </p:column>
+
+                        <p:column headerText="Apellido" filterBy="#{h.apellido}" filterMatchMode="contains" >
+                            <h:outputText value="#{h.apellido}"  /> 
+                        </p:column>
+
+                        <p:column headerText="Correo" filterBy="#{h.correo}" filterMatchMode="contains" >
+                            <h:outputText value="#{h.correo}"  /> 
+                        </p:column>
+
+                        <p:column headerText="Apellido" filterBy="#{h.documento}" filterMatchMode="contains" >
+                            <h:outputText value="#{h.documento}"  /> 
+                        </p:column>
+
+                        <p:column headerText="Apellido" filterBy="#{h.ciudadIdCiudad}" filterMatchMode="contains" >
+                            <h:outputText value="#{h.ciudadIdCiudad}"  /> 
+                        </p:column>
+
+                        <p:column headerText=" " exportable="false" >
+
+                            <h:commandButton class="btn btn-warning rounded-pill"
+                                             html5:data-bs-toggle="modal"
+                                             html5:data-bs-target="#editar"
+                                             action="#{huespedView.guardarTemporal(h)}" 
+                                             value="Editar" >
+                                <f:ajax render=":formActualizar"> </f:ajax>
+                            </h:commandButton>
+
+                        </p:column>
+
+                        <p:column headerText=" " exportable="false" >
+
+                            <h:commandLink class="btn btn-danger rounded-pill" action="#{huespedView.eliminarHuesped(h)}" value="Eliminar"/>
+
+                        </p:column>  
+
+                    </p:dataTable>
+
+                </h:form>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="registrar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <h:form>
+                        <div class="modal-body">
+                            
+                            <h:outputLabel value="Nombre" for="nombre" />
+                            <h:inputText id="nombre" value="#{huespedView.hueReg.nombre}" required="true" html5:placeholder="Escribe el nombre" class="form-control"/>
+                            
+                            <h:outputLabel value="Apllido" for="apellido" />
+                            <h:inputText id="apellido" value="#{huespedView.hueReg.apellido}" required="true" html5:placeholder="Escribe el apellido" class="form-control"/>
+                            
+                            <h:outputLabel value="Correo" for="correo" />
+                            <h:inputText id="correo" value="#{huespedView.hueReg.correo}" required="true" html5:placeholder="Escribe el correo" class="form-control"/>
+                            
+                            <h:outputLabel value="Documento" for="documento" />
+                            <h:inputText id="documento" value="#{huespedView.hueReg.documento}" required="true" html5:placeholder="Escribe el documento" class="form-control"/>
+                            
+                            <h:outputLabel value="Barrio" for="barrio" />
+                            <h:inputText id="barrio" value="#{huespedView.hueReg.barrio}" required="true" html5:placeholder="Escribe el barrio" class="form-control"/>
+                            
+                            <h:outputLabel value="Nombre:" for="nombre" />
+                            <h:inputText id="nombre" value="#{huespedView.hueReg.direccion}" required="true" html5:placeholder="Escribe el nombre" class="form-control"/>
+
+                            <h:outputLabel value="Ciudad:" for="ciudad" />
+                            <h:selectOneMenu id="ciudad" value="#{huespedView.fk_ciudad}" class="form-control">
+                                <f:selectItems itemLabel="#{ciu.descripcion}" itemValue="#{ciu.idCiudad}" var="ciu" value="#{ciudadRequest.ciudades}"></f:selectItems>                                
+                            </h:selectOneMenu>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <h:commandButton action="#{huespedView.registrarHuesped()}" class="btn btn-primary" value="Registrar.">
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="editar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <h:form>
+                        <div class="modal-body">
+                            
+                            <h:outputLabel value="Nombre" for="nombre" />
+                            <h:inputText id="nombre" value="#{huespedView.hueTemporal.nombre}" required="true" html5:placeholder="Escribe el nombre" class="form-control"/>
+                            
+                            <h:outputLabel value="Apllido" for="apellido" />
+                            <h:inputText id="apellido" value="#{huespedView.hueTemporal.apellido}" required="true" html5:placeholder="Escribe el apellido" class="form-control"/>
+                            
+                            <h:outputLabel value="Correo" for="correo" />
+                            <h:inputText id="correo" value="#{huespedView.hueTemporal.correo}" required="true" html5:placeholder="Escribe el correo" class="form-control"/>
+                            
+                            <h:outputLabel value="Documento" for="documento" />
+                            <h:inputText id="documento" value="#{huespedView.hueTemporal.documento}" required="true" html5:placeholder="Escribe el documento" class="form-control"/>
+                            
+                            <h:outputLabel value="Barrio" for="barrio" />
+                            <h:inputText id="barrio" value="#{huespedView.hueTemporal.barrio}" required="true" html5:placeholder="Escribe el barrio" class="form-control"/>
+                            
+                            <h:outputLabel value="Nombre" for="nombre" />
+                            <h:inputText id="nombre" value="#{huespedView.hueTemporal.direccion}" required="true" html5:placeholder="Escribe la dirección" class="form-control"/>
+
+                            <h:outputLabel value="Ciudad" for="ciudad" />
+                            <h:selectOneMenu id="ciudad" value="#{huespedView.fk_ciudad}" class="form-control">
+                                <f:selectItems itemLabel="#{ciu.descripcion}" itemValue="#{ciu.idCiudad}" var="ciu" value="#{ciudadRequest.ciudades}"></f:selectItems>                                
+                            </h:selectOneMenu>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <h:commandButton action="#{huespedView.actualizarHuesped()}" class="btn btn-primary" value="Registrar.">
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+    </ui:composition>
+</html>
+

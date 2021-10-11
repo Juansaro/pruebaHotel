@@ -1,12 +1,161 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:html5="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition>
+
+        <h1 class="mt-4">Dashboard</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+        <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-primary text-white mb-4">
+                    <div class="card-body">
+
+
+                    </div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-warning text-white mb-4">
+                    <div class="card-body">Warning Card</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-success text-white mb-4">
+                    <div class="card-body">Success Card</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-danger text-white mb-4">
+                    <div class="card-body">Danger Card</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="#">View Details</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                DataTable Example
+            </div>
+            <div class="card-body">
+                <h:form id="frmPrincipal" styleClass="jsfcrud_list_form">
+                    <p:growl id="growl" life="3000"/>
+                    <p:dataTable id="tabla" emptyMessage="Ninguna usuario registrado" value="#{usuarioSesion.usuarios}" 
+                                 var="u" paginator="true"  rows="10" rowSelectMode="add" paginatorPosition="bottom"
+                                 >
+                        <p:column headerText="Nombre" filterBy="#{u.nombre}" filterMatchMode="contains" >
+                            <h:outputText value="#{u.nombre}"  /> 
+                        </p:column>
+
+                        <p:column headerText="Apellidos" filterBy="#{u.apellido}" filterMatchMode="contains" >
+                            <h:outputText value="#{u.apellido}"  /> 
+                        </p:column>
+
+                        <p:column headerText="Clave:" filterBy="#{u.contrasena}" filterMatchMode="contains" >
+                            <h:outputText value="#{u.contrasena}"  /> 
+                        </p:column>
+
+                        <p:column headerText="Email:" filterBy="#{u.correo}" filterMatchMode="contains" >
+                            <h:outputText value="#{u.correo}"  /> 
+                        </p:column>
+
+                        <p:column headerText="Ciudad" filterBy="#{u.fkRol}" filterMatchMode="contains" >
+                            <h:outputText value="#{u.fkRol}"  /> 
+                        </p:column>
+
+                        <p:column headerText=" " exportable="false" >
+
+                            <h:commandButton class="btn btn-warning rounded-pill"
+                                             html5:data-toggle="modal"
+                                             html5:data-target="#exampleModalAct"
+                                             action="#{usuarioSesion.guardarTemporal(u)}" 
+                                             value="Editar" >
+                                <f:ajax render=":formActualizar"> </f:ajax>
+                            </h:commandButton>
+
+                        </p:column>
+
+                        <p:column headerText=" " exportable="false" >
+
+                            <h:commandLink class="btn btn-danger rounded-pill" action="#{usuarioSesion.eliminarUsuario(u)}" value="Eliminar"/>
+
+                        </p:column>  
+
+                    </p:dataTable>
+
+                </h:form>
+            </div>
+        </div>
+
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registrar">
+            Launch demo modal
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="registrar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <h:form>
+                        <div class="modal-body">
+                            <h:outputLabel value="Nombre:" for="nombre" />
+                            <h:inputText id="nombre" value="#{usuarioSesion.usuReg.nombre}" required="true" html5:placeholder="Escribe el nombre" class="form-control"/>
+
+                            <h:outputLabel value="Apellido:" for="apellido" />
+                            <h:inputText id="apellido" value="#{usuarioSesion.usuReg.apellido}" required="true" html5:placeholder="Escribe el apellido" class="form-control"/>
+
+                            <h:outputLabel value="Correo:" for="correo" />
+                            <h:inputText id="correo" value="#{usuarioSesion.usuReg.correo}" required="true" html5:placeholder="Escribe el correo" class="form-control"/>
+
+                            <h:outputLabel value="Clave:" for="clave" />
+                            <h:inputText id="clave" value="#{usuarioSesion.usuReg.contrasena}" required="true" html5:placeholder="Escribe la clave" class="form-control"/>
+
+                            <h:outputLabel value="Rol:" for="rol" />
+                            <h:selectOneMenu id="rol" value="#{usuarioSesion.fk_rol}" class="form-control">
+                                <f:selectItems itemLabel="#{rol.descripcion}" itemValue="#{rol.idRol}" var="rol" value="#{rolRequest.roles}"></f:selectItems>                                
+                            </h:selectOneMenu>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <h:commandButton action="#{usuarioSesion.registrarUsuario()}" class="btn btn-primary" value="Registrar.">
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </ui:composition>
 </html>
 
