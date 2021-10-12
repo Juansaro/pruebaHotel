@@ -5,6 +5,7 @@
  */
 package com.hotel.ejb;
 
+import com.hotel.model.Habitacion;
 import com.hotel.model.Hotel;
 import java.util.List;
 import javax.ejb.Local;
@@ -37,5 +38,5 @@ public interface HotelFacadeLocal {
     public boolean eliminarHotel(int hot_id);
 
     public Hotel leerHotel(int idHot);
-    
+
 }

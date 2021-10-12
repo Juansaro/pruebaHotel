@@ -6,6 +6,7 @@
 package com.hotel.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,14 +14,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -46,9 +47,8 @@ public class Telefono implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "numero")
     private String numero;
-    @JoinColumn(name = "hotel_id_hotel", referencedColumnName = "id_hotel")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Hotel hotelIdHotel;
+    @ManyToMany(mappedBy = "telefonoCollection", fetch = FetchType.LAZY)
+    private Collection<Hotel> hotelCollection;
 
     public Telefono() {
     }
@@ -78,12 +78,13 @@ public class Telefono implements Serializable {
         this.numero = numero;
     }
 
-    public Hotel getHotelIdHotel() {
-        return hotelIdHotel;
+    @XmlTransient
+    public Collection<Hotel> getHotelCollection() {
+        return hotelCollection;
     }
 
-    public void setHotelIdHotel(Hotel hotelIdHotel) {
-        this.hotelIdHotel = hotelIdHotel;
+    public void setHotelCollection(Collection<Hotel> hotelCollection) {
+        this.hotelCollection = hotelCollection;
     }
 
     @Override

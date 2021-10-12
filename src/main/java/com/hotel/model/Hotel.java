@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -38,7 +39,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Hotel.findAll", query = "SELECT h FROM Hotel h"),
     @NamedQuery(name = "Hotel.findByIdHotel", query = "SELECT h FROM Hotel h WHERE h.idHotel = :idHotel"),
     @NamedQuery(name = "Hotel.findByNombre", query = "SELECT h FROM Hotel h WHERE h.nombre = :nombre"),
-    @NamedQuery(name = "Hotel.findByHotelFoto", query = "SELECT h FROM Hotel h WHERE h.hotelFoto = :hotelFoto")})
+    @NamedQuery(name = "Hotel.findByHotelFoto", query = "SELECT h FROM Hotel h WHERE h.hotelFoto = :hotelFoto"),
+    @NamedQuery(name = "Hotel.findByDireccion", query = "SELECT h FROM Hotel h WHERE h.direccion = :direccion")})
 public class Hotel implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -55,6 +57,14 @@ public class Hotel implements Serializable {
     @Size(max = 300)
     @Column(name = "hotel_foto")
     private String hotelFoto;
+    @Size(max = 45)
+    @Column(name = "direccion")
+    private String direccion;
+    @JoinTable(name = "hotel_has_telefono", joinColumns = {
+        @JoinColumn(name = "fk_hotel", referencedColumnName = "id_hotel")}, inverseJoinColumns = {
+        @JoinColumn(name = "fk_telefono", referencedColumnName = "id_telefono")})
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Collection<Telefono> telefonoCollection;
     @ManyToMany(mappedBy = "hotelCollection", fetch = FetchType.LAZY)
     private Collection<Habitacion> habitacionCollection;
     @JoinColumn(name = "fk_ciudad", referencedColumnName = "id_ciudad")
@@ -62,8 +72,6 @@ public class Hotel implements Serializable {
     private Ciudad fkCiudad;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkHotel", fetch = FetchType.LAZY)
     private Collection<Reserva> reservaCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hotelIdHotel", fetch = FetchType.LAZY)
-    private Collection<Telefono> telefonoCollection;
 
     public Hotel() {
     }
@@ -101,6 +109,23 @@ public class Hotel implements Serializable {
         this.hotelFoto = hotelFoto;
     }
 
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    @XmlTransient
+    public Collection<Telefono> getTelefonoCollection() {
+        return telefonoCollection;
+    }
+
+    public void setTelefonoCollection(Collection<Telefono> telefonoCollection) {
+        this.telefonoCollection = telefonoCollection;
+    }
+
     @XmlTransient
     public Collection<Habitacion> getHabitacionCollection() {
         return habitacionCollection;
@@ -125,15 +150,6 @@ public class Hotel implements Serializable {
 
     public void setReservaCollection(Collection<Reserva> reservaCollection) {
         this.reservaCollection = reservaCollection;
-    }
-
-    @XmlTransient
-    public Collection<Telefono> getTelefonoCollection() {
-        return telefonoCollection;
-    }
-
-    public void setTelefonoCollection(Collection<Telefono> telefonoCollection) {
-        this.telefonoCollection = telefonoCollection;
     }
 
     @Override

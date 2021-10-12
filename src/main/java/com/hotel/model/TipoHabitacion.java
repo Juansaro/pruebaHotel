@@ -45,7 +45,7 @@ public class TipoHabitacion implements Serializable {
     @Size(max = 70)
     @Column(name = "descripcion")
     private String descripcion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoHabitacionIdTipoHabitacion", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkTipo", fetch = FetchType.LAZY)
     private Collection<Habitacion> habitacionCollection;
 
     public TipoHabitacion() {

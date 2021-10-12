@@ -61,6 +61,9 @@ public class ReservaView implements Serializable{
     @Inject
     private EstadoReserva estadoReserva;
     
+    @Inject
+    private UsuarioSesion u;
+    
     private int fk_huesped;
     private int fk_habitacion;
     private int fk_usuario;
@@ -68,6 +71,7 @@ public class ReservaView implements Serializable{
     private int fk_estado;
     
     private List<Reserva> reservas;
+    private List<Reserva> reservasEmpleados;
     private List<Habitacion> habitaciones;
     private List<Usuario> empleados;
     private List<Hotel> hoteles;
@@ -79,6 +83,7 @@ public class ReservaView implements Serializable{
     @PostConstruct
     public void init(){
         reservas = reservaFacadeLocal.findAll();
+        reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
         habitaciones = HabitacionFacadeLocal.findAll();
         //Hacer filtro de empleados
         empleados = usuarioFacadeLocal.findAll();
@@ -87,7 +92,7 @@ public class ReservaView implements Serializable{
     }
     
     public void registrarReserva(){
-        if(reservaFacadeLocal.registrarReserva(resReg, fk_huesped, fk_habitacion, fk_estado, fk_hotel, fk_estado)){
+        if(reservaFacadeLocal.registrarReserva(resReg, fk_huesped, fk_habitacion, u.getUsuLog().getIdUsuario(), fk_hotel, fk_estado)){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva registrada", "Reserva registrada"));
             resReg = new Reserva();
             reservas = reservaFacadeLocal.findAll();
@@ -99,15 +104,15 @@ public class ReservaView implements Serializable{
     public void guardarTemporal(Reserva r){
         resTemporal = r;
         fk_huesped = r.getFkHuesped().getIdHuesped();
-        fk_habitacion = r.getFkHabitacion().getNumeroHabitacion();
-        fk_usuario = r.getFkEmpleado().getIdUsuario();
+        fk_habitacion = r.getFkHabitacion().getIdHabitacion();
+        fk_usuario = u.getUsuLog().getIdUsuario();
         fk_hotel = r.getFkHotel().getIdHotel();
-        fk_estado = r.getEstadoReservaIdEstadoReserva().getIdEstadoReserva();
+        fk_estado = r.getFkEstado().getIdEstadoReserva();
     }
     
     public void actualizarReserva(){
         try{
-            reservaFacadeLocal.actualizarReserva(resTemporal, fk_huesped, fk_habitacion, fk_estado, fk_hotel, fk_estado);
+            reservaFacadeLocal.actualizarReserva(resTemporal, fk_huesped, fk_habitacion, u.getUsuLog().getIdUsuario(), fk_hotel, fk_estado);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva editado", "Reserva editado"));
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de edición", "Error de edición"));
@@ -124,7 +129,7 @@ public class ReservaView implements Serializable{
         } catch (Exception e) {
         }
     }
-
+    
     public List<Reserva> getReservas() {
         return reservas;
     }

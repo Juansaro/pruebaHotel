@@ -6,6 +6,7 @@
 package com.hotel.ejb;
 
 import com.hotel.model.Reserva;
+import com.hotel.model.Usuario;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -31,6 +32,8 @@ public interface ReservaFacadeLocal {
 
     public boolean actualizarReserva(Reserva resIn, int fk_huesped, int fk_habitacion, int fk_empleado, int fk_hotel, int fk_estado);
 
-    public boolean eliminarReserva(int res_id);
+    public boolean eliminarReserva(int res_id); 
+
+    public List<Reserva> leerReservasEmpleado(Usuario usuIn);
     
 }

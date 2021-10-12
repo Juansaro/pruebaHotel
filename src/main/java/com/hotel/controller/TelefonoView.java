@@ -58,7 +58,6 @@ public class TelefonoView implements Serializable{
     
     public void guardarTemporal(Telefono t){
         telTemporal = t;
-        fk_hotel = t.getHotelIdHotel().getIdHotel();
     }
     
     public void actualizarTelefono(){

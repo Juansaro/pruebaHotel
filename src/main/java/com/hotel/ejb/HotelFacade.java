@@ -5,6 +5,7 @@
  */
 package com.hotel.ejb;
 
+import com.hotel.model.Habitacion;
 import com.hotel.model.Hotel;
 import com.hotel.model.Usuario;
 import java.util.List;
@@ -83,5 +84,7 @@ public class HotelFacade extends AbstractFacade<Hotel> implements HotelFacadeLoc
             return null;
         }
     }
+    
+   
     
 }

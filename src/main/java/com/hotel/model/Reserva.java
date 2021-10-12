@@ -35,7 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Reserva.findAll", query = "SELECT r FROM Reserva r"),
     @NamedQuery(name = "Reserva.findByIdReserva", query = "SELECT r FROM Reserva r WHERE r.idReserva = :idReserva"),
     @NamedQuery(name = "Reserva.findByFechaIngreso", query = "SELECT r FROM Reserva r WHERE r.fechaIngreso = :fechaIngreso"),
-    @NamedQuery(name = "Reserva.findByFechaSalida", query = "SELECT r FROM Reserva r WHERE r.fechaSalida = :fechaSalida")})
+    @NamedQuery(name = "Reserva.findByFechaSalida", query = "SELECT r FROM Reserva r WHERE r.fechaSalida = :fechaSalida"),
+    @NamedQuery(name = "Reserva.findByPrecio", query = "SELECT r FROM Reserva r WHERE r.precio = :precio"),
+    @NamedQuery(name = "Reserva.findByFechaRegistro", query = "SELECT r FROM Reserva r WHERE r.fechaRegistro = :fechaRegistro")})
 public class Reserva implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,10 +54,16 @@ public class Reserva implements Serializable {
     @Column(name = "fecha_salida")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaSalida;
-    @JoinColumn(name = "estado_reserva_id_estado_reserva", referencedColumnName = "id_estado_reserva")
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "precio")
+    private Float precio;
+    @Column(name = "fechaRegistro")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaRegistro;
+    @JoinColumn(name = "fk_estado", referencedColumnName = "id_estado_reserva")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private EstadoReserva estadoReservaIdEstadoReserva;
-    @JoinColumn(name = "fk_habitacion", referencedColumnName = "numero_habitacion")
+    private EstadoReserva fkEstado;
+    @JoinColumn(name = "fk_habitacion", referencedColumnName = "id_habitacion")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Habitacion fkHabitacion;
     @JoinColumn(name = "fk_hotel", referencedColumnName = "id_hotel")
@@ -104,12 +112,28 @@ public class Reserva implements Serializable {
         this.fechaSalida = fechaSalida;
     }
 
-    public EstadoReserva getEstadoReservaIdEstadoReserva() {
-        return estadoReservaIdEstadoReserva;
+    public Float getPrecio() {
+        return precio;
     }
 
-    public void setEstadoReservaIdEstadoReserva(EstadoReserva estadoReservaIdEstadoReserva) {
-        this.estadoReservaIdEstadoReserva = estadoReservaIdEstadoReserva;
+    public void setPrecio(Float precio) {
+        this.precio = precio;
+    }
+
+    public Date getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(Date fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
+
+    public EstadoReserva getFkEstado() {
+        return fkEstado;
+    }
+
+    public void setFkEstado(EstadoReserva fkEstado) {
+        this.fkEstado = fkEstado;
     }
 
     public Habitacion getFkHabitacion() {

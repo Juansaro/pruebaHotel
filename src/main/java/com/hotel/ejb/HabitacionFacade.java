@@ -6,6 +6,8 @@
 package com.hotel.ejb;
 
 import com.hotel.model.Habitacion;
+import com.hotel.model.Hotel;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,12 +32,13 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
     @Override
     public boolean crearHabitacion(Habitacion h, int fk_tipo_habitacion) {
         try {
-            Query c = em.createNativeQuery("INSERT INTO habitacion (bano, calefaccion, telefono, estado, tipo_habitacion_id_tipo_habitacion) VALUES (?,?,?,?,?)");
-            c.setParameter(1, h.getBano());
-            c.setParameter(2, h.getCalefaccion());
-            c.setParameter(3, h.getTelefono());
-            c.setParameter(4, h.getEstado());
+            Query c = em.createNativeQuery("INSERT INTO habitacion (numero_habitacion, bano, calefaccion, telefono, tipo_habitacion_id_tipo_habitacion,estado) VALUES (?,?,?,?,?,?)");
+            c.setParameter(1, h.getIdHabitacion());
+            c.setParameter(2, Short.parseShort("1"));
+            c.setParameter(3, Short.parseShort("1"));
+            c.setParameter(4, Short.parseShort("1"));
             c.setParameter(5, fk_tipo_habitacion);
+            c.setParameter(6, Short.parseShort("1"));
             c.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -77,7 +80,7 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
             qr.setParameter(2, habIn.getCalefaccion());
             qr.setParameter(3, habIn.getTelefono());
             qr.setParameter(4, fk_tipo);
-            qr.setParameter(5, habIn.getEstado());
+            qr.setParameter(5, habIn.getFkTipo());
             qr.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -85,5 +88,55 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
         }
 
     }
+    
+    @Override
+    public boolean actualizarHotelHabitacion(Habitacion habIn) {
+        try {
+            Query qr = em.createNativeQuery("UPDATE hotel_has_habitacion SET fk_habitacion = ? WHERE (fk_habitacion = ?)");
+            qr.setParameter(1, habIn.getIdHabitacion());
+            qr.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+    
+    @Override
+    public void crearHotelHabitacion(int fk_hotel, Habitacion ha) {
+        try {
+            Query c = em.createNativeQuery("INSERT INTO hotel_has_habitacion (fk_hotel, fk_habitacion) VALUES (?,?)");
+            c.setParameter(1, fk_hotel);
+            c.setParameter(2, ha.getIdHabitacion());
+            c.executeUpdate();
+        } catch (Exception e) {
+        
+        }    
+    }
+    
+    @Override
+    public boolean eliminarHotelHabitacion(Habitacion ha) {
+        try {
+            Query c = em.createNativeQuery("DELETE FROM hotel_has_habitacion  WHERE fk_habitacion = ?");
+            c.setParameter(1, ha.getIdHabitacion());
+            c.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+     @Override
+    public List<Habitacion> leerTodos(Hotel hotIn){
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query q = em.createQuery("SELECT ha, h FROM Habitacion ha JOIN ha.hotelCollection  h WHERE h.idHotel = :hotIn");
+            q.setParameter("hotIn", hotIn.getIdHotel());
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
     
 }

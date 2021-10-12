@@ -48,7 +48,7 @@ public class EstadoReserva implements Serializable {
     @Size(min = 1, max = 70)
     @Column(name = "descripcion")
     private String descripcion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estadoReservaIdEstadoReserva", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkEstado", fetch = FetchType.LAZY)
     private Collection<Reserva> reservaCollection;
 
     public EstadoReserva() {

@@ -6,6 +6,8 @@
 package com.hotel.ejb;
 
 import com.hotel.model.Reserva;
+import com.hotel.model.Usuario;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -71,6 +73,18 @@ public class ReservaFacade extends AbstractFacade<Reserva> implements ReservaFac
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+    
+    @Override
+    public List<Reserva> leerReservasEmpleado(Usuario usuIn) {
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query qt = em.createQuery("SELECT r FROM Reserva r WHERE r.fkHuesped = :u");
+            qt.setParameter("u", usuIn);
+            return qt.getResultList();
+        } catch (Exception e) {
+            return null;
         }
     }
     

@@ -6,6 +6,7 @@
 package com.hotel.ejb;
 
 import com.hotel.model.Habitacion;
+import com.hotel.model.Hotel;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -34,5 +35,13 @@ public interface HabitacionFacadeLocal {
     public boolean crearHabitacion(Habitacion h, int fk_tipo_habitacion);
 
     public boolean actualizarHabitacion(Habitacion habIn, int fk_tipo);
-    
+
+    public void crearHotelHabitacion(int fk_hotel, Habitacion ha);
+   
+    public boolean eliminarHotelHabitacion(Habitacion ha);
+
+    public boolean actualizarHotelHabitacion(Habitacion habIn);
+
+    public List<Habitacion> leerTodos(Hotel hotIn);
+
 }
