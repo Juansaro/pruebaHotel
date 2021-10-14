@@ -30,6 +30,8 @@ public interface HuespedFacadeLocal {
 
     public boolean actualizarHuesped(Huesped huesIn, int fk_ciudad);
 
-    public boolean eliminarHuesped(int hues_id);
+    public List<Huesped> leerTodos();
+
+    public boolean eliminarHuesped(Huesped p);
     
 }

@@ -21,62 +21,62 @@ import javax.inject.Named;
 
 @Named(value = "huespedView")
 @ViewScoped
-public class HuespedView implements Serializable{
-    
+public class HuespedView implements Serializable {
+
     @EJB
     private HuespedFacadeLocal huespedFacadeLocal;
-    
+
     @EJB
     private CiudadFacadeLocal ciudadFacadeLocal;
-    
+
     @Inject
     private Ciudad ciudad;
-    
+
     private int fk_ciudad;
-    
+
     private List<Huesped> huespedes;
     private List<Ciudad> ciudades;
-    
+
     private Huesped hueReg = new Huesped();
     private Huesped hueTemporal = new Huesped();
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         huespedes = huespedFacadeLocal.findAll();
         ciudades = ciudadFacadeLocal.findAll();
     }
-    
-    public void registrarHuesped(){
-        if(huespedFacadeLocal.registrarHuesped(hueReg, fk_ciudad)){
+
+    public void registrarHuesped() {
+        if (huespedFacadeLocal.registrarHuesped(hueReg, fk_ciudad)) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Huesped registrado", "Huesped registrado"));
             hueReg = new Huesped();
-            huespedes = huespedFacadeLocal.findAll();
-        }else{
+            huespedes = huespedFacadeLocal.leerTodos();
+        } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
         }
     }
-    
-    public void guardarTemporal(Huesped h){
+
+    public void guardarTemporal(Huesped h) {
         hueTemporal = h;
         fk_ciudad = h.getFkCiudad().getIdCiudad();
     }
-    
-    public void actualizarHuesped(){
-        try{
+
+    public void actualizarHuesped() {
+        try {
             huespedFacadeLocal.actualizarHuesped(hueTemporal, fk_ciudad);
+            huespedes = huespedFacadeLocal.leerTodos();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Huesped editado", "Huesped editado"));
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de edición", "Error de edición"));
         }
     }
-    
-    public void eliminarHuesped(Huesped h){
+
+    public void eliminarHuesped(Huesped h) {
         try {
-            if (huespedFacadeLocal.eliminarHuesped(h.getIdHuesped())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Huesped editado", "Huesped editado"));
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de edición", "Error de edición"));
-            }
+            huespedFacadeLocal.remove(h);
+            huespedes = huespedFacadeLocal.leerTodos();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Huesped eliminado", "Huesped eliminado"));
+
         } catch (Exception e) {
         }
     }
@@ -128,5 +128,5 @@ public class HuespedView implements Serializable{
     public void setFk_ciudad(int fk_ciudad) {
         this.fk_ciudad = fk_ciudad;
     }
-    
+
 }

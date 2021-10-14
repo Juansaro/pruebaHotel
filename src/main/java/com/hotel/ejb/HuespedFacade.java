@@ -6,6 +6,7 @@
 package com.hotel.ejb;
 
 import com.hotel.model.Huesped;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -49,7 +50,7 @@ public class HuespedFacade extends AbstractFacade<Huesped> implements HuespedFac
     @Override
     public boolean actualizarHuesped(Huesped huesIn, int fk_ciudad) {
         try {
-            Query qr = em.createNativeQuery("UPDATE hotel SET documento = ?, nombre = ?, apellido = ?, correo = ?, direccion = ?, barrio = ?, ciudad_id_ciudad = ? WHERE (id_huesped = ?)");
+            Query qr = em.createNativeQuery("UPDATE huesped SET documento = ?, nombre = ?, apellido = ?, correo = ?, direccion = ?, barrio = ?, fk_ciudad = ? WHERE (id_huesped = ?)");
             qr.setParameter(1, huesIn.getDocumento());
             qr.setParameter(2, huesIn.getNombre());
             qr.setParameter(3, huesIn.getApellido());
@@ -57,6 +58,7 @@ public class HuespedFacade extends AbstractFacade<Huesped> implements HuespedFac
             qr.setParameter(5, huesIn.getDireccion());
             qr.setParameter(6, huesIn.getBarrio());
             qr.setParameter(7, fk_ciudad);
+            qr.setParameter(8, huesIn.getIdHuesped());
             qr.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -66,14 +68,25 @@ public class HuespedFacade extends AbstractFacade<Huesped> implements HuespedFac
     }
     
     @Override
-    public boolean eliminarHuesped(int hues_id) {
+    public boolean eliminarHuesped(Huesped p) {
         try {
-            Query c = em.createNativeQuery("DELETE FROM huesped WHERE (id_huesped = ?)");
-            c.setParameter(1, hues_id);
+            Query c = em.createNativeQuery("DELETE FROM huesped WHERE id_huesped = ?");
+            c.setParameter(1, p.getIdHuesped());
             c.executeUpdate();
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+    
+    @Override
+    public List<Huesped> leerTodos(){
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query q = em.createQuery("SELECT ha FROM Huesped ha");
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
         }
     }
     

@@ -132,6 +132,10 @@ public class ReservaView implements Serializable{
         }
     }
     
+    public List<Reserva> reservasEmpleado(){
+        return reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
+    }
+    
     public List<Reserva> getReservas() {
         return reservas;
     }
@@ -258,6 +262,22 @@ public class ReservaView implements Serializable{
 
     public void setResTemporal(Reserva resTemporal) {
         this.resTemporal = resTemporal;
+    }
+
+    public UsuarioSesion getU() {
+        return u;
+    }
+
+    public void setU(UsuarioSesion u) {
+        this.u = u;
+    }
+
+    public List<Reserva> getReservasEmpleados() {
+        return reservasEmpleados;
+    }
+
+    public void setReservasEmpleados(List<Reserva> reservasEmpleados) {
+        this.reservasEmpleados = reservasEmpleados;
     }
     
 }
