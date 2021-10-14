@@ -2,121 +2,75 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:html5="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:html5="http://xmlns.jcp.org/jsf/passthrough">
     <ui:composition>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                DataTable Example
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrar">
+                    Registrar habitaciones
+                </button>
+            </div>
+            <div class="card-body">
+                <h:form id="frmPrincipal" styleClass="jsfcrud_list_form">
+                    <p:growl id="growl" life="3000"/>
+                    <p:dataTable id="tabla" emptyMessage="Ninguna habitacion registrada" value="#{habitacionView.listaHabitaciones}" 
+                                 var="h" paginator="true"  rows="10" rowSelectMode="add" paginatorPosition="bottom"
+                                 >
+                        <p:column headerText="Numero habitación" filterBy="#{h.idHabitacion}" filterMatchMode="contains" >
+                            <h:outputText value="#{h.idHabitacion}"  /> 
+                        </p:column>
 
+                        <p:column headerText="Baño" filterBy="#{h.bano}" filterMatchMode="contains" >
+                            <h:commandButton action="#{habitacionView.cambiarBano(h)}" class="btn btn-block btn-outline-primary btn-xs" value="C/E" />
+                            <img height="24px" width="24px" src="#{request.contextPath}/assets/images/#{usu.usuEstado == '1'?'si':'no'}.png" alt=""/>
+                        </p:column>
 
+                        <p:column headerText="Teléfono" filterBy="#{h.bano}" filterMatchMode="contains" >
+                            <h:commandButton action="#{habitacionView.cambiarTelefono(h)}" class="btn btn-block btn-outline-primary btn-xs" value="C/E" />
+                            <img height="24px" width="24px" src="#{request.contextPath}/assets/images/#{usu.usuEstado == '1'?'si':'no'}.png" alt=""/>
+                        </p:column>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-4">
-                    <div class="card container mt-3 mb-3" style="max-width: 44rem;" id="carta">
-                        <div class="card-body">
-                            <h5 class="card-title font-weight-bold text-white">Habitaciones</h5>
-                            <hr class="bg-white"/>
-                            <h:form>
+                        <p:column headerText="Calefacción" filterBy="#{h.bano}" filterMatchMode="contains" >
+                            <h:commandButton action="#{habitacionView.cambiarCalefaccion(h)}" class="btn btn-block btn-outline-primary btn-xs" value="C/E" />
+                            <img height="24px" width="24px" src="#{request.contextPath}/assets/images/#{usu.usuEstado == '1'?'si':'no'}.png" alt=""/>
+                        </p:column>
 
+                        <p:column headerText="Baño" filterBy="#{h.bano}" filterMatchMode="contains" >
+                            <h:outputText value="#{h.idHabitacion}"  />
+                        </p:column>
 
-                                <h:commandButton class="btn btn-warning btn-lg btn-block text-white rounded-pill"
-                                                 html5:data-bs-toggle="modal"
-                                                 html5:data-bs-target="#habitaciones"
-                                                 value="Elegir servicio" >
+                        <p:column headerText="Baño"  filterMatchMode="contains" >
+                                <h:outputText value="#{h.fkHotel}" /><br/>
+                        </p:column>
 
-                                    <f:ajax render=":formActualizar"> </f:ajax>
-                                </h:commandButton>
+                        <p:column headerText=" " exportable="false" >
 
-                            </h:form>
+                            <h:commandButton class="btn btn-warning"
+                                             html5:data-bs-toggle="modal"
+                                             html5:data-bs-target="#exampleModalAct"
+                                             action="#{habitacionView.guardarTemporal(h)}" 
+                                             value="Editar" >
+                                <f:ajax render=":formActualizar"> </f:ajax>
+                            </h:commandButton>
 
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrar">
-                                Registrar Habitacion.
-                            </button>
-                        </div>
+                        </p:column>
 
-                    </div>
-                </div>
-                <div class="col-8">
+                        <p:column headerText=" " exportable="false" >
 
-                    <div class="card container mt-3 mb-3" style="max-width: 33rem;" id="carta">
+                            <h:commandLink class="btn btn-danger" action="#{habitacionView.eliminarHabitacion(h)}" value="Eliminar"/>
 
-                        <div class="card-body">
-                            <h5 class="card-title font-weight-bold text-white">Habitaciones</h5>
-                            <hr class="bg-white"/>
-                            <h:form>
+                        </p:column>  
 
-                                <p:dataTable id="tabla" emptyMessage="Ninguna habitación registrada" value="#{habitacionView.listaHabitaciones}" 
-                                             var="h" paginator="true"  rows="10" rowSelectMode="add" paginatorPosition="bottom"
-                                             >
+                    </p:dataTable>
 
-                                    <p:column headerText="Número">
-                                        <h:outputText value="#{h.idHabitacion}"  /> 
-                                    </p:column>
-
-                                    <p:column headerText="Tipo" >
-                                        <h:outputText value="#{h.fkTipo}"  /> 
-                                    </p:column>
-
-                                    <p:column headerText="Estado" >
-                                        <h:outputText value="#{h.estadoHabitacionIdEstado}"  /> 
-                                    </p:column>
-
-                                </p:dataTable>
-                                <br/>
-
-                            </h:form>
-                        </div>
-
-                    </div>
-
-                </div>
+                </h:form>
             </div>
         </div>
-
-        <div class="modal fade" id="habitaciones" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Actualizar</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <h:form id="formActualizar">
-                        <div class="modal-body">
-                            <div class="row">                                
-                                <c:forEach items="#{hotelView.hoteles}" var="hot" varStatus="act">
-                                    <div class="col-lg-4">
-                                        <h:commandLink
-                                            html5:data-toggle="modal"
-                                            html5:data-target="#exampleModalComprar" 
-                                            action="#{habitacionView.cargaHabitacionesSolicitadas(hot)}">
-                                            <div class="card text-dark">
-                                                <div class="card-header border-0">
-                                                    <h3 class="card-title">#{hot.nombre}</h3>
-                                                </div>
-                                                <div class="card-header border-0">
-                                                    <h3 class="card-title">#{hot.fkCiudad}</h3>
-                                                </div>
-                                                <div class="card-body">
-                                                    <!--No olvidar colocar foto aquí-->
-                                                    <h6>$#{hot.direccion}</h6>
-                                                </div>
-                                            </div>
-                                        </h:commandLink>
-                                    </div>
-                                </c:forEach>
-                            </div>
-
-                        </div>
-                    </h:form>
-                </div>
-            </div>
-        </div>
-
-
 
         <div class="modal fade" id="editar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -125,16 +79,29 @@
                         <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <h:outputLabel value="Nombre:" for="nombre" />
-                        <h:inputText id="nombre" value="#{hotelView.hotelTemporal.nombre}" required="true" html5:placeholder="Escribe el nombre" class="form-control"/>
+                    <h:form id="formEditar">
+                        <div class="modal-body">
 
-                        <h:outputLabel value="Ciudad:" for="ciudad" />
-                        <h:selectOneMenu id="ciudad" value="#{hotelView.fk_ciudad}" class="form-control">
-                            <f:selectItems itemLabel="#{ciu.descripcion}" itemValue="#{ciu.idCiudad}" var="ciu" value="#{ciudadRequest.ciudades}"></f:selectItems>                                
-                        </h:selectOneMenu>
+                            <h:outputLabel value="Tipo de habitacion" for="tipo" />
+                            <h:selectOneMenu id="tipo" value="#{habitacionView.fk_tipo_habitacion}" class="form-control">
+                                <f:selectItems itemLabel="#{tip.descripcion}" itemValue="#{tip.idTipoHabitacion}" var="tip" value="#{tipoHabitaciones.tipoHabitaciones}"></f:selectItems>                                
+                            </h:selectOneMenu>
 
-                    </div>
+                            <h:outputLabel value="Hotel" for="hotel" />
+                            <h:selectOneMenu id="hotel" value="#{habitacionView.fk_hotel}" class="form-control">
+                                <f:selectItems itemLabel="#{hot.nombre}" itemValue="#{hot.idHotel}" var="hot" value="#{hotelView.hoteles}"></f:selectItems>                                
+                            </h:selectOneMenu>
+                            
+                            <h:outputLabel value="Costo" for="costo" />
+                            <h:inputText value="#{habitacionView.habTemporal.precio}"/>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <h:commandButton action="#{habitacionView.editarHabitacion()}" class="btn btn-primary" value="Registrar.">
+                            </h:commandButton>
+                        </div>
+                    </h:form>
                 </div>
             </div>
         </div>
@@ -149,13 +116,19 @@
                     </div>
                     <h:form>
                         <div class="modal-body">
-                            <h:outputLabel value="Nombre:" for="nombre" />
-                            <h:inputText id="nombre" value="#{habitacionView.habReg.idHabitacion}" required="true" html5:placeholder="Escribe el nombre" class="form-control"/>
-
-                            <h:outputLabel value="Ciudad:" for="ciudad" />
-                            <h:selectOneMenu id="ciudad" value="#{habitacionView.fk_tipo_habitacion}" class="form-control">
+                            
+                            <h:outputLabel value="Tipo de habitacion" for="tipo" />
+                            <h:selectOneMenu id="tipo" value="#{habitacionView.fk_tipo_habitacion}" class="form-control">
                                 <f:selectItems itemLabel="#{tip.descripcion}" itemValue="#{tip.idTipoHabitacion}" var="tip" value="#{tipoHabitaciones.tipoHabitaciones}"></f:selectItems>                                
                             </h:selectOneMenu>
+
+                            <h:outputLabel value="Hotel" for="hotel" />
+                            <h:selectOneMenu id="hotel" value="#{habitacionView.fk_hotel}" class="form-control">
+                                <f:selectItems itemLabel="#{hot.nombre}" itemValue="#{hot.idHotel}" var="hot" value="#{hotelView.hoteles}"></f:selectItems>                                
+                            </h:selectOneMenu>
+                            
+                            <h:outputLabel value="Costo" for="costo" />
+                            <h:inputText value="#{habitacionView.habReg.precio}"/>
 
                         </div>
                         <div class="modal-footer">
@@ -168,8 +141,6 @@
                 </div>
             </div>
         </div>
-
     </ui:composition>
 </html>
-
 

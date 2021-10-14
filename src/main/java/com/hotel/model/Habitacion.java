@@ -16,8 +16,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -69,16 +67,14 @@ public class Habitacion implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "precio")
     private Float precio;
-    @JoinTable(name = "hotel_has_habitacion", joinColumns = {
-        @JoinColumn(name = "fk_habitacion", referencedColumnName = "id_habitacion")}, inverseJoinColumns = {
-        @JoinColumn(name = "fk_hotel", referencedColumnName = "id_hotel")})
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Collection<Hotel> hotelCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkHabitacion", fetch = FetchType.LAZY)
     private Collection<Reserva> reservaCollection;
-    @JoinColumn(name = "estado_habitacion_id_estado", referencedColumnName = "id_estado")
+    @JoinColumn(name = "fk_estado", referencedColumnName = "id_estado")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private EstadoHabitacion estadoHabitacionIdEstado;
+    private EstadoHabitacion fkEstado;
+    @JoinColumn(name = "fk_hotel", referencedColumnName = "id_hotel")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Hotel fkHotel;
     @JoinColumn(name = "fk_tipo", referencedColumnName = "id_tipo_habitacion")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private TipoHabitacion fkTipo;
@@ -146,15 +142,6 @@ public class Habitacion implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Hotel> getHotelCollection() {
-        return hotelCollection;
-    }
-
-    public void setHotelCollection(Collection<Hotel> hotelCollection) {
-        this.hotelCollection = hotelCollection;
-    }
-
-    @XmlTransient
     public Collection<Reserva> getReservaCollection() {
         return reservaCollection;
     }
@@ -163,12 +150,20 @@ public class Habitacion implements Serializable {
         this.reservaCollection = reservaCollection;
     }
 
-    public EstadoHabitacion getEstadoHabitacionIdEstado() {
-        return estadoHabitacionIdEstado;
+    public EstadoHabitacion getFkEstado() {
+        return fkEstado;
     }
 
-    public void setEstadoHabitacionIdEstado(EstadoHabitacion estadoHabitacionIdEstado) {
-        this.estadoHabitacionIdEstado = estadoHabitacionIdEstado;
+    public void setFkEstado(EstadoHabitacion fkEstado) {
+        this.fkEstado = fkEstado;
+    }
+
+    public Hotel getFkHotel() {
+        return fkHotel;
+    }
+
+    public void setFkHotel(Hotel fkHotel) {
+        this.fkHotel = fkHotel;
     }
 
     public TipoHabitacion getFkTipo() {

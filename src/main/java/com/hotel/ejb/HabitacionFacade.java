@@ -30,16 +30,16 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
     }
     
     @Override
-    public boolean crearHabitacion(Habitacion h, int fk_tipo_habitacion) {
+    public boolean crearHabitacion(Habitacion h, int fk_tipo, int fk_hotel) {
         try {
-            Query c = em.createNativeQuery("INSERT INTO habitacion (id_habitacion, bano, calefaccion, telefono, fk_tipo, precio, estado_habitacion_id_estado) VALUES (?,?,?,?,?,?,?)");
-            c.setParameter(1, h.getIdHabitacion());
+            Query c = em.createNativeQuery("INSERT INTO habitacion ( bano, calefaccion, telefono, fk_tipo, precio, fk_estado, fk_hotel) VALUES (?,?,?,?,?,?,?)");
+            c.setParameter(1, Short.parseShort("1"));
             c.setParameter(2, Short.parseShort("1"));
             c.setParameter(3, Short.parseShort("1"));
-            c.setParameter(4, Short.parseShort("1"));
-            c.setParameter(5, fk_tipo_habitacion);
-            c.setParameter(6, h.getPrecio());
-            c.setParameter(7, 1);
+            c.setParameter(4, fk_tipo);
+            c.setParameter(5, h.getPrecio());
+            c.setParameter(6, Short.parseShort("1"));
+            c.setParameter(6, fk_hotel);
             c.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -127,12 +127,12 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
         }
     }
     
-    @Override
-    public List<Habitacion> leerTodos(Hotel habIn){
+     @Override
+    public List<Habitacion> leerTodos(Hotel hotIn){
         try {
             em.getEntityManagerFactory().getCache().evictAll();
-            Query q = em.createQuery("SELECT h FROM Habitacion h WHERE h.hotelCollection = :habIn ");
-            q.setParameter("habIn", habIn);
+            Query q = em.createQuery("SELECT ha, h FROM Habitacion ha JOIN ha.hotelCollection  h WHERE h.idHotel = :hotIn");
+            q.setParameter("hotIn", hotIn.getIdHotel());
             return q.getResultList();
         } catch (Exception e) {
             return null;

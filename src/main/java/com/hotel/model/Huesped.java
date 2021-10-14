@@ -78,9 +78,9 @@ public class Huesped implements Serializable {
     @Size(max = 45)
     @Column(name = "barrio")
     private String barrio;
-    @JoinColumn(name = "ciudad_id_ciudad", referencedColumnName = "id_ciudad")
+    @JoinColumn(name = "fk_ciudad", referencedColumnName = "id_ciudad")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Ciudad ciudadIdCiudad;
+    private Ciudad fkCiudad;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkHuesped", fetch = FetchType.LAZY)
     private Collection<Reserva> reservaCollection;
 
@@ -156,12 +156,12 @@ public class Huesped implements Serializable {
         this.barrio = barrio;
     }
 
-    public Ciudad getCiudadIdCiudad() {
-        return ciudadIdCiudad;
+    public Ciudad getFkCiudad() {
+        return fkCiudad;
     }
 
-    public void setCiudadIdCiudad(Ciudad ciudadIdCiudad) {
-        this.ciudadIdCiudad = ciudadIdCiudad;
+    public void setFkCiudad(Ciudad fkCiudad) {
+        this.fkCiudad = fkCiudad;
     }
 
     @XmlTransient

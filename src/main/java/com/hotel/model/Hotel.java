@@ -16,8 +16,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -60,18 +58,15 @@ public class Hotel implements Serializable {
     @Size(max = 45)
     @Column(name = "direccion")
     private String direccion;
-    @JoinTable(name = "hotel_has_telefono", joinColumns = {
-        @JoinColumn(name = "fk_hotel", referencedColumnName = "id_hotel")}, inverseJoinColumns = {
-        @JoinColumn(name = "fk_telefono", referencedColumnName = "id_telefono")})
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Collection<Telefono> telefonoCollection;
-    @ManyToMany(mappedBy = "hotelCollection", fetch = FetchType.LAZY)
-    private Collection<Habitacion> habitacionCollection;
     @JoinColumn(name = "fk_ciudad", referencedColumnName = "id_ciudad")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Ciudad fkCiudad;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkHotel", fetch = FetchType.LAZY)
     private Collection<Reserva> reservaCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkHotel", fetch = FetchType.LAZY)
+    private Collection<Telefono> telefonoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkHotel", fetch = FetchType.LAZY)
+    private Collection<Habitacion> habitacionCollection;
 
     public Hotel() {
     }
@@ -117,6 +112,23 @@ public class Hotel implements Serializable {
         this.direccion = direccion;
     }
 
+    public Ciudad getFkCiudad() {
+        return fkCiudad;
+    }
+
+    public void setFkCiudad(Ciudad fkCiudad) {
+        this.fkCiudad = fkCiudad;
+    }
+
+    @XmlTransient
+    public Collection<Reserva> getReservaCollection() {
+        return reservaCollection;
+    }
+
+    public void setReservaCollection(Collection<Reserva> reservaCollection) {
+        this.reservaCollection = reservaCollection;
+    }
+
     @XmlTransient
     public Collection<Telefono> getTelefonoCollection() {
         return telefonoCollection;
@@ -133,23 +145,6 @@ public class Hotel implements Serializable {
 
     public void setHabitacionCollection(Collection<Habitacion> habitacionCollection) {
         this.habitacionCollection = habitacionCollection;
-    }
-
-    public Ciudad getFkCiudad() {
-        return fkCiudad;
-    }
-
-    public void setFkCiudad(Ciudad fkCiudad) {
-        this.fkCiudad = fkCiudad;
-    }
-
-    @XmlTransient
-    public Collection<Reserva> getReservaCollection() {
-        return reservaCollection;
-    }
-
-    public void setReservaCollection(Collection<Reserva> reservaCollection) {
-        this.reservaCollection = reservaCollection;
     }
 
     @Override

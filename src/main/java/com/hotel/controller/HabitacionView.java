@@ -45,35 +45,31 @@ public class HabitacionView implements Serializable {
 
     private int fk_tipo_habitacion;
     private int fk_hotel;
-    private float cosTotal;
+    private int fk_tipo;
 
     private Habitacion habReg;
     private Habitacion habTemporal;
     private Hotel htIn;
-    private Hotel htTemporal = new Hotel();
+    private Hotel htTemporal;
 
     private List<Habitacion> habitaciones;
     private List<EstadoReserva> estadoReservas;
-    private List<Hotel> hoteles;
-
     private List<Habitacion> listaHabitaciones = new ArrayList<>();
 
     @PostConstruct
     public void init() {
+        habitaciones = habitacionFacadeLocal.findAll();
         habReg = new Habitacion();
         habTemporal = new Habitacion();
-        hoteles = hotelFacadeLocal.findAll();
-        htIn = new Hotel();
-        listaHabitaciones = new ArrayList<>();
     }
 
     public void registrarHabitacion() {
 
         try {
-            if (habitacionFacadeLocal.crearHabitacion(habReg, fk_tipo_habitacion)) {
-                habitacionFacadeLocal.crearHotelHabitacion(htTemporal.getIdHotel(), habReg);
-                htIn = new Hotel();
+            if (habitacionFacadeLocal.crearHabitacion(habReg, fk_tipo_habitacion, fk_hotel)) {
+                habReg = new Habitacion();
                 
+                habitaciones = habitacionFacadeLocal.findAll();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Habitación registrada", "Habitación registrada"));
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
@@ -87,7 +83,6 @@ public class HabitacionView implements Serializable {
     public void eliminarHabitacion(Habitacion ha) {
         try {
             if (habitacionFacadeLocal.eliminarHabitacion(ha.getIdHabitacion())) {
-                habitacionFacadeLocal.eliminarHotelHabitacion(ha); 
                 listaHabitaciones = habitacionFacadeLocal.findAll();
                 
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Habitación Eliminada", "Habitación eliminada"));
@@ -100,18 +95,23 @@ public class HabitacionView implements Serializable {
     }
 
     public void guardarTemporal(Habitacion ha) {
-        habTemporal = new Habitacion();
+        habTemporal = ha;
         fk_tipo_habitacion = ha.getFkTipo().getIdTipoHabitacion();
+        fk_hotel = ha.getFkHotel().getIdHotel();
+        fk_tipo = ha.getFkTipo().getIdTipoHabitacion();
     }
-/*
+
     public void consultarHabitacion() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/administrador/tablaHabitacion.xhtml");
     }
-*/
+    
+    public void renderHabitacion(){
+        listaHabitaciones = habitacionFacadeLocal.leerTodos(htTemporal);
+    }
+
     public void editarHabitacion() {
         try {
             habitacionFacadeLocal.actualizarHabitacion(habTemporal, fk_tipo_habitacion);
-            habitacionFacadeLocal.actualizarHotelHabitacion(habTemporal);
             habTemporal = new Habitacion();
             habitaciones = habitacionFacadeLocal.findAll();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Habitación Eliminada", "Habitación eliminada"));
@@ -146,23 +146,10 @@ public class HabitacionView implements Serializable {
         }
         habitacionFacadeLocal.edit(habIn);
     }
-    
-/*
-    public String encontrarHabitacion(Hotel h) throws IOException {
-        htTemporal = h;
-        listaHabitaciones = habitacionFacadeLocal.leerTodos(h);
-        return "tablaHabitacion.xhtml";
-    }
-*/ 
-    
-    public void cargaHabitacionesSolicitadas(Hotel h) {
-        listaHabitaciones = habitacionFacadeLocal.leerTodos(h);
-        htTemporal = h;
-    }
-    
-    public List<Habitacion> renderHabitacionHotel() {
-        
-        return habitaciones;
+
+    public List<Habitacion> encontrarHabitacion(Hotel htIn) throws IOException{
+        FacesContext.getCurrentInstance().getExternalContext().redirect("administrador/tablaHabitacion.xhtml");
+        return habitacionFacadeLocal.leerTodos(htIn);
     }
     
     public EstadoReserva getEstadoReserva() {
@@ -251,22 +238,6 @@ public class HabitacionView implements Serializable {
 
     public void setListaHabitaciones(List<Habitacion> listaHabitaciones) {
         this.listaHabitaciones = listaHabitaciones;
-    }
-
-    public float getCosTotal() {
-        return cosTotal;
-    }
-
-    public void setCosTotal(int cosTotal) {
-        this.cosTotal = cosTotal;
-    }
-
-    public List<Hotel> getHoteles() {
-        return hoteles;
-    }
-
-    public void setHoteles(List<Hotel> hoteles) {
-        this.hoteles = hoteles;
     }
 
 }

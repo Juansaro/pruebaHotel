@@ -30,7 +30,7 @@ public class HuespedFacade extends AbstractFacade<Huesped> implements HuespedFac
     @Override
     public boolean registrarHuesped(Huesped huesIn, int fk_ciudad) {
         try {
-            Query qr = em.createNativeQuery("INSERT INTO huesped (documento, nombre, apellido, correo, direccion, barrio, ciudad_id_ciudad) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            Query qr = em.createNativeQuery("INSERT INTO huesped (documento, nombre, apellido, correo, direccion, barrio, fk_ciudad) VALUES (?, ?, ?, ?, ?, ?, ?)");
             qr.setParameter(1, huesIn.getDocumento());
             qr.setParameter(2, huesIn.getNombre());
             qr.setParameter(3, huesIn.getApellido());

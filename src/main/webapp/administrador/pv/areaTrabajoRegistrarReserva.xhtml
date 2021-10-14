@@ -15,13 +15,17 @@
                         <h5 class="card-title font-weight-bold text-white">Registrar reserva</h5>
                         <hr class="bg-white"/>
                         <h:form>
+                            Huesped
+                            <h:selectOneMenu class="form-control" id="huesped" value="#{reservaView.fk_huesped}" required="true">
+                                <f:selectItems value="#{huespedView.huespedes}" var="hue" itemLabel="#{hue.correo}" itemValue="#{hue.idHuesped}"/>
+                            </h:selectOneMenu>
                             Hotel
                             <h:selectOneMenu class="form-control" id="hotel" value="#{reservaView.fk_hotel}" required="true">
                                 <f:selectItems value="#{hotelView.hoteles}" var="hot" itemLabel="#{hot.nombre}" itemValue="#{hot.idHotel}"/>
                             </h:selectOneMenu>
                             Habitacion
                             <h:selectOneMenu class="form-control" id="habitacion" value="#{reservaView.fk_habitacion}" required="true">
-                                <f:selectItems value="#{habitacionView.habitaciones}" var="hab" itemLabel="#{hab.numeroHabitacion}" itemValue="#{hab.numeroHabitacion}"/>
+                                <f:selectItems value="#{habitacionView.habitaciones}" var="hab" itemLabel="#{hab.fkTipo.descripcion}" itemValue="#{hab.idHabitacion}"/>
                             </h:selectOneMenu>
                             Empleado
                             <h:selectOneMenu class="form-control" id="empleado" value="#{reservaView.fk_usuario}" required="true">

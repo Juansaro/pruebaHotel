@@ -41,7 +41,7 @@ public class HotelView implements Serializable{
     private Hotel hotelTemporal = new Hotel();
     
     @PostConstruct
-    public void init(){
+    private void init(){
         hoteles = hotelFacadeLocal.findAll();
         ciudades = ciudadFacadeLocal.findAll();
     }
