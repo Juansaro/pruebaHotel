@@ -17,6 +17,7 @@ import com.hotel.model.Hotel;
 import com.hotel.model.Huesped;
 import com.hotel.model.Reserva;
 import com.hotel.model.Usuario;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -91,11 +92,12 @@ public class ReservaView implements Serializable{
         estados = estadoReservaFacadeLocal.findAll();
     }
     
-    public void registrarReserva(){
-        if(reservaFacadeLocal.registrarReserva(resReg, fk_huesped, fk_habitacion, u.getUsuLog().getIdUsuario(), fk_hotel, fk_estado)){
+    public void registrarReserva() throws IOException{
+        if(reservaFacadeLocal.registrarReserva(resReg, fk_huesped, fk_habitacion, u.getUsuLog().getIdUsuario(), fk_hotel)){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva registrada", "Reserva registrada"));
             resReg = new Reserva();
             reservas = reservaFacadeLocal.findAll();
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/pruebaHotel/faces/administrador/reserva.xhtml");
         }else{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
         }

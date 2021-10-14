@@ -86,7 +86,17 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         } catch (Exception e) {
             return false;
         }
-
+    }
+    
+    @Override
+    public List<Usuario> leerEmpleado(){
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query q = em.createQuery("SELECT u FROM Usuario u WHERE u.fkRol.idRol = 2");
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

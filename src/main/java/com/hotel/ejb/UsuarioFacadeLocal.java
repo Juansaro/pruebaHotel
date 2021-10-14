@@ -35,5 +35,7 @@ public interface UsuarioFacadeLocal {
     public boolean actualizarUsuario(Usuario usuIn, int rolIn);
 
     public Usuario encontrarUsuarioCorreo(String correo);
+
+    public List<Usuario> leerEmpleado();
     
 }

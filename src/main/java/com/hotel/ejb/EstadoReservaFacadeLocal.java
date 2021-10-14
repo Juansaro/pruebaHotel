@@ -29,5 +29,7 @@ public interface EstadoReservaFacadeLocal {
     List<EstadoReserva> findRange(int[] range);
 
     int count();
+
+    public List<EstadoReserva> leerTodos();
     
 }

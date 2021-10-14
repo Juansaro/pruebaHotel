@@ -25,7 +25,7 @@ public class EstadoReservaRequest implements Serializable{
     
     @PostConstruct
     public void init(){
-        estadoReservas = estadoReservaFacadeLocal.findAll();
+        estadoReservas = estadoReservaFacadeLocal.leerTodos();
     }
 
     public List<EstadoReserva> getEstadoReservas() {

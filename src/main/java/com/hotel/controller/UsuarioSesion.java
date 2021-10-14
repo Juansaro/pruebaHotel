@@ -70,9 +70,10 @@ public class UsuarioSesion implements Serializable {
                                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "No exite", "No existe"));
                                 break;
                         }
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Correo o clave incorrectos", "Correo o clave incorrectos"));
                     }
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Correo o clave incorrectos", "Correo o clave incorrectos"));
                 }
-
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
             }
@@ -81,6 +82,13 @@ public class UsuarioSesion implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
         }
 
+    }
+    
+    public void cerrarSesion() throws IOException {
+        usuLog = null;
+        FacesContext fc = FacesContext.getCurrentInstance();
+        fc.getExternalContext().invalidateSession();
+        fc.getExternalContext().redirect("../index.xhtml");
     }
 
     public void registrarUsuario() {

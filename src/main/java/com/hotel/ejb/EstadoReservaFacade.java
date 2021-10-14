@@ -6,9 +6,11 @@
 package com.hotel.ejb;
 
 import com.hotel.model.EstadoReserva;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +29,17 @@ public class EstadoReservaFacade extends AbstractFacade<EstadoReserva> implement
 
     public EstadoReservaFacade() {
         super(EstadoReserva.class);
+    }
+    
+    @Override
+    public List<EstadoReserva> leerTodos(){
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query q = em.createQuery("SELECT e FROM EstadoReserva e");
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
     
 }
