@@ -67,7 +67,7 @@ public class UsuarioSesion implements Serializable {
                                 break;
                             }
                             default:
-                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
+                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "No exite", "No existe"));
                                 break;
                         }
                     }

@@ -36,6 +36,4 @@ public class estadoReservaRequest implements Serializable{
         this.estadoReservas = estadoReservas;
     }
     
-    
-    
 }

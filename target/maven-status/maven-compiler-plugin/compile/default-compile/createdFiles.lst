@@ -15,6 +15,7 @@ com\hotel\controller\RolRequest.class
 com\hotel\model\Usuario_.class
 com\hotel\controller\HabitacionView.class
 com\hotel\ejb\ReservaFacade.class
+com\hotel\ejb\EstadoHabitacionFacade.class
 com\hotel\ejb\HabitacionFacadeLocal.class
 com\hotel\model\Habitacion_.class
 com\hotel\model\Reserva.class
@@ -24,6 +25,7 @@ com\hotel\model\Rol_.class
 com\hotel\controller\DFRootView.class
 com\hotel\controller\ReservaView.class
 com\hotel\ejb\UsuarioFacade.class
+com\hotel\controller\estadoReservaRequest.class
 com\hotel\model\Telefono_.class
 com\hotel\ejb\TelefonoFacade.class
 com\hotel\model\EstadoReserva_.class
@@ -38,12 +40,16 @@ com\hotel\ejb\UsuarioFacadeLocal.class
 com\hotel\ejb\ReservaFacadeLocal.class
 com\hotel\ejb\TipoHabitacionFacadeLocal.class
 com\hotel\ejb\AbstractFacade.class
+com\hotel\model\EstadoHabitacion.class
 com\hotel\model\Hotel_.class
 com\hotel\ejb\HabitacionFacade.class
 com\hotel\controller\HotelView.class
 com\hotel\ejb\HuespedFacade.class
 com\hotel\controller\UsuarioSesion.class
 com\hotel\ejb\HotelFacade.class
+com\hotel\ejb\EstadoHabitacionFacadeLocal.class
+com\hotel\controller\EstadoHabitacionRequest.class
+com\hotel\model\EstadoHabitacion_.class
 com\hotel\ejb\HotelFacadeLocal.class
 com\hotel\ejb\EstadoReservaFacadeLocal.class
 com\hotel\model\Rol.class

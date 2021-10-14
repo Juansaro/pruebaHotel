@@ -32,13 +32,14 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
     @Override
     public boolean crearHabitacion(Habitacion h, int fk_tipo_habitacion) {
         try {
-            Query c = em.createNativeQuery("INSERT INTO habitacion (numero_habitacion, bano, calefaccion, telefono, tipo_habitacion_id_tipo_habitacion,estado) VALUES (?,?,?,?,?,?)");
+            Query c = em.createNativeQuery("INSERT INTO habitacion (id_habitacion, bano, calefaccion, telefono, fk_tipo, precio, estado_habitacion_id_estado) VALUES (?,?,?,?,?,?,?)");
             c.setParameter(1, h.getIdHabitacion());
             c.setParameter(2, Short.parseShort("1"));
             c.setParameter(3, Short.parseShort("1"));
             c.setParameter(4, Short.parseShort("1"));
             c.setParameter(5, fk_tipo_habitacion);
-            c.setParameter(6, Short.parseShort("1"));
+            c.setParameter(6, h.getPrecio());
+            c.setParameter(7, 1);
             c.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -62,10 +63,10 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
     
     
     @Override
-    public Habitacion validarSiExiste(String nombreIn){
+    public Habitacion validarSiExiste(int idIn){
         try {
-            Query q = em.createQuery("SELECT h FROM habitacion h WHERE h LIKE CONCAT('%',:nombreIn,'%')");
-            q.setParameter("nombreIn", nombreIn);
+            Query q = em.createQuery("SELECT h FROM Habitacion h WHERE h.idHabitacion = :nombreIn");
+            q.setParameter("nombreIn", idIn);
             return (Habitacion) q.getSingleResult();
         } catch (Exception e) {
             return  null;
@@ -126,12 +127,12 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
         }
     }
     
-     @Override
-    public List<Habitacion> leerTodos(Hotel hotIn){
+    @Override
+    public List<Habitacion> leerTodos(Hotel habIn){
         try {
             em.getEntityManagerFactory().getCache().evictAll();
-            Query q = em.createQuery("SELECT ha, h FROM Habitacion ha JOIN ha.hotelCollection  h WHERE h.idHotel = :hotIn");
-            q.setParameter("hotIn", hotIn.getIdHotel());
+            Query q = em.createQuery("SELECT h FROM Habitacion h WHERE h.hotelCollection = :habIn ");
+            q.setParameter("habIn", habIn);
             return q.getResultList();
         } catch (Exception e) {
             return null;
