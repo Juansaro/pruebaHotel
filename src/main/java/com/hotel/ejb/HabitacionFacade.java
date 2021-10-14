@@ -138,5 +138,17 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
         }
     }
     
+    @Override
+    public Habitacion leerTipoHabitacion(int h) {
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query qt = em.createQuery("SELECT h FROM Habitacion h WHERE h.idHabitacion = :h");
+            qt.setParameter("h", h);
+            return (Habitacion) qt.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
     
 }

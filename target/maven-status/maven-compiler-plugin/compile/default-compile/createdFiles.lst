@@ -26,6 +26,7 @@ com\hotel\controller\EstadoReservaRequest.class
 com\hotel\controller\DFRootView.class
 com\hotel\controller\ReservaView.class
 com\hotel\ejb\UsuarioFacade.class
+com\hotel\utilidades\ReservaMail.class
 com\hotel\model\Telefono_.class
 com\hotel\ejb\TelefonoFacade.class
 com\hotel\model\EstadoReserva_.class
@@ -39,6 +40,7 @@ com\hotel\controller\CiudadRequest.class
 com\hotel\ejb\UsuarioFacadeLocal.class
 com\hotel\ejb\ReservaFacadeLocal.class
 com\hotel\ejb\TipoHabitacionFacadeLocal.class
+com\hotel\utilidades\ReservaMail$1.class
 com\hotel\ejb\AbstractFacade.class
 com\hotel\model\EstadoHabitacion.class
 com\hotel\model\Hotel_.class

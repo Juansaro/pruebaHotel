@@ -44,4 +44,7 @@ public interface HabitacionFacadeLocal {
 
     public List<Habitacion> leerTodos();
 
+    public Habitacion leerTipoHabitacion(int h);
+
+
 }

@@ -90,4 +90,16 @@ public class HuespedFacade extends AbstractFacade<Huesped> implements HuespedFac
         }
     }
     
+    @Override
+    public Huesped leerHuesped(int h) {
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query qt = em.createQuery("SELECT h FROM Huesped h WHERE h.idHuesped = :h");
+            qt.setParameter("h", h);
+            return (Huesped) qt.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
 }

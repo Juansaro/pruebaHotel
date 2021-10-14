@@ -17,8 +17,15 @@ import com.hotel.model.Hotel;
 import com.hotel.model.Huesped;
 import com.hotel.model.Reserva;
 import com.hotel.model.Usuario;
+import com.hotel.utilidades.ReservaMail;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -80,6 +87,9 @@ public class ReservaView implements Serializable{
     
     private Reserva resReg = new Reserva();
     private Reserva resTemporal = new Reserva();
+    private Huesped hueIn = new Huesped();
+    private Hotel hotIn = new Hotel();
+    private Habitacion habIn = new Habitacion();
     
     @PostConstruct
     public void init(){
@@ -92,8 +102,49 @@ public class ReservaView implements Serializable{
         estados = estadoReservaFacadeLocal.findAll();
     }
     
+    public Date ObtenerFechaActual() {
+        try {
+            DateTimeFormatter d = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            String fechaActual = d.format(LocalDateTime.now());
+            SimpleDateFormat formato = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date fechaFormateada = formato.parse(fechaActual);
+            return fechaFormateada;
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+/*
+    public boolean validarCitaRepetida() {
+        listaUltimaFecha.addAll(citaFacadeLocal.leerTodos(usu.getUsuLog()));
+        if (listaUltimaFecha != null && !listaUltimaFecha.isEmpty()) {
+            Cita item = resReg.getFechaRegistro();
+            Date registro = item.getRegistroActual();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(registro);
+            calendar.add(Calendar.MINUTE, 30);
+            Date fechaSalida = calendar.getTime();
+            calendar.getTime();
+            return ObtenerFechaActual().after(fechaSalida);
+        } else {
+            return true;
+        }
+    }
+    */
     public void registrarReserva() throws IOException{
         if(reservaFacadeLocal.registrarReserva(resReg, fk_huesped, fk_habitacion, u.getUsuLog().getIdUsuario(), fk_hotel)){
+            hueIn = huespedFacadeLocal.leerHuesped(fk_huesped);
+            hotIn = hotelFacadeLocal.leerHotel(fk_hotel);
+            habIn = HabitacionFacadeLocal.leerTipoHabitacion(fk_habitacion);
+            ReservaMail.correoReserva(
+                                hueIn.getNombre(),
+                                hueIn.getApellido(),
+                                hueIn.getCorreo(),
+                                //cit.getServicioIdServicio().getNombre(),//No funciona así toca con un filtro en la colección de 
+                                hotIn.getNombre(),
+                                habIn.getFkTipo().getDescripcion(),
+                                resReg.getFechaIngreso(),
+                                resReg.getFechaSalida()
+                        );
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva registrada", "Reserva registrada"));
             resReg = new Reserva();
             reservas = reservaFacadeLocal.findAll();

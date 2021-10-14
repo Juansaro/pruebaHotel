@@ -33,5 +33,7 @@ public interface HuespedFacadeLocal {
     public List<Huesped> leerTodos();
 
     public boolean eliminarHuesped(Huesped p);
+
+    public Huesped leerHuesped(int h);
     
 }
