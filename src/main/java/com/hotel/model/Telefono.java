@@ -108,7 +108,7 @@ public class Telefono implements Serializable {
 
     @Override
     public String toString() {
-        return "com.hotel.model.Telefono[ idTelefono=" + idTelefono + " ]";
+        return numero;
     }
     
 }

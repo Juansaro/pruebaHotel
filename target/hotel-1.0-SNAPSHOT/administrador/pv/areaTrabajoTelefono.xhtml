@@ -21,11 +21,11 @@
                     <p:dataTable id="tabla" emptyMessage="Ninguna usuario registrado" value="#{telefonoView.telefonos}" 
                                  var="t" paginator="true"  rows="10" rowSelectMode="add" paginatorPosition="bottom"
                                  >
-                        <p:column headerText="Nombre" filterBy="#{t.hotelIdHotel}" filterMatchMode="contains" >
-                            <h:outputText value="#{t.hotelIdHotel}"  /> 
+                        <p:column headerText="Hotel" filterBy="#{t.fkHotel}" filterMatchMode="contains" >
+                            <h:outputText value="#{t.fkHotel}"  /> 
                         </p:column>
 
-                        <p:column headerText="Ciudad" filterBy="#{t.numero}" filterMatchMode="contains" >
+                        <p:column headerText="Número" filterBy="#{t.numero}" filterMatchMode="contains" >
                             <h:outputText value="#{t.numero}"  /> 
                         </p:column>
 
@@ -66,9 +66,9 @@
                             <h:outputLabel value="Número" for="numero" />
                             <h:inputText id="numero" value="#{telefonoView.telReg.numero}" required="true" html5:placeholder="Escribe el número" class="form-control"/>
 
-                            <h:outputLabel value="Ciudad:" for="ciudad" />
-                            <h:selectOneMenu id="ciudad" value="#{telefonoView.fk_hotel}" class="form-control">
-                                <f:selectItems itemLabel="#{ciu.descripcion}" itemValue="#{ciu.idCiudad}" var="ciu" value="#{ciudadRequest.ciudades}"></f:selectItems>                                
+                            <h:outputLabel value="Hotel" for="hotel" />
+                            <h:selectOneMenu id="hotel" value="#{telefonoView.fk_hotel}" class="form-control">
+                                <f:selectItems itemLabel="#{hot.nombre}" itemValue="#{hot.idHotel}" var="hot" value="#{hotelView.hoteles}"></f:selectItems>                                
                             </h:selectOneMenu>
 
                         </div>
@@ -96,9 +96,9 @@
                             <h:outputLabel value="Número" for="numero" />
                             <h:inputText id="numero" value="#{telefonoView.telTemporal.numero}" required="true" html5:placeholder="Escribe el número" class="form-control"/>
 
-                            <h:outputLabel value="Ciudad:" for="ciudad" />
-                            <h:selectOneMenu id="ciudad" value="#{telefonoView.fk_hotel}" class="form-control">
-                                <f:selectItems itemLabel="#{ciu.descripcion}" itemValue="#{ciu.idCiudad}" var="ciu" value="#{ciudadRequest.ciudades}"></f:selectItems>                                
+                            <h:outputLabel value="Hotel" for="hotel" />
+                            <h:selectOneMenu id="hotel" value="#{telefonoView.fk_hotel}" class="form-control">
+                                <f:selectItems itemLabel="#{hot.nombre}" itemValue="#{hot.idHotel}" var="hot" value="#{hotelView.hoteles}"></f:selectItems>                                
                             </h:selectOneMenu>
 
                         </div>

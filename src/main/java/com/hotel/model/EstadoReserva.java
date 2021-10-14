@@ -110,7 +110,7 @@ public class EstadoReserva implements Serializable {
 
     @Override
     public String toString() {
-        return "com.hotel.model.EstadoReserva[ idEstadoReserva=" + idEstadoReserva + " ]";
+        return descripcion;
     }
     
 }

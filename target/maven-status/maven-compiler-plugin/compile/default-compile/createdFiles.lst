@@ -22,10 +22,10 @@ com\hotel\model\Reserva.class
 com\hotel\controller\HuespedView.class
 com\hotel\model\Usuario.class
 com\hotel\model\Rol_.class
+com\hotel\controller\EstadoReservaRequest.class
 com\hotel\controller\DFRootView.class
 com\hotel\controller\ReservaView.class
 com\hotel\ejb\UsuarioFacade.class
-com\hotel\controller\estadoReservaRequest.class
 com\hotel\model\Telefono_.class
 com\hotel\ejb\TelefonoFacade.class
 com\hotel\model\EstadoReserva_.class

@@ -169,7 +169,7 @@ public class Hotel implements Serializable {
 
     @Override
     public String toString() {
-        return "com.hotel.model.Hotel[ idHotel=" + idHotel + " ]";
+        return nombre;
     }
     
 }

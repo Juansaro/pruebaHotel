@@ -28,7 +28,7 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
     public HabitacionFacade() {
         super(Habitacion.class);
     }
-    
+
     @Override
     public boolean crearHabitacion(Habitacion h, int fk_tipo, int fk_hotel) {
         try {
@@ -38,8 +38,8 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
             c.setParameter(3, Short.parseShort("1"));
             c.setParameter(4, fk_tipo);
             c.setParameter(5, h.getPrecio());
-            c.setParameter(6, Short.parseShort("1"));
-            c.setParameter(6, fk_hotel);
+            c.setParameter(6, 1);
+            c.setParameter(7, fk_hotel);
             c.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -74,14 +74,14 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
     }
     
     @Override
-    public boolean actualizarHabitacion(Habitacion habIn, int fk_tipo) {
+    public boolean actualizarHabitacion(Habitacion habIn, int fk_tipo, int fk_estado,int fk_hotel) {
         try {
-            Query qr = em.createNativeQuery("UPDATE usuario SET nombre = ?, apellido = ?, correo = ?, contrasena = ?, fk_rol = ? WHERE (id_usuario = ?)");
-            qr.setParameter(1, habIn.getBano());
-            qr.setParameter(2, habIn.getCalefaccion());
-            qr.setParameter(3, habIn.getTelefono());
-            qr.setParameter(4, fk_tipo);
-            qr.setParameter(5, habIn.getFkTipo());
+            Query qr = em.createNativeQuery("UPDATE habitacion SET fk_tipo = ?, precio = ?, fk_estado = ?, fk_hotel = ? WHERE (id_habitacion = ?)");
+            qr.setParameter(1, fk_tipo);
+            qr.setParameter(2, habIn.getPrecio());
+            qr.setParameter(3, fk_estado);
+            qr.setParameter(4, fk_hotel);
+            qr.setParameter(5, habIn.getIdHabitacion());
             qr.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -127,12 +127,11 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
         }
     }
     
-     @Override
-    public List<Habitacion> leerTodos(Hotel hotIn){
+    @Override
+    public List<Habitacion> leerTodos(){
         try {
             em.getEntityManagerFactory().getCache().evictAll();
-            Query q = em.createQuery("SELECT ha, h FROM Habitacion ha JOIN ha.hotelCollection  h WHERE h.idHotel = :hotIn");
-            q.setParameter("hotIn", hotIn.getIdHotel());
+            Query q = em.createQuery("SELECT ha FROM Habitacion ha");
             return q.getResultList();
         } catch (Exception e) {
             return null;

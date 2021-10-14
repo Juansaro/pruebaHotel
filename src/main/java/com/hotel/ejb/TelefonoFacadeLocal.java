@@ -35,5 +35,7 @@ public interface TelefonoFacadeLocal {
     public boolean actualizarTelefono(Telefono telIn, int hotelIn);
 
     public boolean eliminarTelefono(int tel_id);
+
+    public List<Telefono> leerTodos();
     
 }

@@ -16,7 +16,7 @@ import javax.inject.Named;
 
 @Named(value = "estadoReservaRequest")
 @RequestScoped
-public class estadoReservaRequest implements Serializable{
+public class EstadoReservaRequest implements Serializable{
     
     @EJB
     private EstadoReservaFacadeLocal estadoReservaFacadeLocal;

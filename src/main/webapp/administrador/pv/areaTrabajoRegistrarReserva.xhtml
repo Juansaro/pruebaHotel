@@ -33,7 +33,7 @@
                             </h:selectOneMenu>
                             Estado
                             <h:selectOneMenu class="form-control" id="estado" value="#{reservaView.fk_estado}" required="true">
-                                <f:selectItems value="#{estadoRequest.estados}" var="est" itemLabel="#{est.descripcion}" itemValue="#{est.idEstadoReserva}"/>
+                                <f:selectItems value="#{estadoReservaRequest.estadoReservas}" var="esta" itemLabel="#{esta.descripcion}" itemValue="#{esta.idEstadoReserva}"/>
                             </h:selectOneMenu>
 
                             <h:outputLabel class="card-text font-weight-bold text-white" value="Fecha de entrada" for="fechaSolicitud" />

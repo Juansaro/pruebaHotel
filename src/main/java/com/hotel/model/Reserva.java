@@ -190,7 +190,7 @@ public class Reserva implements Serializable {
 
     @Override
     public String toString() {
-        return "com.hotel.model.Reserva[ idReserva=" + idReserva + " ]";
+        return "" + idReserva;
     }
     
 }

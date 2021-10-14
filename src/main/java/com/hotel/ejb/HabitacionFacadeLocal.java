@@ -30,18 +30,18 @@ public interface HabitacionFacadeLocal {
     
     public boolean eliminarHabitacion(int hab_id);
 
-    public boolean actualizarHabitacion(Habitacion habIn, int fk_tipo);
-
     public void crearHotelHabitacion(int fk_hotel, Habitacion ha);
    
     public boolean eliminarHotelHabitacion(Habitacion ha);
 
     public boolean actualizarHotelHabitacion(Habitacion habIn);
 
-    public List<Habitacion> leerTodos(Hotel hotIn);
-
     public Habitacion validarSiExiste(int idIn);
 
     public boolean crearHabitacion(Habitacion h, int fk_tipo, int fk_hotel);
+
+    public boolean actualizarHabitacion(Habitacion habIn, int fk_tipo, int fk_estado, int fk_hotel);
+
+    public List<Habitacion> leerTodos();
 
 }

@@ -195,7 +195,7 @@ public class Huesped implements Serializable {
 
     @Override
     public String toString() {
-        return "com.hotel.model.Huesped[ idHuesped=" + idHuesped + " ]";
+        return nombre + apellido;
     }
     
 }

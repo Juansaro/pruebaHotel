@@ -80,8 +80,8 @@ public class ReservaFacade extends AbstractFacade<Reserva> implements ReservaFac
     public List<Reserva> leerReservasEmpleado(Usuario usuIn) {
         try {
             em.getEntityManagerFactory().getCache().evictAll();
-            Query qt = em.createQuery("SELECT r FROM Reserva r WHERE r.fkHuesped = :u");
-            qt.setParameter("u", usuIn);
+            Query qt = em.createQuery("SELECT r FROM Reserva r WHERE r.fkEmpleado = :usuIn");
+            qt.setParameter("usuIn", usuIn);
             return qt.getResultList();
         } catch (Exception e) {
             return null;

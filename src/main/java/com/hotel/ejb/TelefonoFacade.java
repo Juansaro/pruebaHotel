@@ -6,6 +6,7 @@
 package com.hotel.ejb;
 
 import com.hotel.model.Telefono;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -32,11 +33,11 @@ public class TelefonoFacade extends AbstractFacade<Telefono> implements Telefono
     }
     
     @Override
-    public boolean registrarTelefono(Telefono telIn, int hotelIn) {
+    public boolean registrarTelefono(Telefono telIn, int fk_hotel) {
         try {
-            Query qr = em.createNativeQuery("INSERT INTO telefono (numero, hotel_id_hotel) VALUES (?, ?)");
+            Query qr = em.createNativeQuery("INSERT INTO telefono (numero, fk_hotel) VALUES (?, ?)");
             qr.setParameter(1, telIn.getNumero());
-            qr.setParameter(2, hotelIn);
+            qr.setParameter(2, fk_hotel);
             qr.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -46,11 +47,12 @@ public class TelefonoFacade extends AbstractFacade<Telefono> implements Telefono
     }
 
     @Override
-    public boolean actualizarTelefono(Telefono telIn, int hotelIn) {
+    public boolean actualizarTelefono(Telefono telIn, int fk_hotel) {
         try {
-            Query qr = em.createNativeQuery("UPDATE usuario SET nombre = ?, apellido = ?, correo = ?, contrasena = ?, fk_rol = ? WHERE (id_usuario = ?)");
+            Query qr = em.createNativeQuery("UPDATE telefono SET numero = ?, fk_hotel = ? WHERE (id_telefono = ?)");
             qr.setParameter(1, telIn.getNumero());
-            qr.setParameter(2, hotelIn);
+            qr.setParameter(2, fk_hotel);
+            qr.setParameter(3, telIn.getIdTelefono());
             qr.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -68,6 +70,17 @@ public class TelefonoFacade extends AbstractFacade<Telefono> implements Telefono
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+    
+    @Override
+    public List<Telefono> leerTodos(){
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query q = em.createQuery("SELECT t FROM Telefono t");
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
         }
     }
     

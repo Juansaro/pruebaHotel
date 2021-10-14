@@ -121,7 +121,7 @@ public class Ciudad implements Serializable {
 
     @Override
     public String toString() {
-        return "com.hotel.model.Ciudad[ idCiudad=" + idCiudad + " ]";
+        return descripcion;
     }
     
 }

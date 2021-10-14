@@ -21,57 +21,64 @@ import javax.inject.Named;
 
 @Named(value = "telefonoView")
 @ViewScoped
-public class TelefonoView implements Serializable{
-    
+public class TelefonoView implements Serializable {
+
     @EJB
     private TelefonoFacadeLocal telefonoFacadeLocal;
-    
+
     @EJB
     private HotelFacadeLocal hotelFacadeLocal;
-    
+
     @Inject
     private Hotel hotel;
-    
+
     private int fk_hotel;
-    
+
     private List<Hotel> hoteles;
     private List<Telefono> telefonos;
-    
+
     private Telefono telReg = new Telefono();
     private Telefono telTemporal = new Telefono();
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         telefonos = telefonoFacadeLocal.findAll();
-        hoteles = hotelFacadeLocal.findAll();
     }
-    
-    public void registrarTelefono(){
-        if(telefonoFacadeLocal.registrarTelefono(telReg, fk_hotel)){
+
+    public void registrarTelefono() {
+        if (telefonoFacadeLocal.registrarTelefono(telReg, fk_hotel)) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Hotel registrado", "Hotel registrado"));
             telReg = new Telefono();
-            hoteles = hotelFacadeLocal.findAll();
-        }else{
+            telefonos = telefonoFacadeLocal.leerTodos();
+        } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
         }
     }
-    
-    public void guardarTemporal(Telefono t){
+
+    public void guardarTemporal(Telefono t) {
         telTemporal = t;
     }
-    
-    public void actualizarTelefono(){
-        try{
-            telefonoFacadeLocal.actualizarTelefono(telTemporal, fk_hotel);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Hotel editado", "Hotel editado"));
+
+    public void actualizarTelefono() {
+        try {
+
+            if (telefonoFacadeLocal.actualizarTelefono(telTemporal, fk_hotel)) {
+                telefonos = telefonoFacadeLocal.leerTodos();
+                telTemporal = new Telefono();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Hotel editado", "Hotel editado"));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de edición", "Error de edición"));
+            }
+
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de edición", "Error de edición"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de componente", "Error de componente"));
         }
     }
-    
-    public void eliminarTelefono(Telefono t){
+
+    public void eliminarTelefono(Telefono t) {
         try {
             if (telefonoFacadeLocal.eliminarTelefono(t.getIdTelefono())) {
+                telefonos = telefonoFacadeLocal.leerTodos();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Hotel eliminado", "Hotel eliminado"));
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de eliminación", "Error de eliminación"));
@@ -119,5 +126,5 @@ public class TelefonoView implements Serializable{
     public void setTelTemporal(Telefono telTemporal) {
         this.telTemporal = telTemporal;
     }
-    
+
 }
