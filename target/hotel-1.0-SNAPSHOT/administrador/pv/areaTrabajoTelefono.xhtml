@@ -10,15 +10,15 @@
         <div class="card m-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                DataTable Example
+                Tabla de teléfonos
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrar">
-                Registrar usuario.
+                Registrar telefono.
             </button>
             </div>
             <div class="card-body">
                 <h:form id="frmPrincipal" styleClass="jsfcrud_list_form">
                     <p:growl id="growl" life="3000"/>
-                    <p:dataTable id="tabla" emptyMessage="Ninguna usuario registrado" value="#{telefonoView.telefonos}" 
+                    <p:dataTable id="tabla" emptyMessage="Ningun teléfono registrado" value="#{telefonoView.telefonos}" 
                                  var="t" paginator="true"  rows="10" rowSelectMode="add" paginatorPosition="bottom"
                                  >
                         <p:column headerText="Hotel" filterBy="#{t.hotelIdHotel}" filterMatchMode="contains" >
@@ -58,7 +58,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Registrar teléfono</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <h:form>
@@ -88,7 +88,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Editar teléfono</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                      <h:form>

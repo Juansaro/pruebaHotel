@@ -110,7 +110,7 @@ public class Rol implements Serializable {
 
     @Override
     public String toString() {
-        return "com.hotel.model.Rol[ idRol=" + idRol + " ]";
+        return descripcion;
     }
     
 }

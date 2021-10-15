@@ -10,9 +10,9 @@
         <div class="card m-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                DataTable Example
+                Tabla de habitaciones
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrar">
-                    Registrar habitaciones
+                    Registrar habitación
                 </button>
             </div>
             <div class="card-body">
@@ -48,8 +48,12 @@
                             <h:outputText value="#{h.fkTipo}"/>
                         </p:column>
 
-                        <p:column headerText="Hotel" filterBy="#{h.fkHotel}"  filterMatchMode="contains" >
-                            <h:outputText value="#{h.fkHotel}" /><br/>
+                        <p:column headerText="Hotel" filterBy="#{h.hotelIdHotel}"  filterMatchMode="contains" >
+                            <h:outputText value="#{h.hotelIdHotel}" /><br/>
+                        </p:column>
+                        
+                        <p:column headerText="Estado" filterBy="#{h.estadoHabitacionIdEstado}"  filterMatchMode="contains" >
+                            <h:outputText value="#{h.estadoHabitacionIdEstado}" /><br/>
                         </p:column>
 
                         <p:column headerText=" " exportable="false" >
@@ -80,7 +84,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Editar habitación</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <h:form id="formEditar">
@@ -120,7 +124,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Registrar habitacion</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <h:form>

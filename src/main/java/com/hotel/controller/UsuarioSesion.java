@@ -90,6 +90,15 @@ public class UsuarioSesion implements Serializable {
 
     }
 
+    public void validarUsuarioSesion() throws IOException {
+
+        if (usuLog == null || usuLog.getCorreo() == null) {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            fc.getExternalContext().invalidateSession();
+            fc.getExternalContext().redirect("../index.xhtml");
+        }
+    }
+
     public void cerrarSesion() throws IOException {
         usuLog = null;
         FacesContext fc = FacesContext.getCurrentInstance();
@@ -97,13 +106,22 @@ public class UsuarioSesion implements Serializable {
         fc.getExternalContext().redirect("../index.xhtml");
     }
 
+    public void cambiarEstado(Usuario usuIn) {
+        if (usuIn.getEstado() == Short.parseShort("0")) {
+            usuIn.setEstado(Short.parseShort("1"));
+        } else {
+            usuIn.setEstado(Short.parseShort("0"));
+        }
+        usuarioFacadeLocal.edit(usuIn);
+    }
+
     public void registrarUsuario() {
         usuReg.setContrasena(generatePassayPassword());
         if (usuarioFacadeLocal.registrarUsuario(usuReg, fk_rol)) {
             usuClaveMail.correoReserva(
-                    usuReg.getNombre(), 
-                    usuReg.getApellido(), 
-                    usuReg.getCorreo(), 
+                    usuReg.getNombre(),
+                    usuReg.getApellido(),
+                    usuReg.getCorreo(),
                     usuReg.getDocumento(),
                     usuReg.getContrasena()
             );
@@ -233,7 +251,7 @@ public class UsuarioSesion implements Serializable {
     public void setUsuTemporal(Usuario usuTemporal) {
         this.usuTemporal = usuTemporal;
     }
-    
+
     public String getClaveIn() {
         return claveIn;
     }

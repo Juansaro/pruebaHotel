@@ -44,6 +44,11 @@
                         <p:column headerText="Documento:" filterBy="#{u.documento}" filterMatchMode="contains" >
                             <h:outputText value="#{u.documento}"  /> 
                         </p:column>
+                        
+                        <p:column headerText="Estado:" filterMatchMode="contains" >
+                            <h:commandButton action="#{usuarioSesion.cambiarEstado(u)}" class="btn btn-block btn-outline-primary btn-xs" value="C/E" />
+                            <img height="24px" width="24px" src="#{request.contextPath}/assets/img/#{u.estado == '1'?'si':'no'}.png" alt=""/>
+                        </p:column>
 
                         <p:column headerText=" " exportable="false" >
                             <h:commandButton class="btn btn-warning"
@@ -54,15 +59,6 @@
                                 <f:ajax render=":formEditar"> </f:ajax>
                             </h:commandButton>
                         </p:column>
-
-                        <p:column headerText=" " exportable="false" >
-
-                            <h:commandButton class="btn btn-danger"
-                                             action="#{usuarioSesion.eliminarUsuario(u)}" 
-                                             value="Eliminar" >
-                            </h:commandButton>
-
-                        </p:column>  
 
                     </p:dataTable>
                 </h:form>
@@ -128,9 +124,6 @@
 
                             <h:outputLabel value="Correo:" for="correo" />
                             <h:inputText id="correo" value="#{usuarioSesion.usuReg.correo}" required="true" html5:placeholder="Escribe el correo" class="form-control"/>
-
-                            <h:outputLabel value="Clave:" for="clave" />
-                            <h:inputText id="clave" value="#{usuarioSesion.usuReg.contrasena}" required="true" html5:placeholder="Escribe la clave" class="form-control"/>
 
                             <h:outputLabel value="Documento:" for="documento" />
                             <h:inputText id="documento" value="#{usuarioSesion.usuReg.documento}" required="true" html5:placeholder="Escribe el documento" class="form-control"/>

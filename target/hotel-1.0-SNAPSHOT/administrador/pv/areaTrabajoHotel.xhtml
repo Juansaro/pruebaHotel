@@ -10,15 +10,15 @@
         <div class="card m-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                DataTable Example
+                Tabla de hoteles
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrar">
-                Registrar usuario.
-            </button>
+                    Registrar hotel.
+                </button>
             </div>
             <div class="card-body">
                 <h:form id="frmPrincipal" styleClass="jsfcrud_list_form">
                     <p:growl id="growl" life="3000"/>
-                    <p:dataTable id="tabla" emptyMessage="Ninguna usuario registrado" value="#{hotelView.hoteles}" 
+                    <p:dataTable id="tabla" emptyMessage="Ningun hotel registrado" value="#{hotelView.hoteles}" 
                                  var="h" paginator="true"  rows="10" rowSelectMode="add" paginatorPosition="bottom"
                                  >
                         <p:column headerText="Nombre" filterBy="#{h.nombre}" filterMatchMode="contains" >
@@ -58,7 +58,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Registrar hotel</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <h:form>
@@ -71,6 +71,9 @@
                                 <f:selectItems itemLabel="#{ciu.descripcion}" itemValue="#{ciu.idCiudad}" var="ciu" value="#{ciudadRequest.ciudades}"></f:selectItems>                                
                             </h:selectOneMenu>
 
+                            <h:outputLabel value="Dirección:" for="direccion" />
+                            <h:inputText id="direccion" value="#{hotelView.hotelReg.direccion}" required="true" html5:placeholder="Escribe la dirección" class="form-control"/>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -82,13 +85,13 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Modal -->
         <div class="modal fade" id="editar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Editar hotel</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <h:form>
@@ -100,6 +103,9 @@
                             <h:selectOneMenu id="ciudad" value="#{hotelView.fk_ciudad}" class="form-control">
                                 <f:selectItems itemLabel="#{ciu.descripcion}" itemValue="#{ciu.idCiudad}" var="ciu" value="#{ciudadRequest.ciudades}"></f:selectItems>                                
                             </h:selectOneMenu>
+
+                            <h:outputLabel value="Dirección:" for="direccion" />
+                            <h:inputText id="direccion" value="#{hotelView.hotelTemporal.direccion}" required="true" html5:placeholder="Escribe la dirección" class="form-control"/>
 
                         </div>
                         <div class="modal-footer">

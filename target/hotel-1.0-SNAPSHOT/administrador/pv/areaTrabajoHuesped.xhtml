@@ -10,9 +10,9 @@
         <div class="card m-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                DataTable Example
+                Tabla de huespedes
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrar">
-                    Registrar usuario.
+                    Registrar huesped.
                 </button>
             </div>
             <div class="card-body">
@@ -37,8 +37,8 @@
                             <h:outputText value="#{h.documento}"  /> 
                         </p:column>
 
-                        <p:column headerText="Apellido" filterBy="#{h.fkCiudad}" filterMatchMode="contains" >
-                            <h:outputText value="#{h.fkCiudad}"  /> 
+                        <p:column headerText="Ciudad" filterBy="#{h.ciudadIdCiudad}" filterMatchMode="contains" >
+                            <h:outputText value="#{h.ciudadIdCiudad}"  /> 
                         </p:column>
 
                         <p:column headerText=" " exportable="false" >
@@ -70,7 +70,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Registrar huesped</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <h:form>
@@ -91,8 +91,8 @@
                             <h:outputLabel value="Barrio" for="barrio" />
                             <h:inputText id="barrio" value="#{huespedView.hueReg.barrio}" required="true" html5:placeholder="Escribe el barrio" class="form-control"/>
 
-                            <h:outputLabel value="Nombre:" for="direccion" />
-                            <h:inputText id="direccion" value="#{huespedView.hueReg.direccion}" required="true" html5:placeholder="Escribe el nombre" class="form-control"/>
+                            <h:outputLabel value="Dirección:" for="direccion" />
+                            <h:inputText id="direccion" value="#{huespedView.hueReg.direccion}" required="true" html5:placeholder="Escribe la dirección" class="form-control"/>
 
                             <h:outputLabel value="Ciudad:" for="ciudad" />
                             <h:selectOneMenu id="ciudad" value="#{huespedView.fk_ciudad}" class="form-control">
@@ -116,7 +116,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Registrar huesped</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <h:form>
