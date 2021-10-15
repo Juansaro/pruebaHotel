@@ -30,14 +30,14 @@ public interface UsuarioFacadeLocal {
 
     public boolean registrarUsuario(Usuario usuIn, int rolIn);
 
-    public Usuario validarUsuario(String correoIn, String claveIn);
-
     public boolean actualizarUsuario(Usuario usuIn, int rolIn);
-
-    public Usuario encontrarUsuarioCorreo(String correo);
 
     public List<Usuario> leerEmpleado();
 
     public boolean eliminarUsuario(Usuario usuIn);
+
+    public Usuario encontrarUsuarioDocumento(int documento);
+
+    public Usuario validarUsuario(int docIn, String claveIn);
     
 }

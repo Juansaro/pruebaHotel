@@ -47,12 +47,12 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     }
 
     @Override
-    public Usuario validarUsuario(String correoIn, String claveIn) {
+    public Usuario validarUsuario(int docIn, String claveIn) {
 
         try {
             em.getEntityManagerFactory().getCache().evictAll();
-            Query qt = em.createQuery("SELECT u FROM Usuario u WHERE u.correo = :correoIn AND u.contrasena = :claveIn");
-            qt.setParameter("correoIn", correoIn);
+            Query qt = em.createQuery("SELECT u FROM Usuario u WHERE u.documento = :docIn AND u.contrasena = :claveIn");
+            qt.setParameter("docIn", docIn);
             qt.setParameter("claveIn", claveIn);
             return (Usuario) qt.getSingleResult();
         } catch (Exception e) {
@@ -62,8 +62,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     }
     
     @Override
-    public Usuario encontrarUsuarioCorreo(String correo){
-        Query q = em.createNamedQuery("Usuario.findByCorreo", Usuario.class).setParameter("correo", correo);
+    public Usuario encontrarUsuarioDocumento(int documento){
+        Query q = em.createNamedQuery("Usuario.findByDocumento", Usuario.class).setParameter("documento", documento);
         
         List<Usuario> listado = q.getResultList();
         
@@ -76,13 +76,13 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     @Override
     public boolean actualizarUsuario(Usuario usuIn, int rolIn) {
         try {
-            Query qr = em.createNativeQuery("UPDATE usuario SET nombre = ?, apellido = ?, correo = ?, contrasena = ?, fk_rol = ? WHERE (id_usuario = ?)");
-            qr.setParameter(1, usuIn.getNombre());
-            qr.setParameter(2, usuIn.getApellido());
-            qr.setParameter(3, usuIn.getCorreo());
-            qr.setParameter(4, usuIn.getContrasena());
-            qr.setParameter(5, rolIn);
-            qr.setParameter(6, usuIn.getIdUsuario());
+            Query qr = em.createNativeQuery("UPDATE usuario SET documento = ?, nombre = ?, apellido = ?, correo = ?, contrasena = ?, fk_rol = ? WHERE (documento = ?)");
+            qr.setParameter(1, usuIn.getDocumento());
+            qr.setParameter(2, usuIn.getNombre());
+            qr.setParameter(3, usuIn.getApellido());
+            qr.setParameter(4, usuIn.getCorreo());
+            qr.setParameter(5, usuIn.getContrasena());
+            qr.setParameter(6, rolIn);
             qr.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -93,8 +93,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     @Override
     public boolean eliminarUsuario(Usuario usuIn) {
         try {
-            Query qr = em.createNativeQuery("DELETE FROM usuario WHERE (id_usuario =  ?)");
-            qr.setParameter(1, usuIn.getIdUsuario());
+            Query qr = em.createNativeQuery("DELETE FROM usuario WHERE (documento =  ?)");
+            qr.setParameter(1, usuIn.getDocumento());
             qr.executeUpdate();
             return true;
         } catch (Exception e) {

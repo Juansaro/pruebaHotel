@@ -72,7 +72,7 @@ public class Reserva implements Serializable {
     @JoinColumn(name = "fk_huesped", referencedColumnName = "id_huesped")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Huesped fkHuesped;
-    @JoinColumn(name = "fk_empleado", referencedColumnName = "id_usuario")
+    @JoinColumn(name = "fk_empleado", referencedColumnName = "documento")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Usuario fkEmpleado;
 
@@ -190,7 +190,7 @@ public class Reserva implements Serializable {
 
     @Override
     public String toString() {
-        return "" + idReserva;
+        return "com.hotel.model.Reserva[ idReserva=" + idReserva + " ]";
     }
     
 }

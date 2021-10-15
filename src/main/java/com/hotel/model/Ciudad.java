@@ -48,7 +48,7 @@ public class Ciudad implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "descripcion")
     private String descripcion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkCiudad", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ciudadIdCiudad", fetch = FetchType.LAZY)
     private Collection<Huesped> huespedCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkCiudad", fetch = FetchType.LAZY)
     private Collection<Hotel> hotelCollection;

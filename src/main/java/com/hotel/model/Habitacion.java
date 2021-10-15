@@ -69,12 +69,9 @@ public class Habitacion implements Serializable {
     private Float precio;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkHabitacion", fetch = FetchType.LAZY)
     private Collection<Reserva> reservaCollection;
-    @JoinColumn(name = "fk_estado", referencedColumnName = "id_estado")
+    @JoinColumn(name = "estado_habitacion_id_estado", referencedColumnName = "id_estado")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private EstadoHabitacion fkEstado;
-    @JoinColumn(name = "fk_hotel", referencedColumnName = "id_hotel")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Hotel fkHotel;
+    private EstadoHabitacion estadoHabitacionIdEstado;
     @JoinColumn(name = "fk_tipo", referencedColumnName = "id_tipo_habitacion")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private TipoHabitacion fkTipo;
@@ -150,20 +147,12 @@ public class Habitacion implements Serializable {
         this.reservaCollection = reservaCollection;
     }
 
-    public EstadoHabitacion getFkEstado() {
-        return fkEstado;
+    public EstadoHabitacion getEstadoHabitacionIdEstado() {
+        return estadoHabitacionIdEstado;
     }
 
-    public void setFkEstado(EstadoHabitacion fkEstado) {
-        this.fkEstado = fkEstado;
-    }
-
-    public Hotel getFkHotel() {
-        return fkHotel;
-    }
-
-    public void setFkHotel(Hotel fkHotel) {
-        this.fkHotel = fkHotel;
+    public void setEstadoHabitacionIdEstado(EstadoHabitacion estadoHabitacionIdEstado) {
+        this.estadoHabitacionIdEstado = estadoHabitacionIdEstado;
     }
 
     public TipoHabitacion getFkTipo() {
@@ -196,7 +185,7 @@ public class Habitacion implements Serializable {
 
     @Override
     public String toString() {
-        return "" + idHabitacion;
+        return "" + fkTipo;
     }
     
 }

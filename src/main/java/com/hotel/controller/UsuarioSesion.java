@@ -38,7 +38,7 @@ public class UsuarioSesion implements Serializable {
     private Rol rol;
 
     private int fk_rol;
-    private String correoIn;
+    private int docIn;
     private String claveIn;
 
     private List<Usuario> usuarios;
@@ -56,9 +56,9 @@ public class UsuarioSesion implements Serializable {
 
     public void validarUsuario() {
         try {
-            usuLog = usuarioFacadeLocal.encontrarUsuarioCorreo(correoIn);
+            usuLog = usuarioFacadeLocal.encontrarUsuarioDocumento(docIn);
             if (usuLog != null) {
-                if (usuLog.getCorreo().equals(correoIn)) {
+                if (usuLog.getCorreo().equals(docIn)) {
                     if (usuLog.getContrasena().equals(claveIn)) {
                         switch (usuLog.getFkRol().toString()) {
                             case "Administrador": {
@@ -225,21 +225,21 @@ public class UsuarioSesion implements Serializable {
     public void setUsuTemporal(Usuario usuTemporal) {
         this.usuTemporal = usuTemporal;
     }
-
-    public String getCorreoIn() {
-        return correoIn;
-    }
-
-    public void setCorreoIn(String correoIn) {
-        this.correoIn = correoIn;
-    }
-
+    
     public String getClaveIn() {
         return claveIn;
     }
 
     public void setClaveIn(String claveIn) {
         this.claveIn = claveIn;
+    }
+
+    public int getDocIn() {
+        return docIn;
+    }
+
+    public void setDocIn(int docIn) {
+        this.docIn = docIn;
     }
 
 }

@@ -131,7 +131,7 @@ public class ReservaView implements Serializable{
     }
     */
     public void registrarReserva() throws IOException{
-        if(reservaFacadeLocal.registrarReserva(resReg, fk_huesped, fk_habitacion, u.getUsuLog().getIdUsuario(), fk_hotel)){
+        if(reservaFacadeLocal.registrarReserva(resReg, fk_huesped, fk_habitacion, u.getUsuLog().getDocumento(), fk_hotel)){
             hueIn = huespedFacadeLocal.leerHuesped(fk_huesped);
             hotIn = hotelFacadeLocal.leerHotel(fk_hotel);
             habIn = HabitacionFacadeLocal.leerTipoHabitacion(fk_habitacion);
@@ -158,14 +158,14 @@ public class ReservaView implements Serializable{
         resTemporal = r;
         fk_huesped = r.getFkHuesped().getIdHuesped();
         fk_habitacion = r.getFkHabitacion().getIdHabitacion();
-        fk_usuario = u.getUsuLog().getIdUsuario();
+        fk_usuario = u.getUsuLog().getDocumento();
         fk_hotel = r.getFkHotel().getIdHotel();
         fk_estado = r.getFkEstado().getIdEstadoReserva();
     }
     
     public void actualizarReserva(){
         try{
-            reservaFacadeLocal.actualizarReserva(resTemporal, fk_huesped, fk_habitacion, u.getUsuLog().getIdUsuario(), fk_hotel, fk_estado);
+            reservaFacadeLocal.actualizarReserva(resTemporal, fk_huesped, fk_habitacion, u.getUsuLog().getDocumento(), fk_hotel, fk_estado);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva editado", "Reserva editado"));
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de edición", "Error de edición"));

@@ -46,9 +46,9 @@ public class Telefono implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "numero")
     private String numero;
-    @JoinColumn(name = "fk_hotel", referencedColumnName = "id_hotel")
+    @JoinColumn(name = "hotel_id_hotel", referencedColumnName = "id_hotel")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Hotel fkHotel;
+    private Hotel hotelIdHotel;
 
     public Telefono() {
     }
@@ -78,12 +78,12 @@ public class Telefono implements Serializable {
         this.numero = numero;
     }
 
-    public Hotel getFkHotel() {
-        return fkHotel;
+    public Hotel getHotelIdHotel() {
+        return hotelIdHotel;
     }
 
-    public void setFkHotel(Hotel fkHotel) {
-        this.fkHotel = fkHotel;
+    public void setHotelIdHotel(Hotel hotelIdHotel) {
+        this.hotelIdHotel = hotelIdHotel;
     }
 
     @Override
@@ -108,7 +108,7 @@ public class Telefono implements Serializable {
 
     @Override
     public String toString() {
-        return numero;
+        return "" + idTelefono;
     }
     
 }

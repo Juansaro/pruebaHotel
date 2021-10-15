@@ -58,7 +58,7 @@ public class HuespedView implements Serializable {
 
     public void guardarTemporal(Huesped h) {
         hueTemporal = h;
-        fk_ciudad = h.getFkCiudad().getIdCiudad();
+        fk_ciudad = h.getCiudadIdCiudad().getIdCiudad();
     }
 
     public void actualizarHuesped() {
