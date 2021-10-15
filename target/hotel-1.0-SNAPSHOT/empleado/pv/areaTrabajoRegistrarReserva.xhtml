@@ -16,7 +16,7 @@
                         <hr class="bg-white"/>
                         <h:form>
                             Huesped
-                            <h:selectOneMenu class="form-control" id="huesped" value="#{reservaView.fk_huesped}" required="true">
+                            <h:selectOneMenu class="form-control" id="huesped" value="#{reservaView.huesped.idHuesped}" required="true">
                                 <f:selectItems value="#{huespedView.huespedes}" var="hue" itemLabel="#{hue.correo}" itemValue="#{hue.idHuesped}"/>
                             </h:selectOneMenu>
                             Hotel

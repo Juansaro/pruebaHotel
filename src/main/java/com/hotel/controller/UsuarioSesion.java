@@ -73,19 +73,34 @@ public class UsuarioSesion implements Serializable {
                                 break;
                             }
                             default:
-                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "No exite", "No existe"));
+                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                                        "No exite",
+                                        "No existe"
+                                ));
                                 break;
                         }
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Correo o clave incorrectos", "Correo o clave incorrectos"));
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                                "Correo o clave incorrectos",
+                                "Correo o clave incorrectos"
+                        ));
                     }
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Correo o clave incorrectos", "Correo o clave incorrectos"));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                            "Correo o clave incorrectos",
+                            "Correo o clave incorrectos"
+                    ));
                 }
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                        "Error de registro",
+                        "Error de registro"
+                ));
             }
 
         } catch (IOException e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                    "Error de registro",
+                    "Error de registro"
+            ));
         }
 
     }
@@ -125,11 +140,17 @@ public class UsuarioSesion implements Serializable {
                     usuReg.getDocumento(),
                     usuReg.getContrasena()
             );
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario registrado", "Usuario registrado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Usuario registrado",
+                    "Usuario registrado"
+            ));
             usuReg = new Usuario();
             usuarios = usuarioFacadeLocal.findAll();
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                    "Error de registro",
+                    "Error de registro"
+            ));
         }
     }
 
@@ -141,11 +162,17 @@ public class UsuarioSesion implements Serializable {
     public void actualizarUsuario() {
         try {
             usuarioFacadeLocal.actualizarUsuario(usuTemporal, fk_rol);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario editado", "Usuario editado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                    "Usuario editado",
+                    "Usuario editado"
+            ));
             usuTemporal = new Usuario();
             usuarios = usuarioFacadeLocal.findAll();
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de edición", "Error de edición"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                    "Error de edición",
+                    "Error de edición"
+            ));
         }
     }
 
@@ -153,20 +180,29 @@ public class UsuarioSesion implements Serializable {
         try {
             if (usuarioFacadeLocal.eliminarUsuario(u)) {
                 usuarios = usuarioFacadeLocal.findAll();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario eliminado", "Usuario eliminado"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "Usuario eliminado",
+                        "Usuario eliminado"
+                ));
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de eliminación", "Error de eliminación"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                        "Error de eliminación",
+                        "Error de eliminación"
+                ));
             }
 
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de eliminación", "Error de eliminación"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                    "Error de eliminación",
+                    "Error de eliminación"
+            ));
         }
     }
 
     public String generatePassayPassword() {
         PasswordGenerator gen = new PasswordGenerator();
-        CharacterData lowerCaseChars = EnglishCharacterData.LowerCase;
-        CharacterRule lowerCaseRule = new CharacterRule(lowerCaseChars);
+        CharacterData caracteresMinuscula = EnglishCharacterData.LowerCase;
+        CharacterRule lowerCaseRule = new CharacterRule(caracteresMinuscula);
         lowerCaseRule.setNumberOfCharacters(2);
 
         CharacterData upperCaseChars = EnglishCharacterData.UpperCase;
@@ -177,7 +213,7 @@ public class UsuarioSesion implements Serializable {
         CharacterRule digitRule = new CharacterRule(digitChars);
         digitRule.setNumberOfCharacters(2);
 
-        CharacterData specialChars = new CharacterData() {
+        CharacterData caracteresEspeciales = new CharacterData() {
             @Override
             public String getErrorCode() {
                 return ERROR_CODE;
@@ -188,7 +224,7 @@ public class UsuarioSesion implements Serializable {
                 return "!@#$%^&*()_+";
             }
         };
-        CharacterRule splCharRule = new CharacterRule(specialChars);
+        CharacterRule splCharRule = new CharacterRule(caracteresEspeciales);
         splCharRule.setNumberOfCharacters(2);
 
         String password = gen.generatePassword(10, splCharRule, lowerCaseRule,

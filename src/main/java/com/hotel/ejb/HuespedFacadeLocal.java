@@ -35,5 +35,7 @@ public interface HuespedFacadeLocal {
     public boolean eliminarHuesped(Huesped p);
 
     public Huesped leerHuesped(int h);
+
+    public List<String> leerCorreosHuespedes();
     
 }

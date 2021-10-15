@@ -10,6 +10,7 @@ import com.hotel.ejb.HabitacionFacadeLocal;
 import com.hotel.ejb.HotelFacadeLocal;
 import com.hotel.ejb.HuespedFacadeLocal;
 import com.hotel.ejb.ReservaFacadeLocal;
+import com.hotel.ejb.TipoHabitacionFacadeLocal;
 import com.hotel.ejb.UsuarioFacadeLocal;
 import com.hotel.model.EstadoReserva;
 import com.hotel.model.Habitacion;
@@ -24,6 +25,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -37,72 +39,77 @@ import javax.inject.Named;
 
 @Named(value = "reservaView")
 @ViewScoped
-public class ReservaView implements Serializable{
-    
+public class ReservaView implements Serializable {
+
     @EJB
     private ReservaFacadeLocal reservaFacadeLocal;
-    
+
     @EJB
-    private HuespedFacadeLocal huespedFacadeLocal; 
-    
+    private HuespedFacadeLocal huespedFacadeLocal;
+
     @EJB
-    private HabitacionFacadeLocal HabitacionFacadeLocal;
-    
+    private HabitacionFacadeLocal habitacionFacadeLocal;
+
     @EJB
     private UsuarioFacadeLocal usuarioFacadeLocal;
-    
+
     @EJB
     private HotelFacadeLocal hotelFacadeLocal;
-    
+
     @EJB
     private EstadoReservaFacadeLocal estadoReservaFacadeLocal;
-    
+
+    @EJB
+    private TipoHabitacionFacadeLocal tipoHabitacionFacadeLocal;
+
     @Inject
-    private Huesped huespued;
-    
+    private Huesped huesped;
+
     @Inject
     private Habitacion habitacion;
-    
+
     @Inject
     private Usuario usuario;
-    
+
     @Inject
     private EstadoReserva estadoReserva;
-    
+
     @Inject
     private UsuarioSesion u;
-    
+
     private int fk_huesped;
     private int fk_habitacion;
     private int fk_usuario;
     private int fk_hotel;
     private int fk_estado;
-    
+
     private List<Reserva> reservas;
+    private List<Reserva> hueReservas;
     private List<Reserva> reservasEmpleados;
     private List<Habitacion> habitaciones;
     private List<Usuario> empleados;
     private List<Hotel> hoteles;
     private List<EstadoReserva> estados;
-    
+    private List<Reserva> listaUltimaFecha = new ArrayList<>();
+
     private Reserva resReg = new Reserva();
     private Reserva resTemporal = new Reserva();
     private Huesped hueIn = new Huesped();
     private Hotel hotIn = new Hotel();
     private Habitacion habIn = new Habitacion();
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         reservas = reservaFacadeLocal.findAll();
         reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
-        habitaciones = HabitacionFacadeLocal.findAll();
+        habitaciones = habitacionFacadeLocal.findAll();
         //Hacer filtro de empleados
         empleados = usuarioFacadeLocal.findAll();
         hoteles = hotelFacadeLocal.findAll();
         estados = estadoReservaFacadeLocal.findAll();
     }
-    
-    public Date ObtenerFechaActual() {
+
+    public Date obtenerFechaActual() {
         try {
             DateTimeFormatter d = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             String fechaActual = d.format(LocalDateTime.now());
@@ -113,48 +120,76 @@ public class ReservaView implements Serializable{
             return null;
         }
     }
-/*
-    public boolean validarCitaRepetida() {
-        listaUltimaFecha.addAll(citaFacadeLocal.leerTodos(usu.getUsuLog()));
+
+    public boolean validarReservaRepetida() {
+
+        listaUltimaFecha.addAll(hueReservas);
         if (listaUltimaFecha != null && !listaUltimaFecha.isEmpty()) {
-            Cita item = resReg.getFechaRegistro();
-            Date registro = item.getRegistroActual();
+            Reserva item = listaUltimaFecha.get(listaUltimaFecha.size() - 1);
+            Date registro = item.getFechaRegistro();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(registro);
-            calendar.add(Calendar.MINUTE, 30);
+            calendar.add(Calendar.MINUTE, 45);
             Date fechaSalida = calendar.getTime();
             calendar.getTime();
-            return ObtenerFechaActual().after(fechaSalida);
+            return obtenerFechaActual().after(fechaSalida);
         } else {
             return true;
         }
     }
-    */
-    public void registrarReserva() throws IOException{
-        if(reservaFacadeLocal.registrarReserva(resReg, fk_huesped, fk_habitacion, u.getUsuLog().getDocumento(), fk_hotel)){
-            hueIn = huespedFacadeLocal.leerHuesped(fk_huesped);
-            hotIn = hotelFacadeLocal.leerHotel(fk_hotel);
-            habIn = HabitacionFacadeLocal.leerTipoHabitacion(fk_habitacion);
-            ReservaMail.correoReserva(
-                                hueIn.getNombre(),
-                                hueIn.getApellido(),
-                                hueIn.getCorreo(),
-                                //cit.getServicioIdServicio().getNombre(),//No funciona así toca con un filtro en la colección de 
-                                hotIn.getNombre(),
-                                habIn.getFkTipo().getDescripcion(),
-                                resReg.getFechaIngreso(),
-                                resReg.getFechaSalida()
-                        );
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva registrada", "Reserva registrada"));
-            resReg = new Reserva();
-            reservas = reservaFacadeLocal.findAll();
-            FacesContext.getCurrentInstance().getExternalContext().redirect("/pruebaHotel/faces/administrador/reserva.xhtml");
-        }else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
+    
+    public boolean validarReservaEdicion() {
+
+        listaUltimaFecha.addAll(hueReservas);
+        if (listaUltimaFecha != null && !listaUltimaFecha.isEmpty()) {
+            Reserva item = listaUltimaFecha.get(listaUltimaFecha.size() - 1);
+            Date registro = item.getFechaRegistro();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(registro);
+            calendar.add(Calendar.MINUTE, 45);
+            Date fechaSalida = calendar.getTime();
+            calendar.getTime();
+            return obtenerFechaActual().after(fechaSalida);
+        } else {
+            return true;
         }
     }
-    
-    public void guardarTemporal(Reserva r){
+
+    public void registrarReserva() throws IOException {
+        hueReservas = reservaFacadeLocal.leerReservasHuesped(huesped);
+        resReg.setFechaRegistro(obtenerFechaActual());
+        resReg.setPrecio(habitacionFacadeLocal.leerCostoHabitacion(fk_habitacion));
+        if (validarReservaRepetida()) {
+            if (reservaFacadeLocal.registrarReserva(resReg, huesped.getIdHuesped(), fk_habitacion, u.getUsuLog().getDocumento(), fk_hotel)) {
+                hueIn = huespedFacadeLocal.leerHuesped(huesped.getIdHuesped());
+                hotIn = hotelFacadeLocal.leerHotel(fk_hotel);
+                habIn = habitacionFacadeLocal.leerTipoHabitacion(fk_habitacion);
+                ReservaMail.correoReserva(
+                        hueIn.getNombre(),
+                        hueIn.getApellido(),
+                        hueIn.getCorreo(),
+                        //cit.getServicioIdServicio().getNombre(),//No funciona así toca con un filtro en la colección de 
+                        hotIn.getNombre(),
+                        habIn.getFkTipo().getDescripcion(),
+                        resReg.getFechaIngreso(),
+                        resReg.getFechaSalida(),
+                        resReg.getPrecio()
+                );
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva registrada", "Reserva registrada"));
+                resReg = new Reserva();
+                huesped = new Huesped();
+                reservas = reservaFacadeLocal.findAll();
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/pruebaHotel/faces/administrador/reserva.xhtml");
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
+            }
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Acabaste de reservar un huesped, espera 45 min", "Acabaste de reservar un huesped, espera 45 min"));
+        }
+
+    }
+
+    public void guardarTemporal(Reserva r) {
         resTemporal = r;
         fk_huesped = r.getFkHuesped().getIdHuesped();
         fk_habitacion = r.getFkHabitacion().getIdHabitacion();
@@ -162,17 +197,17 @@ public class ReservaView implements Serializable{
         fk_hotel = r.getFkHotel().getIdHotel();
         fk_estado = r.getFkEstado().getIdEstadoReserva();
     }
-    
-    public void actualizarReserva(){
-        try{
+
+    public void actualizarReserva() {
+        try {
             reservaFacadeLocal.actualizarReserva(resTemporal, fk_huesped, fk_habitacion, u.getUsuLog().getDocumento(), fk_hotel, fk_estado);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva editado", "Reserva editado"));
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de edición", "Error de edición"));
         }
     }
-    
-    public void eliminarReserva(Reserva r){
+
+    public void eliminarReserva(Reserva r) {
         try {
             if (reservaFacadeLocal.eliminarReserva(r.getIdReserva())) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva eliminada", "Reserva eliminada"));
@@ -182,11 +217,11 @@ public class ReservaView implements Serializable{
         } catch (Exception e) {
         }
     }
-    
-    public List<Reserva> reservasEmpleado(){
+
+    public List<Reserva> reservasEmpleado() {
         return reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
     }
-    
+
     public List<Reserva> getReservas() {
         return reservas;
     }
@@ -227,12 +262,12 @@ public class ReservaView implements Serializable{
         this.estados = estados;
     }
 
-    public Huesped getHuespued() {
-        return huespued;
+    public Huesped getHuesped() {
+        return huesped;
     }
 
-    public void setHuespued(Huesped huespued) {
-        this.huespued = huespued;
+    public void setHuesped(Huesped huesped) {
+        this.huesped = huesped;
     }
 
     public Habitacion getHabitacion() {
@@ -330,5 +365,21 @@ public class ReservaView implements Serializable{
     public void setReservasEmpleados(List<Reserva> reservasEmpleados) {
         this.reservasEmpleados = reservasEmpleados;
     }
-    
+
+    public List<Reserva> getListaUltimaFecha() {
+        return listaUltimaFecha;
+    }
+
+    public void setListaUltimaFecha(List<Reserva> listaUltimaFecha) {
+        this.listaUltimaFecha = listaUltimaFecha;
+    }
+
+    public List<Reserva> getHueReservas() {
+        return hueReservas;
+    }
+
+    public void setHueReservas(List<Reserva> hueReservas) {
+        this.hueReservas = hueReservas;
+    }
+
 }

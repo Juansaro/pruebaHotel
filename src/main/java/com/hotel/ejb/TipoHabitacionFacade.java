@@ -5,10 +5,12 @@
  */
 package com.hotel.ejb;
 
+import com.hotel.model.Habitacion;
 import com.hotel.model.TipoHabitacion;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *

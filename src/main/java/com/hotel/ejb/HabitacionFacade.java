@@ -32,7 +32,7 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
     @Override
     public boolean crearHabitacion(Habitacion h, int fk_tipo, int fk_hotel) {
         try {
-            Query c = em.createNativeQuery("INSERT INTO habitacion ( bano, calefaccion, telefono, fk_tipo, precio, fk_estado, fk_hotel) VALUES (?,?,?,?,?,?,?)");
+            Query c = em.createNativeQuery("INSERT INTO habitacion ( bano, calefaccion, telefono, fk_tipo, precio, estado_habitacion_id_estado, hotel_id_hotel) VALUES (?,?,?,?,?,?,?)");
             c.setParameter(1, Short.parseShort("1"));
             c.setParameter(2, Short.parseShort("1"));
             c.setParameter(3, Short.parseShort("1"));
@@ -76,7 +76,7 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
     @Override
     public boolean actualizarHabitacion(Habitacion habIn, int fk_tipo, int fk_estado,int fk_hotel) {
         try {
-            Query qr = em.createNativeQuery("UPDATE habitacion SET fk_tipo = ?, precio = ?, fk_estado = ?, fk_hotel = ? WHERE (id_habitacion = ?)");
+            Query qr = em.createNativeQuery("UPDATE habitacion SET fk_tipo = ?, precio = ?, estado_habitacion_id_estado = ?, hotel_id_hotel = ? WHERE (id_habitacion = ?)");
             qr.setParameter(1, fk_tipo);
             qr.setParameter(2, habIn.getPrecio());
             qr.setParameter(3, fk_estado);
@@ -88,31 +88,6 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
             return false;
         }
 
-    }
-    
-    @Override
-    public boolean actualizarHotelHabitacion(Habitacion habIn) {
-        try {
-            Query qr = em.createNativeQuery("UPDATE hotel_has_habitacion SET fk_habitacion = ? WHERE (fk_habitacion = ?)");
-            qr.setParameter(1, habIn.getIdHabitacion());
-            qr.executeUpdate();
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-
-    }
-    
-    @Override
-    public void crearHotelHabitacion(int fk_hotel, Habitacion ha) {
-        try {
-            Query c = em.createNativeQuery("INSERT INTO hotel_has_habitacion (fk_hotel, fk_habitacion) VALUES (?,?)");
-            c.setParameter(1, fk_hotel);
-            c.setParameter(2, ha.getIdHabitacion());
-            c.executeUpdate();
-        } catch (Exception e) {
-        
-        }    
     }
     
     @Override
@@ -150,5 +125,16 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
         }
     }
     
+    @Override
+    public Float leerCostoHabitacion(int h) {
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query qt = em.createQuery("SELECT h.precio FROM Habitacion h WHERE h.idHabitacion = :h");
+            qt.setParameter("h", h);
+            return (Float) qt.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
     
 }

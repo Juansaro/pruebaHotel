@@ -23,7 +23,7 @@ import javax.mail.internet.MimeMessage;
 
 public abstract class ReservaMail {
 
-    public static void correoReserva(String nombre, String apellido, String correoPara, String nombreHotel, String tipoHabitacion, Date fechaReserva, Date fechaFinal) {
+    public static void correoReserva(String nombrePara, String apellidoPara, String correoPara, String hotelPara, String tipoHabitacionPara, Date fechaReservaPara, Date fechaFinalPara, float costoPara) {
         final String usuario = "senaland066@gmail.com";
         final String clave = "sennaland 432";
 
@@ -46,13 +46,15 @@ public abstract class ReservaMail {
             MimeMessage mensage = new MimeMessage(session);
             mensage.setFrom(new InternetAddress(usuario));
             mensage.addRecipient(Message.RecipientType.TO, new InternetAddress(correoPara));
-            mensage.setSubject("Hola " +nombre + " has registrado una cita en .");
+            mensage.setSubject("Hola " +nombrePara + " hemos registrado tu reserva en hotel " + hotelPara);
             mensage.setContent("<center> "
-                    + "<img src='https://thumbs.dreamstime.com/b/protecci%C3%B3n-de-la-clave-de-la-seguridad-de-la-contrase%C3%B1a-de-los-datos-de-usuario-79323179.jpg' width='200px' height='200px' >"
                     + "</center>"
                     + "<br/>"
-                    + "<h1> Hola, " + nombre + " " + apellido + " </h1>"
-                    + "Has registrado tu cita para el día: " + fechaReserva
+                    + "<h1> Hola, " + nombrePara + " " + apellidoPara + " </h1>"
+                    + "Hemos registrado tu reserva para el día: " + fechaReservaPara + " en el hotel " + hotelPara
+                    + "<br/> Recuerda que la reserva termina el día: " + fechaFinalPara
+                    + "<br/> El tipo de habitación es: " + tipoHabitacionPara + "."
+                    + "<br/> El costo de tu reserva es: " +costoPara
                     + "<br/>",
                     "text/html");
             Transport.send(mensage);

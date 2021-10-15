@@ -5,6 +5,7 @@
  */
 package com.hotel.ejb;
 
+import com.hotel.model.Habitacion;
 import com.hotel.model.TipoHabitacion;
 import java.util.List;
 import javax.ejb.Local;

@@ -5,6 +5,7 @@
  */
 package com.hotel.ejb;
 
+import com.hotel.model.Huesped;
 import com.hotel.model.Reserva;
 import com.hotel.model.Usuario;
 import java.util.Date;
@@ -41,7 +42,7 @@ public class ReservaFacade extends AbstractFacade<Reserva> implements ReservaFac
             qr.setParameter(6, fk_hotel);
             qr.setParameter(7, 1);
             qr.setParameter(8, resIn.getPrecio());
-            qr.setParameter(9, resIn.getFechaIngreso());
+            qr.setParameter(9, resIn.getFechaRegistro());
             qr.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -85,6 +86,18 @@ public class ReservaFacade extends AbstractFacade<Reserva> implements ReservaFac
             em.getEntityManagerFactory().getCache().evictAll();
             Query qt = em.createQuery("SELECT r FROM Reserva r WHERE r.fkEmpleado = :usuIn");
             qt.setParameter("usuIn", usuIn);
+            return qt.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    @Override
+    public List<Reserva> leerReservasHuesped(Huesped hueIn) {
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query qt = em.createQuery("SELECT r FROM Reserva r WHERE r.fkHuesped = :hueIn");
+            qt.setParameter("hueIn", hueIn);
             return qt.getResultList();
         } catch (Exception e) {
             return null;

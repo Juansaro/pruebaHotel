@@ -31,7 +31,7 @@ public class HuespedFacade extends AbstractFacade<Huesped> implements HuespedFac
     @Override
     public boolean registrarHuesped(Huesped huesIn, int fk_ciudad) {
         try {
-            Query qr = em.createNativeQuery("INSERT INTO huesped (documento, nombre, apellido, correo, direccion, barrio, fk_ciudad) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            Query qr = em.createNativeQuery("INSERT INTO huesped (documento, nombre, apellido, correo, direccion, barrio, ciudad_id_ciudad) VALUES (?, ?, ?, ?, ?, ?, ?)");
             qr.setParameter(1, huesIn.getDocumento());
             qr.setParameter(2, huesIn.getNombre());
             qr.setParameter(3, huesIn.getApellido());
@@ -50,7 +50,7 @@ public class HuespedFacade extends AbstractFacade<Huesped> implements HuespedFac
     @Override
     public boolean actualizarHuesped(Huesped huesIn, int fk_ciudad) {
         try {
-            Query qr = em.createNativeQuery("UPDATE huesped SET documento = ?, nombre = ?, apellido = ?, correo = ?, direccion = ?, barrio = ?, fk_ciudad = ? WHERE (id_huesped = ?)");
+            Query qr = em.createNativeQuery("UPDATE huesped SET documento = ?, nombre = ?, apellido = ?, correo = ?, direccion = ?, barrio = ?, ciudad_id_ciudad = ? WHERE (id_huesped = ?)");
             qr.setParameter(1, huesIn.getDocumento());
             qr.setParameter(2, huesIn.getNombre());
             qr.setParameter(3, huesIn.getApellido());
@@ -100,6 +100,18 @@ public class HuespedFacade extends AbstractFacade<Huesped> implements HuespedFac
         } catch (Exception e) {
             return null;
         }
+    }
+    
+    @Override
+    public List<String> leerCorreosHuespedes() {
+        Query q = em.createNativeQuery("SELECT correo FROM huesped");
+        
+        List<Huesped> listado = q.getResultList();
+        
+        if(!listado.isEmpty()){
+            return q.getResultList();
+        }
+        return null;
     }
     
 }

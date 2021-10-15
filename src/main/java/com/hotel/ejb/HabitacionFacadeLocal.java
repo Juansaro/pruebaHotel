@@ -30,11 +30,7 @@ public interface HabitacionFacadeLocal {
     
     public boolean eliminarHabitacion(int hab_id);
 
-    public void crearHotelHabitacion(int fk_hotel, Habitacion ha);
-   
     public boolean eliminarHotelHabitacion(Habitacion ha);
-
-    public boolean actualizarHotelHabitacion(Habitacion habIn);
 
     public Habitacion validarSiExiste(int idIn);
 
@@ -45,6 +41,8 @@ public interface HabitacionFacadeLocal {
     public List<Habitacion> leerTodos();
 
     public Habitacion leerTipoHabitacion(int h);
+
+    public Float leerCostoHabitacion(int h);
 
 
 }
