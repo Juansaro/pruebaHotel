@@ -19,6 +19,11 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import static org.passay.AllowedCharacterRule.ERROR_CODE;
+import org.passay.CharacterData;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
 
 @Named(value = "usuarioSesion")
 @SessionScoped
@@ -83,7 +88,7 @@ public class UsuarioSesion implements Serializable {
         }
 
     }
-    
+
     public void cerrarSesion() throws IOException {
         usuLog = null;
         FacesContext fc = FacesContext.getCurrentInstance();
@@ -92,6 +97,7 @@ public class UsuarioSesion implements Serializable {
     }
 
     public void registrarUsuario() {
+        usuReg.setContrasena(generatePassayPassword());
         if (usuarioFacadeLocal.registrarUsuario(usuReg, fk_rol)) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario registrado", "Usuario registrado"));
             usuReg = new Usuario();
@@ -115,6 +121,39 @@ public class UsuarioSesion implements Serializable {
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de edición", "Error de edición"));
         }
+    }
+
+    public String generatePassayPassword() {
+        PasswordGenerator gen = new PasswordGenerator();
+        CharacterData lowerCaseChars = EnglishCharacterData.LowerCase;
+        CharacterRule lowerCaseRule = new CharacterRule(lowerCaseChars);
+        lowerCaseRule.setNumberOfCharacters(2);
+
+        CharacterData upperCaseChars = EnglishCharacterData.UpperCase;
+        CharacterRule upperCaseRule = new CharacterRule(upperCaseChars);
+        upperCaseRule.setNumberOfCharacters(2);
+
+        CharacterData digitChars = EnglishCharacterData.Digit;
+        CharacterRule digitRule = new CharacterRule(digitChars);
+        digitRule.setNumberOfCharacters(2);
+
+        CharacterData specialChars = new CharacterData() {
+            @Override
+            public String getErrorCode() {
+                return ERROR_CODE;
+            }
+
+            @Override
+            public String getCharacters() {
+                return "!@#$%^&*()_+";
+            }
+        };
+        CharacterRule splCharRule = new CharacterRule(specialChars);
+        splCharRule.setNumberOfCharacters(2);
+
+        String password = gen.generatePassword(10, splCharRule, lowerCaseRule,
+                upperCaseRule, digitRule);
+        return password;
     }
 
     public List<Usuario> getUsuarios() {
