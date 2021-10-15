@@ -72,6 +72,13 @@ public class Usuario implements Serializable {
     @Size(max = 300)
     @Column(name = "usu_foto")
     private String usuFoto;
+    @Size(max = 70)
+    @Column(name = "documento")
+    private String documento;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "estado")
+    private short estado;
     @JoinColumn(name = "fk_rol", referencedColumnName = "id_rol")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Rol fkRol;
@@ -147,6 +154,22 @@ public class Usuario implements Serializable {
 
     public void setFkRol(Rol fkRol) {
         this.fkRol = fkRol;
+    }
+    
+    public String getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(String documento) {
+        this.documento = documento;
+    }
+    
+    public short getEstado() {
+        return estado;
+    }
+
+    public void setEstado(short estado) {
+        this.estado = estado;
     }
 
     @XmlTransient

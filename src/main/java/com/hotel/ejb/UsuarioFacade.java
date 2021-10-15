@@ -30,12 +30,14 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     @Override
     public boolean registrarUsuario(Usuario usuIn, int rolIn) {
         try {
-            Query qr = em.createNativeQuery("INSERT INTO usuario (nombre, apellido, correo, contrasena, fk_rol) VALUES (?, ?, ?, ?, ?)");
+            Query qr = em.createNativeQuery("INSERT INTO usuario (nombre, apellido, correo, contrasena, fk_rol, documento, estado) VALUES (?, ?, ?, ?, ?, ?, ?)");
             qr.setParameter(1, usuIn.getNombre());
             qr.setParameter(2, usuIn.getApellido());
             qr.setParameter(3, usuIn.getCorreo());
             qr.setParameter(4, usuIn.getContrasena());
             qr.setParameter(5, rolIn);
+            qr.setParameter(6, usuIn.getDocumento());
+            qr.setParameter(7, Short.parseShort("1"));
             qr.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -86,6 +88,19 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         } catch (Exception e) {
             return false;
         }
+    }
+    
+    @Override
+    public boolean eliminarUsuario(Usuario usuIn) {
+        try {
+            Query qr = em.createNativeQuery("DELETE FROM usuario WHERE (id_usuario =  ?)");
+            qr.setParameter(1, usuIn.getIdUsuario());
+            qr.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
     }
     
     @Override

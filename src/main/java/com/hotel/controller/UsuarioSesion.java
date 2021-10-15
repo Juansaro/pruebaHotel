@@ -115,11 +115,25 @@ public class UsuarioSesion implements Serializable {
     public void actualizarUsuario() {
         try {
             usuarioFacadeLocal.actualizarUsuario(usuTemporal, fk_rol);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario editado", "Usuario editado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario editado", "Usuario editado"));
             usuTemporal = new Usuario();
             usuarios = usuarioFacadeLocal.findAll();
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de edición", "Error de edición"));
+        }
+    }
+
+    public void eliminarUsuario(Usuario u) {
+        try {
+            if (usuarioFacadeLocal.eliminarUsuario(u)) {
+                usuarios = usuarioFacadeLocal.findAll();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario eliminado", "Usuario eliminado"));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de eliminación", "Error de eliminación"));
+            }
+
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de eliminación", "Error de eliminación"));
         }
     }
 

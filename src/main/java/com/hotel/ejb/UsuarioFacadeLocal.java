@@ -37,5 +37,7 @@ public interface UsuarioFacadeLocal {
     public Usuario encontrarUsuarioCorreo(String correo);
 
     public List<Usuario> leerEmpleado();
+
+    public boolean eliminarUsuario(Usuario usuIn);
     
 }
