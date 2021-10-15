@@ -9,6 +9,7 @@ import com.hotel.ejb.RolFacadeLocal;
 import com.hotel.ejb.UsuarioFacadeLocal;
 import com.hotel.model.Rol;
 import com.hotel.model.Usuario;
+import com.hotel.utilidades.usuClaveMail;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
@@ -58,7 +59,7 @@ public class UsuarioSesion implements Serializable {
         try {
             usuLog = usuarioFacadeLocal.encontrarUsuarioDocumento(docIn);
             if (usuLog != null) {
-                if (usuLog.getCorreo().equals(docIn)) {
+                if (usuLog.getDocumento().equals(docIn)) {
                     if (usuLog.getContrasena().equals(claveIn)) {
                         switch (usuLog.getFkRol().toString()) {
                             case "Administrador": {
@@ -99,6 +100,13 @@ public class UsuarioSesion implements Serializable {
     public void registrarUsuario() {
         usuReg.setContrasena(generatePassayPassword());
         if (usuarioFacadeLocal.registrarUsuario(usuReg, fk_rol)) {
+            usuClaveMail.correoReserva(
+                    usuReg.getNombre(), 
+                    usuReg.getApellido(), 
+                    usuReg.getCorreo(), 
+                    usuReg.getDocumento(),
+                    usuReg.getContrasena()
+            );
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario registrado", "Usuario registrado"));
             usuReg = new Usuario();
             usuarios = usuarioFacadeLocal.findAll();
