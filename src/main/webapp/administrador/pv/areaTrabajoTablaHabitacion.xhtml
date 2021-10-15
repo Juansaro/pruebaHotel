@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:html5="http://xmlns.jcp.org/jsf/passthrough">
     <ui:composition>
-        <div class="card mb-4">
+        <div class="card m-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
                 DataTable Example
@@ -44,8 +44,12 @@
                             <h:outputText value="#{h.idHabitacion}"  />
                         </p:column>
 
-                        <p:column headerText="Baño"  filterMatchMode="contains" >
-                                <h:outputText value="#{h.fkHotel}" /><br/>
+                        <p:column headerText="Hotel"  filterMatchMode="contains" >
+                            <h:outputText value="#{h.hotelIdHotel}" /><br/>
+                        </p:column>
+                        
+                        <p:column headerText="Hotel"  filterMatchMode="contains" >
+                            <h:outputText value="#{h.estadoHabitacionIdEstado}" /><br/>
                         </p:column>
 
                         <p:column headerText=" " exportable="false" >

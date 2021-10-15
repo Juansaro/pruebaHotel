@@ -72,6 +72,9 @@ public class Habitacion implements Serializable {
     @JoinColumn(name = "estado_habitacion_id_estado", referencedColumnName = "id_estado")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private EstadoHabitacion estadoHabitacionIdEstado;
+    @JoinColumn(name = "hotel_id_hotel", referencedColumnName = "id_hotel")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Hotel hotelIdHotel;
     @JoinColumn(name = "fk_tipo", referencedColumnName = "id_tipo_habitacion")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private TipoHabitacion fkTipo;
@@ -155,6 +158,14 @@ public class Habitacion implements Serializable {
         this.estadoHabitacionIdEstado = estadoHabitacionIdEstado;
     }
 
+    public Hotel getHotelIdHotel() {
+        return hotelIdHotel;
+    }
+
+    public void setHotelIdHotel(Hotel hotelIdHotel) {
+        this.hotelIdHotel = hotelIdHotel;
+    }
+
     public TipoHabitacion getFkTipo() {
         return fkTipo;
     }
@@ -185,7 +196,7 @@ public class Habitacion implements Serializable {
 
     @Override
     public String toString() {
-        return "" + fkTipo;
+        return "com.hotel.model.Habitacion[ idHabitacion=" + idHabitacion + " ]";
     }
     
 }

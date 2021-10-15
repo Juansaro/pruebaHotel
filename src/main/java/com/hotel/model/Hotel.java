@@ -65,6 +65,8 @@ public class Hotel implements Serializable {
     private Collection<Reserva> reservaCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "hotelIdHotel", fetch = FetchType.LAZY)
     private Collection<Telefono> telefonoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "hotelIdHotel", fetch = FetchType.LAZY)
+    private Collection<Habitacion> habitacionCollection;
 
     public Hotel() {
     }
@@ -136,6 +138,15 @@ public class Hotel implements Serializable {
         this.telefonoCollection = telefonoCollection;
     }
 
+    @XmlTransient
+    public Collection<Habitacion> getHabitacionCollection() {
+        return habitacionCollection;
+    }
+
+    public void setHabitacionCollection(Collection<Habitacion> habitacionCollection) {
+        this.habitacionCollection = habitacionCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -158,7 +169,7 @@ public class Hotel implements Serializable {
 
     @Override
     public String toString() {
-        return nombre;
+        return "com.hotel.model.Hotel[ idHotel=" + idHotel + " ]";
     }
     
 }

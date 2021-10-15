@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:html5="http://xmlns.jcp.org/jsf/passthrough">
     <ui:composition>
-        <div class="card mb-4">
+        <div class="card m-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
                 DataTable Example
@@ -21,8 +21,8 @@
                     <p:dataTable id="tabla" emptyMessage="Ninguna usuario registrado" value="#{telefonoView.telefonos}" 
                                  var="t" paginator="true"  rows="10" rowSelectMode="add" paginatorPosition="bottom"
                                  >
-                        <p:column headerText="Hotel" filterBy="#{t.fkHotel}" filterMatchMode="contains" >
-                            <h:outputText value="#{t.fkHotel}"  /> 
+                        <p:column headerText="Hotel" filterBy="#{t.hotelIdHotel}" filterMatchMode="contains" >
+                            <h:outputText value="#{t.hotelIdHotel}"  /> 
                         </p:column>
 
                         <p:column headerText="Número" filterBy="#{t.numero}" filterMatchMode="contains" >
