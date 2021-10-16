@@ -21,8 +21,8 @@
                     <p:dataTable id="tabla" emptyMessage="Ningun teléfono registrado" value="#{telefonoView.telefonos}" 
                                  var="t" paginator="true"  rows="10" rowSelectMode="add" paginatorPosition="bottom"
                                  >
-                        <p:column headerText="Hotel" filterBy="#{t.hotelIdHotel}" filterMatchMode="contains" >
-                            <h:outputText value="#{t.hotelIdHotel}"  /> 
+                        <p:column headerText="Hotel" filterBy="#{t.hotelIdHotel.nombre}" filterMatchMode="contains" >
+                            <h:outputText value="#{t.hotelIdHotel.nombre}"  /> 
                         </p:column>
 
                         <p:column headerText="Número" filterBy="#{t.numero}" filterMatchMode="contains" >
@@ -31,7 +31,7 @@
 
                         <p:column headerText=" " exportable="false" >
 
-                            <h:commandButton class="btn btn-warning rounded-pill"
+                            <h:commandButton class="btn btn-warning"
                                              html5:data-bs-toggle="modal"
                                              html5:data-bs-target="#editar"
                                              action="#{telefonoView.guardarTemporal(t)}" 
@@ -43,7 +43,7 @@
 
                         <p:column headerText=" " exportable="false" >
 
-                            <h:commandLink class="btn btn-danger rounded-pill" action="#{telefonoView.eliminarTelefono(t)}" value="Eliminar"/>
+                            <h:commandLink class="btn btn-danger" action="#{telefonoView.eliminarTelefono(t)}" value="Eliminar"/>
 
                         </p:column>  
 

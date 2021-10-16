@@ -10,8 +10,15 @@ import com.hotel.ejb.UsuarioFacadeLocal;
 import com.hotel.model.Rol;
 import com.hotel.model.Usuario;
 import com.hotel.utilidades.usuClaveMail;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -20,11 +27,14 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.Part;
 import static org.passay.AllowedCharacterRule.ERROR_CODE;
 import org.passay.CharacterData;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
+import org.primefaces.PrimeFaces;
+import org.primefaces.shaded.commons.io.FilenameUtils;
 
 @Named(value = "usuarioSesion")
 @SessionScoped
@@ -41,6 +51,13 @@ public class UsuarioSesion implements Serializable {
     private int fk_rol;
     private int docIn;
     private String claveIn;
+
+    //Archivos (carga)
+    private Part archivoFoto;
+    private Part archivoCarga;
+
+    //Format
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
     private List<Usuario> usuarios;
     private List<Rol> roles;
@@ -145,7 +162,7 @@ public class UsuarioSesion implements Serializable {
                     "Usuario registrado"
             ));
             usuReg = new Usuario();
-            usuarios = usuarioFacadeLocal.findAll();
+            usuarios = usuarioFacadeLocal.leerTodos();
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
                     "Error de registro",
@@ -167,7 +184,7 @@ public class UsuarioSesion implements Serializable {
                     "Usuario editado"
             ));
             usuTemporal = new Usuario();
-            usuarios = usuarioFacadeLocal.findAll();
+            usuarios = usuarioFacadeLocal.leerTodos();
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
                     "Error de edición",
@@ -230,6 +247,46 @@ public class UsuarioSesion implements Serializable {
         String password = gen.generatePassword(10, splCharRule, lowerCaseRule,
                 upperCaseRule, digitRule);
         return password;
+    }
+
+    //Carga de foto de perfil
+    public void cargarFotoPerfil() {
+        if (archivoFoto != null) {
+            if (archivoFoto.getSize() > 70000) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "El archivo es muy grande", "El archivo es muy grande"));
+            } else if (archivoFoto.getContentType().equalsIgnoreCase("image/png") || archivoFoto.getContentType().equalsIgnoreCase("image/jpeg")) {
+                try (InputStream is = archivoFoto.getInputStream()) {
+                    File carpeta = new File("C:\\descansoPlacer\\usuarios\\fotoperfil");
+                    //Comprobación si no exite
+                    if (!carpeta.exists()) {
+                        //Creación de carpeta
+                        carpeta.mkdirs();
+                    }
+                    Calendar hoy = Calendar.getInstance();
+                    //Guardar la fecha con la fecha exacta
+                    String nuevoNombre = sdf.format(hoy.getTime()) + ".";
+                    //Recargue (concatenación) filesnameutils me permite traer la extención
+                    nuevoNombre += FilenameUtils.getExtension(archivoFoto.getSubmittedFileName());
+                    //**parámetros** Fuente , salida, sobreescribir
+                    Files.copy(is, (new File(carpeta, nuevoNombre)).toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    //Recoger la imagen y actualizar el usuario con el nombre de la imagen
+                    usuTemporal.setUsuFoto(nuevoNombre);
+                    usuarioFacadeLocal.edit(usuTemporal);
+                    //Resetear
+                    PrimeFaces.current().executeScript("document.getElementById('resetform').click()");
+
+                    usuarios = usuarioFacadeLocal.findAll();
+                } catch (Exception e) {
+                    System.out.println("error");
+                }
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "El formato no esta permitido", "El formato no esta permitido"));
+            }
+        } else {
+            //Mensaje
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de carga", "Error de carga"));
+        }
+        System.out.println("Llegó");
     }
 
     public List<Usuario> getUsuarios() {
@@ -302,6 +359,22 @@ public class UsuarioSesion implements Serializable {
 
     public void setDocIn(int docIn) {
         this.docIn = docIn;
+    }
+
+    public Part getArchivoFoto() {
+        return archivoFoto;
+    }
+
+    public void setArchivoFoto(Part archivoFoto) {
+        this.archivoFoto = archivoFoto;
+    }
+
+    public Part getArchivoCarga() {
+        return archivoCarga;
+    }
+
+    public void setArchivoCarga(Part archivoCarga) {
+        this.archivoCarga = archivoCarga;
     }
 
 }

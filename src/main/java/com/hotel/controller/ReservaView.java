@@ -82,6 +82,7 @@ public class ReservaView implements Serializable {
     private int fk_usuario;
     private int fk_hotel;
     private int fk_estado;
+    private boolean[] outs;
 
     private List<Reserva> reservas;
     private List<Reserva> hueReservas;
@@ -137,7 +138,7 @@ public class ReservaView implements Serializable {
             return true;
         }
     }
-    
+
     public boolean validarReservaEdicion() {
 
         listaUltimaFecha.addAll(hueReservas);
@@ -159,27 +160,37 @@ public class ReservaView implements Serializable {
         hueReservas = reservaFacadeLocal.leerReservasHuesped(huesped);
         resReg.setFechaRegistro(obtenerFechaActual());
         resReg.setPrecio(habitacionFacadeLocal.leerCostoHabitacion(fk_habitacion));
+        boolean outEnt = reservaFacadeLocal.validarFechaEntrada(resReg.getFechaIngreso());
+        boolean outFin = reservaFacadeLocal.validarFechaSalida(resReg.getFechaIngreso(), resReg.getFechaSalida());
+
         if (validarReservaRepetida()) {
-            if (reservaFacadeLocal.registrarReserva(resReg, huesped.getIdHuesped(), fk_habitacion, u.getUsuLog().getDocumento(), fk_hotel)) {
-                hueIn = huespedFacadeLocal.leerHuesped(huesped.getIdHuesped());
-                hotIn = hotelFacadeLocal.leerHotel(fk_hotel);
-                habIn = habitacionFacadeLocal.leerTipoHabitacion(fk_habitacion);
-                ReservaMail.correoReserva(
-                        hueIn.getNombre(),
-                        hueIn.getApellido(),
-                        hueIn.getCorreo(),
-                        //cit.getServicioIdServicio().getNombre(),//No funciona así toca con un filtro en la colección de 
-                        hotIn.getNombre(),
-                        habIn.getFkTipo().getDescripcion(),
-                        resReg.getFechaIngreso(),
-                        resReg.getFechaSalida(),
-                        resReg.getPrecio()
-                );
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva registrada", "Reserva registrada"));
-                resReg = new Reserva();
-                huesped = new Huesped();
-                reservas = reservaFacadeLocal.findAll();
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/pruebaHotel/faces/administrador/reserva.xhtml");
+            if (outEnt) {
+                if (outFin) {
+                    if (reservaFacadeLocal.registrarReserva(resReg, huesped.getIdHuesped(), fk_habitacion, u.getUsuLog().getDocumento(), fk_hotel)) {
+                        hueIn = huespedFacadeLocal.leerHuesped(huesped.getIdHuesped());
+                        hotIn = hotelFacadeLocal.leerHotel(fk_hotel);
+                        habIn = habitacionFacadeLocal.leerTipoHabitacion(fk_habitacion);
+                        ReservaMail.correoReserva(
+                                hueIn.getNombre(),
+                                hueIn.getApellido(),
+                                hueIn.getCorreo(),
+                                hotIn.getNombre(),
+                                habIn.getFkTipo().getDescripcion(),
+                                resReg.getFechaIngreso(),
+                                resReg.getFechaSalida(),
+                                resReg.getPrecio()
+                        );
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva registrada", "Reserva registrada"));
+                        resReg = new Reserva();
+                        huesped = new Huesped();
+                        reservas = reservaFacadeLocal.findAll();
+                        FacesContext.getCurrentInstance().getExternalContext().redirect("/pruebaHotel/faces/administrador/reserva.xhtml");
+                    } else {
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
+                    }
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
+                }
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
             }
@@ -380,6 +391,14 @@ public class ReservaView implements Serializable {
 
     public void setHueReservas(List<Reserva> hueReservas) {
         this.hueReservas = hueReservas;
+    }
+
+    public boolean[] getOuts() {
+        return outs;
+    }
+
+    public void setOuts(boolean[] outs) {
+        this.outs = outs;
     }
 
 }

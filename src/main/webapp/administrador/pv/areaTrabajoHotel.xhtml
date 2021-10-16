@@ -25,13 +25,13 @@
                             <h:outputText value="#{h.nombre}"  /> 
                         </p:column>
 
-                        <p:column headerText="Ciudad" filterBy="#{h.fkCiudad}" filterMatchMode="contains" >
-                            <h:outputText value="#{h.fkCiudad}"  /> 
+                        <p:column headerText="Ciudad" filterBy="#{h.fkCiudad.descripcion}" filterMatchMode="contains" >
+                            <h:outputText value="#{h.fkCiudad.descripcion}"  /> 
                         </p:column>
 
                         <p:column headerText=" " exportable="false" >
 
-                            <h:commandButton class="btn btn-warning rounded-pill"
+                            <h:commandButton class="btn btn-warning"
                                              html5:data-bs-toggle="modal"
                                              html5:data-bs-target="#editar"
                                              action="#{hotelView.guardarTemporal(h)}" 
@@ -43,7 +43,7 @@
 
                         <p:column headerText=" " exportable="false" >
 
-                            <h:commandLink class="btn btn-danger rounded-pill" action="#{hotelView.eliminarHotel(h)}" value="Eliminar"/>
+                            <h:commandLink class="btn btn-danger" action="#{hotelView.eliminarHotel(h)}" value="Eliminar"/>
 
                         </p:column>  
 

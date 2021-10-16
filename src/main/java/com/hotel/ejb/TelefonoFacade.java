@@ -35,7 +35,7 @@ public class TelefonoFacade extends AbstractFacade<Telefono> implements Telefono
     @Override
     public boolean registrarTelefono(Telefono telIn, int fk_hotel) {
         try {
-            Query qr = em.createNativeQuery("INSERT INTO telefono (numero, fk_hotel) VALUES (?, ?)");
+            Query qr = em.createNativeQuery("INSERT INTO telefono (numero, hotel_id_hotel) VALUES (?, ?)");
             qr.setParameter(1, telIn.getNumero());
             qr.setParameter(2, fk_hotel);
             qr.executeUpdate();

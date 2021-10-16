@@ -11,7 +11,7 @@
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
                 Tabla de reservas
-                
+
                 <h:link outcome="registrarReserva">
                     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrar">
                         Registrar reserva.
@@ -30,33 +30,43 @@
                                  var="r" paginator="true"  rows="10" rowSelectMode="add" paginatorPosition="bottom"
                                  >
 
-                        <p:column headerText="Hotel" filterBy="#{r.fkHotel}" filterMatchMode="contains" >
-                            <h:outputText value="#{r.fkHotel}"  /> 
+                        <p:column headerText="Hotel" filterBy="#{r.fkHotel.nombre}" filterMatchMode="contains" >
+                            <h:outputText value="#{r.fkHotel.nombre}"  /> 
                         </p:column>
 
-                        <p:column headerText="Habitacion" filterBy="#{r.fkHabitacion}" filterMatchMode="contains" >
-                            <h:outputText value="#{r.fkHotel}"  /> 
+                        <p:column headerText="Habitacion" filterBy="#{r.fkHabitacion.fkTipo.descripcion}" filterMatchMode="contains" >
+                            <h:outputText value="#{r.fkHabitacion.fkTipo.descripcion}"  /> 
                         </p:column>
 
-                        <p:column headerText="Huesped" filterBy="#{r.fkHuesped}" filterMatchMode="contains" >
-                            <h:outputText value="#{r.fkHuesped}"  /> 
+                        <p:column headerText="Huesped" filterBy="#{r.fkHuesped.nombre}" filterMatchMode="contains" >
+
+                            <h:outputText value="#{r.fkHuesped.nombre} #{r.fkHuesped.apellido}"  /> 
+
                         </p:column>
 
                         <p:column headerText="Fecha ingreso" filterBy="#{r.fechaIngreso}" filterMatchMode="contains" >
-                            <h:outputText value="#{r.fechaIngreso}"  /> 
+
+                            <h:outputText value="#{r.fechaIngreso}"  >
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss"/>
+                            </h:outputText>
+
                         </p:column>
 
                         <p:column headerText="Fecha salida" filterBy="#{r.fechaSalida}" filterMatchMode="contains" >
-                            <h:outputText value="#{r.fechaSalida}"  /> 
+
+                            <h:outputText value="#{r.fechaSalida}"  >
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss"/>
+                            </h:outputText>
+
                         </p:column>
 
-                        <p:column headerText="Empleado" filterBy="#{r.fkEmpleado}" filterMatchMode="contains" >
-                            <h:outputText value="#{r.fkEmpleado}"  /> 
+                        <p:column headerText="Empleado" filterBy="#{r.fkEmpleado.nombre}" filterMatchMode="contains" >
+                            <h:outputText value="#{r.fkEmpleado.nombre} #{r.fkEmpleado.apellido}"  /> 
                         </p:column>
 
                         <p:column headerText=" " exportable="false" >
 
-                            <h:commandButton class="btn btn-warning rounded-pill"
+                            <h:commandButton class="btn btn-warning"
                                              html5:data-bs-toggle="modal"
                                              html5:data-bs-target="#editar"
                                              action="#{reservaView.guardarTemporal(r)}" 
@@ -67,7 +77,7 @@
 
                         <p:column headerText=" " exportable="false" >
 
-                            <h:commandLink class="btn btn-danger rounded-pill" action="#{reservaView.eliminarReserva(r)}" value="Eliminar"/>
+                            <h:commandLink class="btn btn-danger" action="#{reservaView.eliminarReserva(r)}" value="Eliminar"/>
 
                         </p:column>  
 

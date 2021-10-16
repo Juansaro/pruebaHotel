@@ -76,13 +76,13 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     @Override
     public boolean actualizarUsuario(Usuario usuIn, int rolIn) {
         try {
-            Query qr = em.createNativeQuery("UPDATE usuario SET documento = ?, nombre = ?, apellido = ?, correo = ?, contrasena = ?, fk_rol = ? WHERE (documento = ?)");
-            qr.setParameter(1, usuIn.getDocumento());
-            qr.setParameter(2, usuIn.getNombre());
-            qr.setParameter(3, usuIn.getApellido());
-            qr.setParameter(4, usuIn.getCorreo());
-            qr.setParameter(5, usuIn.getContrasena());
-            qr.setParameter(6, rolIn);
+            Query qr = em.createNativeQuery("UPDATE usuario SET  nombre = ?, apellido = ?, correo = ?, contrasena = ?, fk_rol = ? WHERE (documento = ?)");
+            qr.setParameter(1, usuIn.getNombre());
+            qr.setParameter(2, usuIn.getApellido());
+            qr.setParameter(3, usuIn.getCorreo());
+            qr.setParameter(4, usuIn.getContrasena());
+            qr.setParameter(5, rolIn);
+            qr.setParameter(6, usuIn.getDocumento());
             qr.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -108,6 +108,17 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         try {
             em.getEntityManagerFactory().getCache().evictAll();
             Query q = em.createQuery("SELECT u FROM Usuario u WHERE u.fkRol.idRol = 2");
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    @Override
+    public List<Usuario> leerTodos(){
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query q = em.createQuery("SELECT u FROM Usuario u");
             return q.getResultList();
         } catch (Exception e) {
             return null;

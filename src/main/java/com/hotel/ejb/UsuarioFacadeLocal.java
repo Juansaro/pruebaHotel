@@ -39,5 +39,7 @@ public interface UsuarioFacadeLocal {
     public Usuario encontrarUsuarioDocumento(int documento);
 
     public Usuario validarUsuario(int docIn, String claveIn);
+
+    public List<Usuario> leerTodos();
     
 }

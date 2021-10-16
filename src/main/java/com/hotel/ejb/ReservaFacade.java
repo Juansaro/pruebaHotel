@@ -12,8 +12,10 @@ import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 
 @Stateless
 public class ReservaFacade extends AbstractFacade<Reserva> implements ReservaFacadeLocal {
@@ -28,6 +30,40 @@ public class ReservaFacade extends AbstractFacade<Reserva> implements ReservaFac
 
     public ReservaFacade() {
         super(Reserva.class);
+    }
+    
+    @Override
+    public boolean validarFechaEntrada(Date resIni) {
+
+        StoredProcedureQuery q = em.createStoredProcedureQuery("RESERVA_ENTRADA")
+                .registerStoredProcedureParameter(1, Date.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(2, boolean.class, ParameterMode.OUT)
+                .setParameter(1, resIni);
+
+        q.execute();
+        //Out (2) y (3)
+        boolean outFecEnt = (boolean) q.getOutputParameterValue(2);
+        //Array de booleanos
+        return outFecEnt;
+
+    }
+    
+    @Override
+    public boolean validarFechaSalida(Date resIni, Date resFin) {
+
+        StoredProcedureQuery q = em.createStoredProcedureQuery("RESERVA_SALIDA")
+                .registerStoredProcedureParameter(1, Date.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(2, Date.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(3, boolean.class, ParameterMode.OUT)
+                .setParameter(1, resIni)
+                .setParameter(2, resFin);
+
+        q.execute();
+        //Out (2) y (3)
+        boolean outFecEnt = (boolean) q.getOutputParameterValue(3);
+        //Array de booleanos
+        return outFecEnt;
+
     }
     
     @Override

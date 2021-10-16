@@ -23,11 +23,13 @@ com\hotel\model\Reserva.class
 com\hotel\controller\HuespedView.class
 com\hotel\model\Usuario.class
 com\hotel\model\Rol_.class
+com\hotel\utilidades\envioMasivoHoteles.class
 com\hotel\controller\EstadoReservaRequest.class
 com\hotel\controller\DFRootView.class
 com\hotel\controller\ReservaView.class
 com\hotel\ejb\UsuarioFacade.class
 com\hotel\utilidades\ReservaMail.class
+com\hotel\utilidades\envioMasivoHoteles$1.class
 com\hotel\model\Telefono_.class
 com\hotel\ejb\TelefonoFacade.class
 com\hotel\model\EstadoReserva_.class
@@ -47,6 +49,7 @@ com\hotel\ejb\AbstractFacade.class
 com\hotel\model\EstadoHabitacion.class
 com\hotel\model\Hotel_.class
 com\hotel\ejb\HabitacionFacade.class
+com\hotel\utilidades\ImgServlet.class
 com\hotel\controller\HotelView.class
 com\hotel\ejb\HuespedFacade.class
 com\hotel\controller\UsuarioSesion.class

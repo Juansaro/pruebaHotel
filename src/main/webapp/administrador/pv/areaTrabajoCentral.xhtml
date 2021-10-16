@@ -16,11 +16,12 @@
                 </button>
             </div>
             <div class="card-body">
-                <h:form id="frmPrincipal" styleClass="jsfcrud_list_form">
+                <h:form id="frmPrincipal" styleClass="jsfcrud_list_form" enctype="multipart/form-data">
                     <p:growl id="growl" life="3000"/>
                     <p:dataTable id="tabla" emptyMessage="Ninguna usuario registrado" value="#{usuarioSesion.usuarios}" 
                                  var="u" paginator="true"  rows="10" rowSelectMode="add" paginatorPosition="bottom"
                                  >
+                        
                         <p:column headerText="Nombre" filterBy="#{u.nombre}" filterMatchMode="contains" >
                             <h:outputText value="#{u.nombre}"  /> 
                         </p:column>

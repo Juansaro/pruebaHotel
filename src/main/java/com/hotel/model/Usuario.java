@@ -192,7 +192,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "com.hotel.model.Usuario[ documento=" + documento + " ]";
+        return nombre + " " + apellido;
     }
     
 }

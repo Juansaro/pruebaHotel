@@ -8,6 +8,7 @@ package com.hotel.ejb;
 import com.hotel.model.Huesped;
 import com.hotel.model.Reserva;
 import com.hotel.model.Usuario;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -38,5 +39,9 @@ public interface ReservaFacadeLocal {
     public boolean registrarReserva(Reserva resIn, int fk_huesped, int fk_habitacion, int fk_empleado, int fk_hotel);
 
     public List<Reserva> leerReservasHuesped(Huesped hueIn);
+
+    public boolean validarFechaSalida(Date resIni, Date resFin);
+
+    public boolean validarFechaEntrada(Date resIni);
     
 }

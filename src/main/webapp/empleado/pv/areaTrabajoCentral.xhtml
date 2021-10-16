@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:html5="http://xmlns.jcp.org/jsf/passthrough">
     <ui:composition>
-        <div class="card mb-4">
+        <div class="card m-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
                 Tabla de huespedes
@@ -37,13 +37,13 @@
                             <h:outputText value="#{h.documento}"  /> 
                         </p:column>
 
-                        <p:column headerText="Ciudad" filterBy="#{h.ciudadIdCiudad}" filterMatchMode="contains" >
-                            <h:outputText value="#{h.ciudadIdCiudad}"  /> 
+                        <p:column headerText="Ciudad" filterBy="#{h.ciudadIdCiudad.descripcion}" filterMatchMode="contains" >
+                            <h:outputText value="#{h.ciudadIdCiudad.descripcion}"  /> 
                         </p:column>
 
                         <p:column headerText=" " exportable="false" >
 
-                            <h:commandButton class="btn btn-warning rounded-pill"
+                            <h:commandButton class="btn btn-warning"
                                              html5:data-bs-toggle="modal"
                                              html5:data-bs-target="#editar"
                                              action="#{huespedView.guardarTemporal(h)}" 
@@ -55,7 +55,7 @@
 
                         <p:column headerText=" " exportable="false" >
 
-                            <h:commandLink class="btn btn-danger rounded-pill" action="#{huespedView.eliminarHuesped(h)}" value="Eliminar"/>
+                            <h:commandLink class="btn btn-danger" action="#{huespedView.eliminarHuesped(h)}" value="Eliminar"/>
 
                         </p:column>  
 
