@@ -30,8 +30,6 @@ public interface ReservaFacadeLocal {
 
     int count();
 
-    public boolean actualizarReserva(Reserva resIn, int fk_huesped, int fk_habitacion, int fk_empleado, int fk_hotel, int fk_estado);
-
     public boolean eliminarReserva(int res_id); 
 
     public List<Reserva> leerReservasEmpleado(Usuario usuIn);
@@ -43,5 +41,9 @@ public interface ReservaFacadeLocal {
     public boolean validarFechaSalida(Date resIni, Date resFin);
 
     public boolean validarFechaEntrada(Date resIni);
+
+    public boolean actualizarReserva(Reserva resIn, int fk_estado);
+
+    public List<Reserva> leerTodos();
     
 }

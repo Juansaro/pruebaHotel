@@ -101,7 +101,7 @@ public class ReservaView implements Serializable {
 
     @PostConstruct
     public void init() {
-        reservas = reservaFacadeLocal.findAll();
+        reservas = reservaFacadeLocal.leerTodos();
         reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
         habitaciones = habitacionFacadeLocal.findAll();
         //Hacer filtro de empleados
@@ -183,8 +183,8 @@ public class ReservaView implements Serializable {
                         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva registrada", "Reserva registrada"));
                         resReg = new Reserva();
                         huesped = new Huesped();
-                        reservas = reservaFacadeLocal.findAll();
-                        FacesContext.getCurrentInstance().getExternalContext().redirect("/pruebaHotel/faces/administrador/reserva.xhtml");
+                        reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
+                        FacesContext.getCurrentInstance().getExternalContext().redirect("/pruebaHotel/faces/empleado/reserva.xhtml");
                     } else {
                         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
                     }
@@ -211,7 +211,8 @@ public class ReservaView implements Serializable {
 
     public void actualizarReserva() {
         try {
-            reservaFacadeLocal.actualizarReserva(resTemporal, fk_huesped, fk_habitacion, u.getUsuLog().getDocumento(), fk_hotel, fk_estado);
+            reservaFacadeLocal.actualizarReserva(resTemporal, fk_estado);
+            reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva editado", "Reserva editado"));
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de edición", "Error de edición"));

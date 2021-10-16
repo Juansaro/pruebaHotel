@@ -87,16 +87,11 @@ public class ReservaFacade extends AbstractFacade<Reserva> implements ReservaFac
     }
 
     @Override
-    public boolean actualizarReserva(Reserva resIn, int fk_huesped, int fk_habitacion, int fk_empleado, int fk_hotel, int fk_estado) {
+    public boolean actualizarReserva(Reserva resIn,int fk_estado) {
         try {
-            Query qr = em.createNativeQuery("UPDATE reserva SET fecha_ingreso = ?, fecha_salida = ? ,fk_huesped = ?, fk_habitacion = ?, fk_empleado = ?, fk_hotel = ?, estado_reserva_id_estado_reserva WHERE (id_reserva = ?)");
-            qr.setParameter(1, resIn.getFechaIngreso());
-            qr.setParameter(2, resIn.getFechaSalida());
-            qr.setParameter(3, fk_huesped);
-            qr.setParameter(4, fk_habitacion);
-            qr.setParameter(5, fk_empleado);
-            qr.setParameter(6, fk_hotel);
-            qr.setParameter(7, fk_estado);
+            Query qr = em.createNativeQuery("UPDATE reserva SET fk_estado = ? WHERE (id_reserva = ?)");
+            qr.setParameter(1, fk_estado);
+            qr.setParameter(2, resIn.getIdReserva());
             qr.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -135,6 +130,17 @@ public class ReservaFacade extends AbstractFacade<Reserva> implements ReservaFac
             Query qt = em.createQuery("SELECT r FROM Reserva r WHERE r.fkHuesped = :hueIn");
             qt.setParameter("hueIn", hueIn);
             return qt.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    @Override
+    public List<Reserva> leerTodos(){
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query q = em.createQuery("SELECT r FROM Reserva r");
+            return q.getResultList();
         } catch (Exception e) {
             return null;
         }

@@ -49,7 +49,7 @@ public class TelefonoFacade extends AbstractFacade<Telefono> implements Telefono
     @Override
     public boolean actualizarTelefono(Telefono telIn, int fk_hotel) {
         try {
-            Query qr = em.createNativeQuery("UPDATE telefono SET numero = ?, fk_hotel = ? WHERE (id_telefono = ?)");
+            Query qr = em.createNativeQuery("UPDATE telefono SET numero = ?, hotel_id_hotel = ? WHERE (id_telefono = ?)");
             qr.setParameter(1, telIn.getNumero());
             qr.setParameter(2, fk_hotel);
             qr.setParameter(3, telIn.getIdTelefono());

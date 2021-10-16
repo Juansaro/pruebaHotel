@@ -44,16 +44,16 @@
                             <img height="24px" width="24px" src="#{request.contextPath}/assets/img/#{h.calefaccion == '1'?'si':'no'}.png" alt=""/>
                         </p:column>
 
-                        <p:column headerText="Tipo de habitación" filterBy="#{h.fkTipo}" filterMatchMode="contains" >
-                            <h:outputText value="#{h.fkTipo}"/>
+                        <p:column headerText="Tipo de habitación" filterBy="#{h.fkTipo.descripcion}" filterMatchMode="contains" >
+                            <h:outputText value="#{h.fkTipo.descripcion}"/>
                         </p:column>
 
-                        <p:column headerText="Hotel" filterBy="#{h.hotelIdHotel}"  filterMatchMode="contains" >
-                            <h:outputText value="#{h.hotelIdHotel}" /><br/>
+                        <p:column headerText="Hotel" filterBy="#{h.hotelIdHotel.nombre}"  filterMatchMode="contains" >
+                            <h:outputText value="#{h.hotelIdHotel.nombre}" /><br/>
                         </p:column>
                         
-                        <p:column headerText="Estado" filterBy="#{h.estadoHabitacionIdEstado}"  filterMatchMode="contains" >
-                            <h:outputText value="#{h.estadoHabitacionIdEstado}" /><br/>
+                        <p:column headerText="Estado" filterBy="#{h.estadoHabitacionIdEstado.descripcion}"  filterMatchMode="contains" >
+                            <h:outputText value="#{h.estadoHabitacionIdEstado.descripcion}" /><br/>
                         </p:column>
 
                         <p:column headerText=" " exportable="false" >

@@ -24,10 +24,6 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author juan
- */
 @Entity
 @Table(name = "rol")
 @XmlRootElement

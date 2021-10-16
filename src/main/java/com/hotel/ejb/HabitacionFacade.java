@@ -38,7 +38,7 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
             c.setParameter(3, Short.parseShort("1"));
             c.setParameter(4, fk_tipo);
             c.setParameter(5, h.getPrecio());
-            c.setParameter(6, 1);
+            c.setParameter(6, 2);
             c.setParameter(7, fk_hotel);
             c.executeUpdate();
             return true;

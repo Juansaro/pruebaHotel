@@ -25,11 +25,7 @@
                             </h:selectOneMenu>
                             Habitacion
                             <h:selectOneMenu class="form-control" id="habitacion" value="#{reservaView.fk_habitacion}" required="true">
-                                <f:selectItems value="#{habitacionView.habitaciones}" var="hab" itemLabel="#{hab.fkTipo.descripcion}" itemValue="#{hab.idHabitacion}"/>
-                            </h:selectOneMenu>
-                            Estado
-                            <h:selectOneMenu class="form-control" id="estado" value="#{reservaView.fk_estado}" required="true">
-                                <f:selectItems value="#{estadoReservaRequest.estadoReservas}" var="esta" itemLabel="#{esta.descripcion}" itemValue="#{esta.idEstadoReserva}"/>
+                                <f:selectItems value="#{habitacionView.habitaciones}" var="hab" itemLabel="Tipo: #{hab.fkTipo.descripcion} Estado: #{hab.estadoHabitacionIdEstado.descripcion}" itemValue="#{hab.idHabitacion}"/>
                             </h:selectOneMenu>
 
                             <h:outputLabel class="card-text font-weight-bold text-white" value="Fecha de entrada" for="fechaSolicitud" />

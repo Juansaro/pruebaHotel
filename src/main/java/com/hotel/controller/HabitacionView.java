@@ -107,9 +107,9 @@ public class HabitacionView implements Serializable {
             if (habitacionFacadeLocal.actualizarHabitacion(habTemporal, fk_tipo_habitacion, fk_estado, fk_hotel)) {
                 habTemporal = new Habitacion();
                 habitaciones = habitacionFacadeLocal.leerTodos();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Habitación Eliminada", "Habitación eliminada"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Habitación editada", "Habitación editada"));
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "No se pudo eliminar", "No se pudo eliminar"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "No se pudo editar", "No se pudo editar"));
             }
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error del componente", "Error del componente"));
