@@ -215,10 +215,12 @@ public class ReservaView implements Serializable {
                 case 2:
                     habitacionFacadeLocal.actualizarHabitacionReserva(fk_habitacion);
                     reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
+                    reservas = reservaFacadeLocal.leerTodos();
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva editado", "Reserva editado"));
                     break;
                 case 3:
                     habitacionFacadeLocal.actualizarHabitacionReserva(fk_habitacion);
+                    reservas = reservaFacadeLocal.leerTodos();
                     reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva editado", "Reserva editado"));
                     break;
@@ -236,6 +238,7 @@ public class ReservaView implements Serializable {
         try {
             if (reservaFacadeLocal.eliminarReserva(r.getIdReserva())) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva eliminada", "Reserva eliminada"));
+                reservas = reservaFacadeLocal.leerTodos();
                 reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de eliminación", "Error de eliminación"));

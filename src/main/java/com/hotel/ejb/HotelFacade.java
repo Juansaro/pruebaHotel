@@ -48,11 +48,13 @@ public class HotelFacade extends AbstractFacade<Hotel> implements HotelFacadeLoc
     }
 
     @Override
-    public boolean actualizarHotel(Hotel hotIn, int fk_hotel) {
+    public boolean actualizarHotel(Hotel hotIn, int fk_ciudad) {
         try {
-            Query qr = em.createNativeQuery("UPDATE hotel SET nombre = ?, fk_hotel = ? WHERE (id_hotel = ?)");
+            Query qr = em.createNativeQuery("UPDATE hotel SET nombre = ?, fk_ciudad = ?, direccion = ? WHERE (id_hotel = ?)");
             qr.setParameter(1, hotIn.getNombre());
-            qr.setParameter(2, fk_hotel);
+            qr.setParameter(2, fk_ciudad);
+            qr.setParameter(3, hotIn.getDireccion());
+            qr.setParameter(4, hotIn.getIdHotel());
             qr.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -85,6 +87,16 @@ public class HotelFacade extends AbstractFacade<Hotel> implements HotelFacadeLoc
         }
     }
     
+    @Override
+    public List<Hotel> leerTodos(){
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query q = em.createQuery("SELECT h FROM Hotel h");
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
    
     
 }

@@ -85,8 +85,7 @@ public class HabitacionView implements Serializable {
     public void eliminarHabitacion(Habitacion ha) {
         try {
             if (habitacionFacadeLocal.eliminarHabitacion(ha.getIdHabitacion())) {
-                listaHabitaciones = habitacionFacadeLocal.findAll();
-
+                habitaciones = habitacionFacadeLocal.leerTodos();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Habitación Eliminada", "Habitación eliminada"));
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));

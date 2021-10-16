@@ -28,6 +28,10 @@
                         <p:column headerText="Ciudad" filterBy="#{h.fkCiudad.descripcion}" filterMatchMode="contains" >
                             <h:outputText value="#{h.fkCiudad.descripcion}"  /> 
                         </p:column>
+                        
+                        <p:column headerText="Dirección" filterBy="#{h.direccion}" filterMatchMode="contains" >
+                            <h:outputText value="#{h.direccion}"  /> 
+                        </p:column>
 
                         <p:column headerText=" " exportable="false" >
 
@@ -94,7 +98,7 @@
                         <h5 class="modal-title" id="exampleModalLabel">Editar hotel</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <h:form>
+                    <h:form id="formActualizar">
                         <div class="modal-body">
                             <h:outputLabel value="Nombre:" for="nombre" />
                             <h:inputText id="nombre" value="#{hotelView.hotelTemporal.nombre}" required="true" html5:placeholder="Escribe el nombre" class="form-control"/>

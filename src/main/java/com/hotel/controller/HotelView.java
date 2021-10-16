@@ -42,7 +42,7 @@ public class HotelView implements Serializable{
     
     @PostConstruct
     private void init(){
-        hoteles = hotelFacadeLocal.findAll();
+        hoteles = hotelFacadeLocal.leerTodos();
         ciudades = ciudadFacadeLocal.findAll();
     }
     
@@ -50,7 +50,7 @@ public class HotelView implements Serializable{
         if(hotelFacadeLocal.registrarHotel(hotelReg, fk_ciudad)){
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Hotel registrado", "Hotel registrado"));
             hotelReg = new Hotel();
-            hoteles = hotelFacadeLocal.findAll();
+            hoteles = hotelFacadeLocal.leerTodos();
         }else{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
         }
@@ -63,8 +63,10 @@ public class HotelView implements Serializable{
     
     public void actualizarHotel(){
         try{
-            hotelFacadeLocal.actualizarHotel(hotelReg, fk_ciudad);
+            hotelFacadeLocal.actualizarHotel(hotelTemporal, fk_ciudad);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Hotel editado", "Hotel editado"));
+            hotelTemporal = new Hotel();
+            hoteles = hotelFacadeLocal.leerTodos();
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de edición", "Error de edición"));
         }
@@ -74,6 +76,7 @@ public class HotelView implements Serializable{
         try {
             if (hotelFacadeLocal.eliminarHotel(h.getIdHotel())) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Hotel eliminado", "Hotel eliminado"));
+                hoteles = hotelFacadeLocal.leerTodos();
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de eliminación", "Error de eliminación"));
             }

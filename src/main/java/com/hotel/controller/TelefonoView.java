@@ -42,7 +42,7 @@ public class TelefonoView implements Serializable {
 
     @PostConstruct
     public void init() {
-        telefonos = telefonoFacadeLocal.findAll();
+        telefonos = telefonoFacadeLocal.leerTodos();
     }
 
     public void registrarTelefono() {

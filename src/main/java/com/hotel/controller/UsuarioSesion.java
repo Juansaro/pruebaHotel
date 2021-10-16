@@ -215,7 +215,8 @@ public class UsuarioSesion implements Serializable {
             ));
         }
     }
-
+    
+    //Passay
     public String generatePassayPassword() {
         PasswordGenerator gen = new PasswordGenerator();
         CharacterData caracteresMinuscula = EnglishCharacterData.LowerCase;

@@ -39,4 +39,6 @@ public interface HotelFacadeLocal {
 
     public Hotel leerHotel(int idHot);
 
+    public List<Hotel> leerTodos();
+
 }
