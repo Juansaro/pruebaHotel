@@ -25,21 +25,20 @@
                             </h:selectOneMenu>
                             Habitacion
                             <h:selectOneMenu class="form-control" id="habitacion" value="#{reservaView.fk_habitacion}" required="true">
-                                <f:selectItems value="#{habitacionView.habitaciones}" var="hab" itemLabel="Tipo: #{hab.fkTipo.descripcion} Estado: #{hab.estadoHabitacionIdEstado.descripcion}" itemValue="#{hab.idHabitacion}"/>
+                                <f:selectItems value="#{habitacionView.habitacionesOn}" var="hab" itemLabel="Tipo: #{hab.fkTipo.descripcion} Estado: #{hab.estadoHabitacionIdEstado.descripcion}" itemValue="#{hab.idHabitacion}"/>
                             </h:selectOneMenu>
 
-                            <h:outputLabel class="card-text font-weight-bold text-white" value="Fecha de entrada" for="fechaSolicitud" />
+                            Fecha entrada:
                             <br/>
                             <p:calendar id="fechaSolicitud" value="#{reservaView.resReg.fechaIngreso}" pattern="MM/dd/yyyy HH:mm:ss"/>
                             <br/>
-
                             <p:dialog modal="true" resizable="false" header="Values" widgetVar="dlg" showEffect="fold">
                                 <h:outputText value="Datetime:"/>
                                 <h:outputText value="#{calendarView.date10}">
                                     <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss"/>
                                 </h:outputText>
                             </p:dialog>
-
+                            Fecha salida:
                             <h:outputLabel class="card-text font-weight-bold text-white" value="Fecha de salida" for="fechaSalida" />
                             <br/>
                             <p:calendar id="fechaSalida" value="#{reservaView.resReg.fechaSalida}" pattern="MM/dd/yyyy HH:mm:ss"/>

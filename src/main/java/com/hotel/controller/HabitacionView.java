@@ -53,12 +53,14 @@ public class HabitacionView implements Serializable {
     private Hotel htTemporal;
 
     private List<Habitacion> habitaciones;
+    private List<Habitacion> habitacionesOn;
     private List<EstadoReserva> estadoReservas;
     private List<Habitacion> listaHabitaciones = new ArrayList<>();
 
     @PostConstruct
     public void init() {
         habitaciones = habitacionFacadeLocal.leerTodos();
+        habitacionesOn = habitacionFacadeLocal.leerDisponibles();
         habReg = new Habitacion();
         habTemporal = new Habitacion();
     }
@@ -237,6 +239,14 @@ public class HabitacionView implements Serializable {
 
     public void setFk_estado(int fk_estado) {
         this.fk_estado = fk_estado;
+    }
+
+    public List<Habitacion> getHabitacionesOn() {
+        return habitacionesOn;
+    }
+
+    public void setHabitacionesOn(List<Habitacion> habitacionesOn) {
+        this.habitacionesOn = habitacionesOn;
     }
 
 }

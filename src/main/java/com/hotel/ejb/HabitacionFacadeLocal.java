@@ -44,5 +44,9 @@ public interface HabitacionFacadeLocal {
 
     public Float leerCostoHabitacion(int h);
 
+    public boolean actualizarHabitacionReserva(int habIn);
+
+    public List<Habitacion> leerDisponibles();
+
 
 }

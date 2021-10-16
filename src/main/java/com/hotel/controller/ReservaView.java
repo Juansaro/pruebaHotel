@@ -59,9 +59,6 @@ public class ReservaView implements Serializable {
     @EJB
     private EstadoReservaFacadeLocal estadoReservaFacadeLocal;
 
-    @EJB
-    private TipoHabitacionFacadeLocal tipoHabitacionFacadeLocal;
-
     @Inject
     private Huesped huesped;
 
@@ -166,7 +163,9 @@ public class ReservaView implements Serializable {
         if (validarReservaRepetida()) {
             if (outEnt) {
                 if (outFin) {
-                    if (reservaFacadeLocal.registrarReserva(resReg, huesped.getIdHuesped(), fk_habitacion, u.getUsuLog().getDocumento(), fk_hotel)) {
+                    if (reservaFacadeLocal.registrarReserva(resReg, huesped.getIdHuesped(), fk_habitacion, u.getUsuLog().getDocumento(), fk_hotel)
+                            && habitacionFacadeLocal.actualizarHabitacionReserva(fk_habitacion)) {
+
                         hueIn = huespedFacadeLocal.leerHuesped(huesped.getIdHuesped());
                         hotIn = hotelFacadeLocal.leerHotel(fk_hotel);
                         habIn = habitacionFacadeLocal.leerTipoHabitacion(fk_habitacion);
@@ -212,8 +211,22 @@ public class ReservaView implements Serializable {
     public void actualizarReserva() {
         try {
             reservaFacadeLocal.actualizarReserva(resTemporal, fk_estado);
-            reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva editado", "Reserva editado"));
+            switch (fk_estado) {
+                case 2:
+                    habitacionFacadeLocal.actualizarHabitacionReserva(fk_habitacion);
+                    reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva editado", "Reserva editado"));
+                    break;
+                case 3:
+                    habitacionFacadeLocal.actualizarHabitacionReserva(fk_habitacion);
+                    reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva editado", "Reserva editado"));
+                    break;
+                default:
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Siges en el mismo estado", "Sigues en el mismo estado"));
+                    break;
+            }
+
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de edición", "Error de edición"));
         }
@@ -223,6 +236,7 @@ public class ReservaView implements Serializable {
         try {
             if (reservaFacadeLocal.eliminarReserva(r.getIdReserva())) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva eliminada", "Reserva eliminada"));
+                reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de eliminación", "Error de eliminación"));
             }

@@ -91,6 +91,20 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
     }
     
     @Override
+    public boolean actualizarHabitacionReserva(int habIn) {
+        try {
+            Query qr = em.createNativeQuery("UPDATE habitacion SET estado_habitacion_id_estado = ? WHERE (id_habitacion = ?)");
+            qr.setParameter(1, 2);
+            qr.setParameter(2, habIn);
+            qr.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+    
+    @Override
     public boolean eliminarHotelHabitacion(Habitacion ha) {
         try {
             Query c = em.createNativeQuery("DELETE FROM hotel_has_habitacion  WHERE fk_habitacion = ?");
@@ -107,6 +121,17 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
         try {
             em.getEntityManagerFactory().getCache().evictAll();
             Query q = em.createQuery("SELECT ha FROM Habitacion ha");
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    @Override
+    public List<Habitacion> leerDisponibles(){
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query q = em.createQuery("SELECT ha FROM Habitacion ha WHERE ha.estadoHabitacionIdEstado.idEstado = 2");
             return q.getResultList();
         } catch (Exception e) {
             return null;
