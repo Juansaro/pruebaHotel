@@ -45,5 +45,7 @@ public interface ReservaFacadeLocal {
     public boolean actualizarReserva(Reserva resIn, int fk_estado);
 
     public List<Reserva> leerTodos();
+
+    public boolean cancelarReserva(Date fecReserva);
     
 }

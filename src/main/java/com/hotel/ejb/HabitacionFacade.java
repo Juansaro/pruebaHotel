@@ -162,4 +162,16 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
         }
     }
     
+    @Override
+    public List<Habitacion> leerHabitacionesHotel(Hotel h){
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query q = em.createQuery("SELECT ha FROM Habitacion ha WHERE ha.estadoHabitacionIdEstado.idEstado = 2 AND ha.hotelIdHotel = :h");
+            q.setParameter("h", h);
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
 }

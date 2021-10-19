@@ -48,5 +48,6 @@ public interface HabitacionFacadeLocal {
 
     public List<Habitacion> leerDisponibles();
 
+    public List<Habitacion> leerHabitacionesHotel(Hotel h);
 
 }

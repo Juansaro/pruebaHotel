@@ -67,6 +67,22 @@ public class ReservaFacade extends AbstractFacade<Reserva> implements ReservaFac
     }
     
     @Override
+    public boolean cancelarReserva(Date fecReserva) {
+
+        StoredProcedureQuery q = em.createStoredProcedureQuery("CANCELAR_RESERVA_EMPLEADO")
+                .registerStoredProcedureParameter(1, Date.class, ParameterMode.IN)
+                .registerStoredProcedureParameter(2, boolean.class, ParameterMode.OUT)
+                .setParameter(2, fecReserva);
+
+        q.execute();
+        //Out (2) y (3)
+        boolean outFecReserva = (boolean) q.getOutputParameterValue(3);
+        //Array de booleanos
+        return outFecReserva;
+
+    }
+    
+    @Override
     public boolean registrarReserva(Reserva resIn, int fk_huesped, int fk_habitacion, int fk_empleado, int fk_hotel) {
         try {
             Query qr = em.createNativeQuery("INSERT INTO reserva (fecha_ingreso, fecha_salida, fk_huesped, fk_habitacion, fk_empleado, fk_hotel, fk_estado, precio, fechaRegistro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");

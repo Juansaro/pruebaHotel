@@ -9,15 +9,24 @@ import com.hotel.ejb.CiudadFacadeLocal;
 import com.hotel.ejb.HotelFacadeLocal;
 import com.hotel.model.Ciudad;
 import com.hotel.model.Hotel;
+import java.io.File;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.Part;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.PrimeFaces;
+import org.primefaces.shaded.commons.io.FilenameUtils;
 
 @Named(value = "hotelView")
 @ViewScoped
@@ -39,6 +48,9 @@ public class HotelView implements Serializable{
     
     private Hotel hotelReg = new Hotel();
     private Hotel hotelTemporal = new Hotel();
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+    
+    private Part archivoFoto;
     
     @PostConstruct
     private void init(){
@@ -83,6 +95,45 @@ public class HotelView implements Serializable{
         } catch (Exception e) {
         }
     }
+    
+    public void cargarFotoHotel() {
+        if (archivoFoto != null) {
+            if (archivoFoto.getSize() > 700000 || archivoFoto.getSize() < 10000) {
+                PrimeFaces.current().executeScript("Swal.fire({"
+                        + "  title: 'El archivo !',"
+                        + "  text: 'No se puede cargar por el tamaño !!!',"
+                        + "  icon: 'error',"
+                        + "  confirmButtonText: 'Ok'"
+                        + "})");
+            } else if (archivoFoto.getContentType().equalsIgnoreCase("image/png") || archivoFoto.getContentType().equalsIgnoreCase("image/jpeg")) {
+
+                try (InputStream is = archivoFoto.getInputStream()) {
+                    File carpeta = new File("C:\\descansoPlacer\\hoteles");
+                    if (!carpeta.exists()) {
+                        carpeta.mkdirs();
+                    }
+                    Calendar hoy = Calendar.getInstance();
+                    String nuevoNombre = sdf.format(hoy.getTime()) + ".";
+                    nuevoNombre += FilenameUtils.getExtension(archivoFoto.getSubmittedFileName());
+                    Files.copy(is, (new File(carpeta, nuevoNombre)).toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    hotelTemporal.setHotelFoto(nuevoNombre);
+                    hotelFacadeLocal.edit(hotelTemporal);
+
+                } catch (Exception e) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de componente", "Error de componente"));
+                }
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Revisa el peso de la imagen", "Revisa el peso de la imagen"));
+            }
+
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
+        }
+
+        PrimeFaces.current().executeScript("document.getElementById('resetform').click()");
+
+    }
+
 
     public Ciudad getCiudad() {
         return ciudad;
@@ -130,6 +181,22 @@ public class HotelView implements Serializable{
 
     public void setFk_ciudad(int fk_ciudad) {
         this.fk_ciudad = fk_ciudad;
+    }
+
+    public SimpleDateFormat getSdf() {
+        return sdf;
+    }
+
+    public void setSdf(SimpleDateFormat sdf) {
+        this.sdf = sdf;
+    }
+
+    public Part getArchivoFoto() {
+        return archivoFoto;
+    }
+
+    public void setArchivoFoto(Part archivoFoto) {
+        this.archivoFoto = archivoFoto;
     }
     
 }

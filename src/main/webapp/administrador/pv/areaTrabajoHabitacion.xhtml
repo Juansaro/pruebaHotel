@@ -16,7 +16,7 @@
                 </button>
             </div>
             <div class="card-body">
-                <h:form id="frmPrincipal" styleClass="jsfcrud_list_form">
+                <h:form id="resetform" styleClass="jsfcrud_list_form">
                     <p:growl id="growl" life="3000"/>
                     <p:dataTable id="tabla" emptyMessage="Ninguna habitacion registrada" value="#{habitacionView.habitaciones}" 
                                  var="h" paginator="true"  rows="10" rowSelectMode="add" paginatorPosition="bottom"
@@ -24,7 +24,7 @@
                         <p:column headerText="Numero habitación" filterBy="#{h.idHabitacion}" filterMatchMode="contains" >
                             <h:outputText value="#{h.idHabitacion}"  /> 
                         </p:column>
-                        
+
                         <p:column headerText="Costo" filterBy="#{h.precio}" filterMatchMode="contains" >
                             <h:outputText value="#{h.precio}"  /> 
                         </p:column>
@@ -51,7 +51,7 @@
                         <p:column headerText="Hotel" filterBy="#{h.hotelIdHotel.nombre}"  filterMatchMode="contains" >
                             <h:outputText value="#{h.hotelIdHotel.nombre}" /><br/>
                         </p:column>
-                        
+
                         <p:column headerText="Estado" filterBy="#{h.estadoHabitacionIdEstado.descripcion}"  filterMatchMode="contains" >
                             <h:outputText value="#{h.estadoHabitacionIdEstado.descripcion}" /><br/>
                         </p:column>
@@ -87,7 +87,7 @@
                         <h5 class="modal-title" id="exampleModalLabel">Editar habitación</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <h:form id="formEditar">
+                    <h:form id="formActualizar">
                         <div class="modal-body">
 
                             <h:outputLabel value="Tipo de habitacion" for="tipo" />
@@ -99,12 +99,12 @@
                             <h:selectOneMenu id="hotel" value="#{habitacionView.fk_hotel}" class="form-control">
                                 <f:selectItems itemLabel="#{hot.nombre}" itemValue="#{hot.idHotel}" var="hot" value="#{hotelView.hoteles}"></f:selectItems>                                
                             </h:selectOneMenu>
-                            
+
                             <h:outputLabel value="Estado" for="estado" />
                             <h:selectOneMenu id="estado" value="#{habitacionView.fk_estado}" class="form-control">
                                 <f:selectItems itemLabel="#{est.descripcion}" itemValue="#{est.idEstado}" var="est" value="#{estadoHabitacionRequest.estadoHabitaciones}"></f:selectItems>                                
                             </h:selectOneMenu>
-                            
+
                             <h:outputLabel value="Costo" for="costo" />
                             <h:inputText value="#{habitacionView.habTemporal.precio}"/>
 
@@ -129,7 +129,7 @@
                     </div>
                     <h:form>
                         <div class="modal-body">
-                            
+
                             <h:outputLabel value="Tipo de habitacion" for="tipo" />
                             <h:selectOneMenu id="tipo" value="#{habitacionView.fk_tipo_habitacion}" class="form-control">
                                 <f:selectItems itemLabel="#{tip.descripcion}" itemValue="#{tip.idTipoHabitacion}" var="tip" value="#{tipoHabitaciones.tipoHabitaciones}"></f:selectItems>                                
@@ -139,7 +139,7 @@
                             <h:selectOneMenu id="hotel" value="#{habitacionView.fk_hotel}" class="form-control">
                                 <f:selectItems itemLabel="#{hot.nombre}" itemValue="#{hot.idHotel}" var="hot" value="#{hotelView.hoteles}"></f:selectItems>                                
                             </h:selectOneMenu>
-                            
+
                             <h:outputLabel value="Costo" for="costo" />
                             <h:inputText value="#{habitacionView.habReg.precio}"/>
 

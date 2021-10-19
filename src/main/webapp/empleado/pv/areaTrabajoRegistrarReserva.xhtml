@@ -5,29 +5,34 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:html5="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:composition>
         <p:growl id="growl" life="3000"/>
         <div class="card container mt-3 mb-3" style="max-width: 21rem;" id="carta">
             <div class="row">
                 <div class="col">
                     <div class="card-body">
-                        <h5 class="card-title font-weight-bold text-white">Registrar reserva</h5>
+                        <h5 class="card-title font-weight-bold text-black">Registrar reserva</h5>
                         <hr class="bg-white"/>
-                        <h:form>
+                        <h:form id="formRegistro">
                             Huesped
                             <h:selectOneMenu class="form-control" id="huesped" value="#{reservaView.huesped.idHuesped}" required="true">
                                 <f:selectItems value="#{huespedView.huespedes}" var="hue" itemLabel="#{hue.correo}" itemValue="#{hue.idHuesped}"/>
                             </h:selectOneMenu>
-                            Hotel
-                            <h:selectOneMenu class="form-control" id="hotel" value="#{reservaView.fk_hotel}" required="true">
-                                <f:selectItems value="#{hotelView.hoteles}" var="hot" itemLabel="#{hot.nombre}" itemValue="#{hot.idHotel}"/>
-                            </h:selectOneMenu>
+                            <br/>
+                            <h:commandButton class="btn btn-outline-dark"
+                                             html5:data-bs-toggle="modal"
+                                             html5:data-bs-target="#hoteles"
+                                             value="Elegir hotel" >
+                                <f:ajax render=":formActualizar"> </f:ajax>
+                            </h:commandButton>
+                            Escoge un hotel
+                            <br/><br/>
                             Habitacion
-                            <h:selectOneMenu class="form-control" id="habitacion" value="#{reservaView.fk_habitacion}" required="true">
-                                <f:selectItems value="#{habitacionView.habitacionesOn}" var="hab" itemLabel="Tipo: #{hab.fkTipo.descripcion} Estado: #{hab.estadoHabitacionIdEstado.descripcion}" itemValue="#{hab.idHabitacion}"/>
+                            <h:selectOneMenu class="form-control" id="habitacion" value="#{reservaView.habitacion.idHabitacion}" required="true">
+                                <f:selectItems value="#{reservaView.habitaciones}" var="hab" itemLabel="Tipo: #{hab.fkTipo.descripcion} Estado: #{hab.estadoHabitacionIdEstado.descripcion}" itemValue="#{hab.idHabitacion}"/>
                             </h:selectOneMenu>
-
                             Fecha entrada:
                             <br/>
                             <p:calendar id="fechaSolicitud" value="#{reservaView.resReg.fechaIngreso}" pattern="MM/dd/yyyy HH:mm:ss"/>
@@ -50,11 +55,65 @@
                                     <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss"/>
                                 </h:outputText>
                             </p:dialog>
-
-                            <h:commandLink class="btn btn-success btn-lg btn-block text-white" action="#{reservaView.registrarReserva()}" value="Guardar" />
-                            <br />
+                            
+                            <h:commandButton action="#{reservaView.registrarReserva()}" class="btn btn-primary form-control mt-3 text-white" value="Registrar reserva.">
+                            </h:commandButton>
+                            
+                            <hr/>
+                            <button type="button" class="btn btn-warning form-control" data-bs-dismiss="modal">Regresar</button>
                         </h:form>
+
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="hoteles" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Hoteles</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <h:form id="formActualizar">
+                        <div class="modal-body">
+                            <div class="row">                                
+                                <c:forEach items="#{reservaView.hoteles}" var="hot" varStatus="act">
+                                    <div class="col-lg-4">
+                                        <h:commandLink
+                                            html5:data-bs-toggle="modal"
+                                            html5:data-bs-target="#exampleModalComprar" 
+                                            action="#{reservaView.guardarHotelTemporal(hot)}"
+                                            >
+                                            <div class="card text-dark">
+
+                                                    <h:graphicImage
+                                                        style="height: 32px; width: 32px"
+                                                        class="img-circle elevation-2"
+                                                        value="/ImgProServlet/#{hot.hotelFoto}">
+                                                    </h:graphicImage>
+
+                                                <div class="card-header border-0">
+                                                    <h3 class="card-title">#{hot.nombre}</h3>
+                                                </div>
+                                                <div class="card-header border-0">
+                                                    <h3 class="card-title">#{hot.fkCiudad.descripcion}</h3>
+                                                </div>
+                                                <div class="card-body">
+                                                    <!--No olvidar colocar foto aquí-->
+                                                    <h6>#{hot.direccion}</h6>
+                                                </div>
+                                            </div>
+                                        </h:commandLink>
+                                    </div>
+                                </c:forEach>
+
+                            </div>
+
+                        </div>
+                    </h:form>
                 </div>
             </div>
         </div>

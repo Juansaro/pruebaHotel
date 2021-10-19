@@ -76,8 +76,10 @@ public class UsuarioSesion implements Serializable {
         try {
             usuLog = usuarioFacadeLocal.encontrarUsuarioDocumento(docIn);
             if (usuLog != null) {
-                if (usuLog.getDocumento().equals(docIn)) {
-                    if (usuLog.getContrasena().equals(claveIn)) {
+                
+                if (usuLog.getDocumento().equals(docIn) && usuLog.getContrasena().equals(claveIn)) {
+
+                    if (usuLog.getEstado() == Short.parseShort("1")) {
                         switch (usuLog.getFkRol().toString()) {
                             case "Administrador": {
                                 FacesContext fc = FacesContext.getCurrentInstance();
@@ -96,6 +98,14 @@ public class UsuarioSesion implements Serializable {
                                 ));
                                 break;
                         }
+
+                    } else {
+                        
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                                "Comunicate con el administrador",
+                                "Comunicate con el administrador"
+                        ));
+
                         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
                                 "Correo o clave incorrectos",
                                 "Correo o clave incorrectos"
@@ -215,7 +225,7 @@ public class UsuarioSesion implements Serializable {
             ));
         }
     }
-    
+
     //Passay
     public String generatePassayPassword() {
         PasswordGenerator gen = new PasswordGenerator();

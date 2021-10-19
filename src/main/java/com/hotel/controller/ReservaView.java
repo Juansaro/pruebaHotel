@@ -94,13 +94,14 @@ public class ReservaView implements Serializable {
     private Reserva resTemporal = new Reserva();
     private Huesped hueIn = new Huesped();
     private Hotel hotIn = new Hotel();
+    private Hotel hotTemporal = new Hotel();
     private Habitacion habIn = new Habitacion();
 
     @PostConstruct
     public void init() {
         reservas = reservaFacadeLocal.leerTodos();
         reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
-        habitaciones = habitacionFacadeLocal.findAll();
+        //habitaciones = habitacionFacadeLocal.findAll();
         //Hacer filtro de empleados
         empleados = usuarioFacadeLocal.findAll();
         hoteles = hotelFacadeLocal.findAll();
@@ -152,23 +153,30 @@ public class ReservaView implements Serializable {
             return true;
         }
     }
+    
+    public void guardarHotelTemporal(Hotel h){
+        hotTemporal = h;
+        habitaciones = habitacionFacadeLocal.leerHabitacionesHotel(h);
+    }
 
     public void registrarReserva() throws IOException {
         hueReservas = reservaFacadeLocal.leerReservasHuesped(huesped);
         resReg.setFechaRegistro(obtenerFechaActual());
-        resReg.setPrecio(habitacionFacadeLocal.leerCostoHabitacion(fk_habitacion));
+        resReg.setPrecio(habitacionFacadeLocal.leerCostoHabitacion(habitacion.getIdHabitacion()));
+        //Validación de rangos de citas
         boolean outEnt = reservaFacadeLocal.validarFechaEntrada(resReg.getFechaIngreso());
         boolean outFin = reservaFacadeLocal.validarFechaSalida(resReg.getFechaIngreso(), resReg.getFechaSalida());
 
         if (validarReservaRepetida()) {
             if (outEnt) {
                 if (outFin) {
-                    if (reservaFacadeLocal.registrarReserva(resReg, huesped.getIdHuesped(), fk_habitacion, u.getUsuLog().getDocumento(), fk_hotel)
-                            && habitacionFacadeLocal.actualizarHabitacionReserva(fk_habitacion)) {
-
+                    if (reservaFacadeLocal.registrarReserva(resReg, huesped.getIdHuesped(), habitacion.getIdHabitacion(), u.getUsuLog().getDocumento(), hotTemporal.getIdHotel())) {
+                        //Cambiar estado de la habitación
+                        habitacionFacadeLocal.actualizarHabitacionReserva(fk_habitacion);
                         hueIn = huespedFacadeLocal.leerHuesped(huesped.getIdHuesped());
-                        hotIn = hotelFacadeLocal.leerHotel(fk_hotel);
-                        habIn = habitacionFacadeLocal.leerTipoHabitacion(fk_habitacion);
+                        habIn = habitacionFacadeLocal.leerTipoHabitacion(habitacion.getIdHabitacion());
+                        hotIn = hotelFacadeLocal.leerHotel(hotTemporal.getIdHotel());
+                        
                         ReservaMail.correoReserva(
                                 hueIn.getNombre(),
                                 hueIn.getApellido(),
@@ -182,6 +190,8 @@ public class ReservaView implements Serializable {
                         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva registrada", "Reserva registrada"));
                         resReg = new Reserva();
                         huesped = new Huesped();
+                        hotTemporal = new Hotel();
+                        habitacion = new Habitacion();
                         reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
                         FacesContext.getCurrentInstance().getExternalContext().redirect("/pruebaHotel/faces/empleado/reserva.xhtml");
                     } else {
@@ -236,14 +246,19 @@ public class ReservaView implements Serializable {
 
     public void eliminarReserva(Reserva r) {
         try {
-            if (reservaFacadeLocal.eliminarReserva(r.getIdReserva())) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva eliminada", "Reserva eliminada"));
-                reservas = reservaFacadeLocal.leerTodos();
-                reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
+            if (reservaFacadeLocal.cancelarReserva(r.getFechaIngreso())) {
+                if (reservaFacadeLocal.eliminarReserva(r.getIdReserva())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva eliminada", "Reserva eliminada"));
+                    reservas = reservaFacadeLocal.leerTodos();
+                    reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Debes cancelar con dos días de antelación!", "Debes cancelar con dos días de antelación!"));
+                }
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de eliminación", "Error de eliminación"));
             }
         } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de eliminación", "Error de eliminación"));
         }
     }
 
@@ -417,6 +432,14 @@ public class ReservaView implements Serializable {
 
     public void setOuts(boolean[] outs) {
         this.outs = outs;
+    }
+
+    public Hotel getHotTemporal() {
+        return hotTemporal;
+    }
+
+    public void setHotTemporal(Hotel hotTemporal) {
+        this.hotTemporal = hotTemporal;
     }
 
 }

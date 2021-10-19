@@ -41,4 +41,6 @@ public interface HotelFacadeLocal {
 
     public List<Hotel> leerTodos();
 
+    public boolean ingresarFoto(int hoIn);
+
 }

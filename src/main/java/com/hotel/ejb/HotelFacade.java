@@ -98,5 +98,16 @@ public class HotelFacade extends AbstractFacade<Hotel> implements HotelFacadeLoc
         }
     }
    
+     @Override
+    public boolean ingresarFoto(int hoIn) {
+        try {
+            Query c = em.createNativeQuery("INSERT INTO hotel (hotelFoto) VALUES (?)");
+            c.setParameter(1, hoIn);
+            c.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
     
 }
