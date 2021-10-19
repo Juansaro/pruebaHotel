@@ -63,6 +63,10 @@ public class Habitacion implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "precio")
     private Float precio;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "numero_habitacion")
+    private int numeroHabitacion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkHabitacion", fetch = FetchType.LAZY)
     private Collection<Reserva> reservaCollection;
     @JoinColumn(name = "estado_habitacion_id_estado", referencedColumnName = "id_estado")
@@ -135,6 +139,14 @@ public class Habitacion implements Serializable {
 
     public void setPrecio(Float precio) {
         this.precio = precio;
+    }
+    
+    public int getNumeroHabitacion() {
+        return numeroHabitacion;
+    }
+
+    public void setNumeroHabitacion(int numeroHabitacion) {
+        this.numeroHabitacion = numeroHabitacion;
     }
 
     @XmlTransient

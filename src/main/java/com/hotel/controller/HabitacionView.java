@@ -68,14 +68,29 @@ public class HabitacionView implements Serializable {
     public void registrarHabitacion() {
 
         try {
-            if (habitacionFacadeLocal.crearHabitacion(habReg, fk_tipo_habitacion, fk_hotel)) {
-                habReg = new Habitacion();
-
-                habitaciones = habitacionFacadeLocal.findAll();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Habitación registrada", "Habitación registrada"));
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
+            int res = 0;
+            listaHabitaciones = habitacionFacadeLocal.leerNumeroHabitacion(fk_hotel);
+            for (Habitacion hab : listaHabitaciones) {
+                if (hab.getNumeroHabitacion() == habReg.getNumeroHabitacion()) {
+                    res = 1;
+                } else {
+                    res = 0;
+                }
             }
+
+            if (res == 0) {
+                if (habitacionFacadeLocal.crearHabitacion(habReg, fk_tipo_habitacion, fk_hotel)) {
+                    habReg = new Habitacion();
+
+                    habitaciones = habitacionFacadeLocal.findAll();
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Habitación registrada", "Habitación registrada"));
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
+                }
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Número de habitación repetido", "Número de habitación repetido"));
+            }
+
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error del componente", "Error del componente"));
         }

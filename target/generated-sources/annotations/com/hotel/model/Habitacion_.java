@@ -9,7 +9,7 @@ import javax.persistence.metamodel.CollectionAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2021-10-18T21:46:24")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2021-10-19T13:52:40")
 @StaticMetamodel(Habitacion.class)
 public class Habitacion_ { 
 
@@ -17,6 +17,7 @@ public class Habitacion_ {
     public static volatile SingularAttribute<Habitacion, EstadoHabitacion> estadoHabitacionIdEstado;
     public static volatile SingularAttribute<Habitacion, Float> precio;
     public static volatile SingularAttribute<Habitacion, Hotel> hotelIdHotel;
+    public static volatile SingularAttribute<Habitacion, Integer> numeroHabitacion;
     public static volatile SingularAttribute<Habitacion, String> habitacionFoto;
     public static volatile SingularAttribute<Habitacion, Short> calefaccion;
     public static volatile CollectionAttribute<Habitacion, Reserva> reservaCollection;

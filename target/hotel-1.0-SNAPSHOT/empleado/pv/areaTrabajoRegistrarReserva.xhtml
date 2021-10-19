@@ -16,11 +16,6 @@
                         <h5 class="card-title font-weight-bold text-black">Registrar reserva</h5>
                         <hr class="bg-white"/>
                         <h:form id="formRegistro">
-                            Huesped
-                            <h:selectOneMenu class="form-control" id="huesped" value="#{reservaView.huesped.idHuesped}" required="true">
-                                <f:selectItems value="#{huespedView.huespedes}" var="hue" itemLabel="#{hue.correo}" itemValue="#{hue.idHuesped}"/>
-                            </h:selectOneMenu>
-                            <br/>
                             <h:commandButton class="btn btn-outline-dark"
                                              html5:data-bs-toggle="modal"
                                              html5:data-bs-target="#hoteles"
@@ -29,6 +24,10 @@
                             </h:commandButton>
                             Escoge un hotel
                             <br/><br/>
+                            Huesped
+                            <h:selectOneMenu class="form-control" id="huesped" value="#{reservaView.huesped.idHuesped}" required="true">
+                                <f:selectItems value="#{huespedView.huespedes}" var="hue" itemLabel="#{hue.correo}" itemValue="#{hue.idHuesped}"/>
+                            </h:selectOneMenu>
                             Habitacion
                             <h:selectOneMenu class="form-control" id="habitacion" value="#{reservaView.habitacion.idHabitacion}" required="true">
                                 <f:selectItems value="#{reservaView.habitaciones}" var="hab" itemLabel="Tipo: #{hab.fkTipo.descripcion} Estado: #{hab.estadoHabitacionIdEstado.descripcion}" itemValue="#{hab.idHabitacion}"/>
@@ -55,12 +54,14 @@
                                     <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss"/>
                                 </h:outputText>
                             </p:dialog>
-                            
+
                             <h:commandButton action="#{reservaView.registrarReserva()}" class="btn btn-primary form-control mt-3 text-white" value="Registrar reserva.">
                             </h:commandButton>
-                            
+
                             <hr/>
-                            <button type="button" class="btn btn-warning form-control" data-bs-dismiss="modal">Regresar</button>
+                            <a href="reserva.xhtml" style="text-decoration: None">
+                                <button type="button" class="btn btn-warning form-control" data-bs-dismiss="modal">Regresar</button>
+                            </a>
                         </h:form>
 
                     </div>
@@ -89,11 +90,11 @@
                                             >
                                             <div class="card text-dark">
 
-                                                    <h:graphicImage
-                                                        style="height: 32px; width: 32px"
-                                                        class="img-circle elevation-2"
-                                                        value="/ImgProServlet/#{hot.hotelFoto}">
-                                                    </h:graphicImage>
+                                                <h:graphicImage
+                                                    style="height: 32px; width: 32px"
+                                                    class="img-circle elevation-2"
+                                                    value="/ImgProServlet/#{hot.hotelFoto}">
+                                                </h:graphicImage>
 
                                                 <div class="card-header border-0">
                                                     <h3 class="card-title">#{hot.nombre}</h3>

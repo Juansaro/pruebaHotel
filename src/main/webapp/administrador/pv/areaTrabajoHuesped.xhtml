@@ -11,9 +11,11 @@
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
                 Tabla de huespedes
+                <!--
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrar">
                     Registrar huesped.
                 </button>
+                -->
             </div>
             <div class="card-body">
                 <h:form styleClass="jsfcrud_list_form">
@@ -40,7 +42,15 @@
                         <p:column headerText="Ciudad" filterBy="#{h.ciudadIdCiudad.descripcion}" filterMatchMode="contains" >
                             <h:outputText value="#{h.ciudadIdCiudad.descripcion}"  /> 
                         </p:column>
-
+                        
+                        <p:column headerText="Barrio" filterBy="#{h.barrio}" filterMatchMode="contains" >
+                            <h:outputText value="#{h.barrio}"  /> 
+                        </p:column>
+                        
+                        <p:column headerText="Dirección" filterBy="#{h.direccion}" filterMatchMode="contains" >
+                            <h:outputText value="#{h.direccion}"  /> 
+                        </p:column>
+                        <!-- 
                         <p:column headerText=" " exportable="false" >
 
                             <h:commandButton class="btn btn-warning"
@@ -58,14 +68,14 @@
                             <h:commandLink class="btn btn-danger" action="#{huespedView.eliminarHuesped(h)}" value="Eliminar"/>
 
                         </p:column>  
-
+                        -->
                     </p:dataTable>
 
                 </h:form>
             </div>
         </div>
 
-        <!-- Modal -->
+        <!-- 
         <div class="modal fade" id="registrar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -111,7 +121,7 @@
             </div>
         </div>
 
-        <!-- Modal -->
+       
         <div class="modal fade" id="editar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -156,6 +166,7 @@
                 </div>
             </div>
         </div>
+        -->
     </ui:composition>
 </html>
 

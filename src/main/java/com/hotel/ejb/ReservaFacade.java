@@ -72,11 +72,11 @@ public class ReservaFacade extends AbstractFacade<Reserva> implements ReservaFac
         StoredProcedureQuery q = em.createStoredProcedureQuery("CANCELAR_RESERVA_EMPLEADO")
                 .registerStoredProcedureParameter(1, Date.class, ParameterMode.IN)
                 .registerStoredProcedureParameter(2, boolean.class, ParameterMode.OUT)
-                .setParameter(2, fecReserva);
+                .setParameter(1, fecReserva);
 
         q.execute();
         //Out (2) y (3)
-        boolean outFecReserva = (boolean) q.getOutputParameterValue(3);
+        boolean outFecReserva = (boolean) q.getOutputParameterValue(2);
         //Array de booleanos
         return outFecReserva;
 

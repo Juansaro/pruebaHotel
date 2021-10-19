@@ -76,45 +76,40 @@ public class UsuarioSesion implements Serializable {
         try {
             usuLog = usuarioFacadeLocal.encontrarUsuarioDocumento(docIn);
             if (usuLog != null) {
-                
-                if (usuLog.getDocumento().equals(docIn) && usuLog.getContrasena().equals(claveIn)) {
+                if (usuLog.getEstado() == Short.parseShort("1")) {
+                    if (usuLog.getDocumento().equals(docIn)) {
+                        if (usuLog.getContrasena().equals(claveIn)) {
+                            switch (usuLog.getFkRol().toString()) {
+                                case "Administrador": {
+                                    FacesContext fc = FacesContext.getCurrentInstance();
+                                    fc.getExternalContext().redirect("administrador/index.xhtml");
+                                    break;
+                                }
+                                case "Empleado": {
+                                    FacesContext fc = FacesContext.getCurrentInstance();
+                                    fc.getExternalContext().redirect("empleado/index.xhtml");
+                                    break;
+                                }
+                                default:
+                                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                                            "No exite",
+                                            "No existe"
+                                    ));
+                                    break;
+                            }
 
-                    if (usuLog.getEstado() == Short.parseShort("1")) {
-                        switch (usuLog.getFkRol().toString()) {
-                            case "Administrador": {
-                                FacesContext fc = FacesContext.getCurrentInstance();
-                                fc.getExternalContext().redirect("administrador/index.xhtml");
-                                break;
-                            }
-                            case "Empleado": {
-                                FacesContext fc = FacesContext.getCurrentInstance();
-                                fc.getExternalContext().redirect("empleado/index.xhtml");
-                                break;
-                            }
-                            default:
-                                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
-                                        "No exite",
-                                        "No existe"
-                                ));
-                                break;
                         }
-
-                    } else {
-                        
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
-                                "Comunicate con el administrador",
-                                "Comunicate con el administrador"
-                        ));
-
                         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
                                 "Correo o clave incorrectos",
                                 "Correo o clave incorrectos"
                         ));
                     }
+                } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
-                            "Correo o clave incorrectos",
-                            "Correo o clave incorrectos"
+                            "Comunicate con el administrador",
+                            "Comunicate con el administrador"
                     ));
+
                 }
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,

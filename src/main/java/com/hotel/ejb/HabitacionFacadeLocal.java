@@ -50,4 +50,8 @@ public interface HabitacionFacadeLocal {
 
     public List<Habitacion> leerHabitacionesHotel(Hotel h);
 
+    public List<Habitacion> leerNumeroHabitacion(int h);
+
+    public boolean actualizarHabitacionReservaEliminada(int habIn);
+
 }

@@ -12,19 +12,10 @@
                 <i class="fas fa-table me-1"></i>
                 Tabla de reservas
                 
-                <h:link outcome="registrarReserva">
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrar">
-                        Registrar reserva.
-                    </button>
-                </h:link>
-
-
             </div>
             <div class="card-body">
                 <h:form id="rootform" styleClass="jsfcrud_list_form">
                     <p:growl id="growl" life="3000"/>
-
-
 
                     <p:dataTable id="tabla" emptyMessage="Ninguna reserva registrada" value="#{reservaView.reservas}" 
                                  var="r" paginator="true"  rows="10" rowSelectMode="add" paginatorPosition="bottom"
@@ -61,23 +52,6 @@
                         <p:column headerText="Empleado" filterBy="#{r.fkEmpleado}" filterMatchMode="contains" >
                             <h:outputText value="#{r.fkEmpleado}"  /> 
                         </p:column>
-
-                        <p:column headerText=" " exportable="false" >
-
-                            <h:commandButton class="btn btn-warning"
-                                             html5:data-bs-toggle="modal"
-                                             html5:data-bs-target="#editar"
-                                             action="#{reservaView.guardarTemporal(r)}" 
-                                             value="Editar" >
-                            </h:commandButton>
-
-                        </p:column>
-
-                        <p:column headerText=" " exportable="false" >
-
-                            <h:commandLink class="btn btn-danger" action="#{reservaView.eliminarReserva(r)}" value="Eliminar"/>
-
-                        </p:column>  
 
                     </p:dataTable>
                 </h:form>

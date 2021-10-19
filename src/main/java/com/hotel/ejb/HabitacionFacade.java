@@ -32,7 +32,7 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
     @Override
     public boolean crearHabitacion(Habitacion h, int fk_tipo, int fk_hotel) {
         try {
-            Query c = em.createNativeQuery("INSERT INTO habitacion ( bano, calefaccion, telefono, fk_tipo, precio, estado_habitacion_id_estado, hotel_id_hotel) VALUES (?,?,?,?,?,?,?)");
+            Query c = em.createNativeQuery("INSERT INTO habitacion ( bano, calefaccion, telefono, fk_tipo, precio, estado_habitacion_id_estado, hotel_id_hotel, numero_habitacion) VALUES (?,?,?,?,?,?,?,?)");
             c.setParameter(1, Short.parseShort("1"));
             c.setParameter(2, Short.parseShort("1"));
             c.setParameter(3, Short.parseShort("1"));
@@ -40,6 +40,7 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
             c.setParameter(5, h.getPrecio());
             c.setParameter(6, 2);
             c.setParameter(7, fk_hotel);
+            c.setParameter(8, h.getNumeroHabitacion());
             c.executeUpdate();
             return true;
         } catch (Exception e) {
@@ -92,6 +93,20 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
     
     @Override
     public boolean actualizarHabitacionReserva(int habIn) {
+        try {
+            Query qr = em.createNativeQuery("UPDATE habitacion SET estado_habitacion_id_estado = ? WHERE (id_habitacion = ?)");
+            qr.setParameter(1, 1);
+            qr.setParameter(2, habIn);
+            qr.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+    
+    @Override
+    public boolean actualizarHabitacionReservaEliminada(int habIn) {
         try {
             Query qr = em.createNativeQuery("UPDATE habitacion SET estado_habitacion_id_estado = ? WHERE (id_habitacion = ?)");
             qr.setParameter(1, 2);
@@ -167,6 +182,19 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
         try {
             em.getEntityManagerFactory().getCache().evictAll();
             Query q = em.createQuery("SELECT ha FROM Habitacion ha WHERE ha.estadoHabitacionIdEstado.idEstado = 2 AND ha.hotelIdHotel = :h");
+            q.setParameter("h", h);
+            return q.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    
+    @Override
+    public List<Habitacion> leerNumeroHabitacion(int h){
+        try {
+            em.getEntityManagerFactory().getCache().evictAll();
+            Query q = em.createQuery("SELECT ha FROM Habitacion ha WHERE ha.hotelIdHotel.idHotel = :h");
             q.setParameter("h", h);
             return q.getResultList();
         } catch (Exception e) {
