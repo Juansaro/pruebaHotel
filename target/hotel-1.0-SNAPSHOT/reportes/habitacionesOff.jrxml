@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1966749c-cf8a-4245-8032-352487275ed6">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E6DAC3"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="hotIn" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT ho.nombre as hotel, ha.numero_habitacion, hu.nombre, hu.apellido, e.descripcion,
+-- >  Si tiene baño, telefono o calefacción < --
+CASE
+	WHEN ha.telefono<>0 THEN 'Si'
+    WHEN ha.telefono=0 THEN 'No'
+ELSE 'Unknown'
+-- columna teléfono
+END telefono
+,
+CASE
+    WHEN ha.bano<>0 THEN 'Si'
+    WHEN ha.bano=0 THEN 'No'
+ELSE 'Unknown'
+-- columna baño
+END bano
+,
+CASE
+    WHEN ha.calefaccion<>0 THEN 'Si'
+    WHEN ha.calefaccion=0 THEN 'No'
+ELSE 'Unknown'
+-- columna calefacción
+END calefaccion
+	FROM habitacion ha
+    INNER JOIN hotel ho on ho.id_hotel = ha.hotel_id_hotel
+    INNER JOIN tipo_habitacion t on ha.fk_tipo = t.id_tipo_habitacion
+    INNER JOIN reserva r on ha.id_habitacion = r.fk_habitacion
+    INNER JOIN huesped hu on r.fk_huesped = hu.id_huesped
+    INNER JOIN estado_habitacion e on ha.estado_habitacion_id_estado = e.id_estado
+WHERE e.id_estado = 1 and ho.id_hotel = $P{hotIn};]]>
+	</queryString>
+	<field name="hotel" class="java.lang.String"/>
+	<field name="numero_habitacion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="apellido" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descripcion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="telefono" class="java.lang.String"/>
+	<field name="bano" class="java.lang.String"/>
+	<field name="calefaccion" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="136" splitType="Stretch">
+			<staticText>
+				<reportElement style="SubTitle" x="0" y="91" width="341" height="45" uuid="6b85697e-8e86-4ea0-9ee4-c86673d44f2a"/>
+				<textElement>
+					<font fontName="Times New Roman" size="35" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Habitaciones ocupadas:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="802" height="1" uuid="5179aa50-326d-4409-9cde-d102090e8b83"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="0" y="0" width="100" height="15" forecolor="#736343" uuid="928544e9-7241-4d17-a41c-d35195ff172e"/>
+				<text><![CDATA[hotel]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="100" y="0" width="100" height="15" forecolor="#736343" uuid="0e483421-4f14-4919-b0ee-24d94b12239c"/>
+				<text><![CDATA[Num habitación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="200" y="0" width="100" height="15" forecolor="#736343" uuid="c5a47289-ce32-4d8c-8e3f-46183f5727a5"/>
+				<text><![CDATA[nombre huesped]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="300" y="0" width="100" height="15" forecolor="#736343" uuid="a6af0590-47f0-42fb-bdbe-7d950dc08162"/>
+				<text><![CDATA[apellido huesped]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="400" y="0" width="100" height="15" forecolor="#736343" uuid="1b00004a-483d-40ec-b861-5d7ef8f879fe"/>
+				<text><![CDATA[descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="500" y="0" width="100" height="15" forecolor="#736343" uuid="dace4360-89ad-4552-a46d-8e9dc53aba97"/>
+				<text><![CDATA[teléfono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="600" y="0" width="100" height="15" forecolor="#736343" uuid="ccdf21d6-6151-45ef-8b3b-bbc2a4c173cd"/>
+				<text><![CDATA[baño]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="700" y="0" width="100" height="15" forecolor="#736343" uuid="9edb5352-3b3b-438d-998c-5cd0dd5a1083"/>
+				<text><![CDATA[calefacción]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="0" y="0" width="802" height="15" uuid="828e328e-a10b-44d9-85bf-8491f823d5ec"/>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="0" y="0" width="100" height="15" uuid="9bd5a77e-deb2-43ae-9296-31003c53f9ac"/>
+					<textFieldExpression><![CDATA[$F{hotel}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="100" y="0" width="100" height="15" uuid="e74da40f-50d6-4f7e-9875-c9d590c172cd"/>
+					<textFieldExpression><![CDATA[$F{numero_habitacion}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="200" y="0" width="100" height="15" uuid="a8868bba-8acd-40c1-bba4-1418e3e9c466"/>
+					<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="300" y="0" width="100" height="15" uuid="d4d8c879-bee2-4ca4-ac41-0befd8d4d0a3"/>
+					<textFieldExpression><![CDATA[$F{apellido}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="400" y="0" width="100" height="15" uuid="e0bdd1dc-75cd-43f2-81f6-683792fe9ff5"/>
+					<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="500" y="0" width="100" height="15" uuid="0f77603a-03d7-4049-8c54-69af748faf4a"/>
+					<textFieldExpression><![CDATA[$F{telefono}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="600" y="0" width="100" height="15" uuid="5d62b402-2bb7-4095-b6f7-289fa7ade887"/>
+					<textFieldExpression><![CDATA[$F{bano}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement style="Detail" x="700" y="0" width="100" height="15" uuid="42d423e2-b1ea-4acb-afe9-64a1f7254176"/>
+					<textFieldExpression><![CDATA[$F{calefaccion}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="6" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="802" height="1" uuid="83a8b58d-2bf0-4420-a49c-24d738b8095d"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="-21" y="1" width="843" height="24" forecolor="#D0B48E" backcolor="#F2EBDF" uuid="a3835fca-1a25-4427-9521-b5d8fc006a4b"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="783" y="1" width="40" height="20" forecolor="#736343" uuid="1724e29e-348d-4bf2-a825-34e55fe721fa"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="703" y="1" width="80" height="20" forecolor="#736343" uuid="e85967c7-f275-46b6-9a45-898757c17a12"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="22" y="1" width="197" height="20" forecolor="#736343" uuid="3962824b-0966-4b9b-a370-77a3416a8251"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

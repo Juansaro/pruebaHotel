@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5fd32566-5319-4a68-9f4c-5f305393203a">
+	<property name="ireport.zoom" value="1.2100000000000006"/>
+	<property name="ireport.x" value="8"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="disponibles" uuid="61d4f849-2e16-4296-b179-e5ed7f22a4c9">
+		<queryString language="SQL">
+			<![CDATA[SELECT ho.nombre as hotel, ha.numero_habitacion, hu.nombre, hu.apellido, e.descripcion
+	FROM habitacion ha
+    INNER JOIN hotel ho on ho.id_hotel = ha.hotel_id_hotel
+    INNER JOIN tipo_habitacion t on ha.fk_tipo = t.id_tipo_habitacion
+    INNER JOIN reserva r on ha.id_habitacion = r.fk_habitacion
+    INNER JOIN huesped hu on r.fk_huesped = hu.id_huesped
+    INNER JOIN estado_habitacion e on ha.estado_habitacion_id_estado = e.id_estado
+    WHERE e.id_estado = 1 and ho.id_hotel = 1;]]>
+		</queryString>
+		<field name="hotel" class="java.lang.String"/>
+		<field name="numero_habitacion" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="nombre" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="apellido" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="descripcion" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="New Dataset 1" uuid="b4daef70-fd70-4925-ae50-345afcbc1bd9">
+		<queryString language="SQL">
+			<![CDATA[SELECT ho.nombre as hotel, ha.numero_habitacion, hu.nombre, hu.apellido, e.descripcion
+	FROM habitacion ha
+    INNER JOIN hotel ho on ho.id_hotel = ha.hotel_id_hotel
+    INNER JOIN tipo_habitacion t on ha.fk_tipo = t.id_tipo_habitacion
+    INNER JOIN reserva r on ha.id_habitacion = r.fk_habitacion
+    INNER JOIN huesped hu on r.fk_huesped = hu.id_huesped
+    INNER JOIN estado_habitacion e on ha.estado_habitacion_id_estado = e.id_estado
+    WHERE e.id_estado = 1 and ho.id_hotel = 1;]]>
+		</queryString>
+		<field name="hotel" class="java.lang.String"/>
+		<field name="numero_habitacion" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="nombre" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="apellido" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="descripcion" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<group name="hotel">
+			<groupExpression><![CDATA[$F{hotel}]]></groupExpression>
+		</group>
+		<group name="numero_habitacion">
+			<groupExpression><![CDATA[$F{numero_habitacion}]]></groupExpression>
+		</group>
+		<group name="nombre">
+			<groupExpression><![CDATA[$F{nombre}]]></groupExpression>
+		</group>
+		<group name="descripcion">
+			<groupExpression><![CDATA[$F{descripcion}]]></groupExpression>
+		</group>
+	</subDataset>
+	<subDataset name="on" uuid="550fbfb5-9143-436a-8cf5-423da5596dac">
+		<queryString language="SQL">
+			<![CDATA[SELECT ho.nombre as hotel, ha.numero_habitacion, hu.nombre, hu.apellido, e.descripcion
+	FROM habitacion ha
+    INNER JOIN hotel ho on ho.id_hotel = ha.hotel_id_hotel
+    INNER JOIN tipo_habitacion t on ha.fk_tipo = t.id_tipo_habitacion
+    INNER JOIN reserva r on ha.id_habitacion = r.fk_habitacion
+    INNER JOIN huesped hu on r.fk_huesped = hu.id_huesped
+    INNER JOIN estado_habitacion e on ha.estado_habitacion_id_estado = e.id_estado
+    WHERE e.id_estado = 1 and ho.id_hotel = 1;]]>
+		</queryString>
+		<field name="hotel" class="java.lang.String"/>
+		<field name="numero_habitacion" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="nombre" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="apellido" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="descripcion" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<group name="hotel">
+			<groupExpression><![CDATA[$F{hotel}]]></groupExpression>
+		</group>
+		<group name="numero_habitacion">
+			<groupExpression><![CDATA[$F{numero_habitacion}]]></groupExpression>
+		</group>
+		<group name="nombre">
+			<groupExpression><![CDATA[$F{nombre}]]></groupExpression>
+		</group>
+		<group name="apellido">
+			<groupExpression><![CDATA[$F{apellido}]]></groupExpression>
+		</group>
+	</subDataset>
+	<subDataset name="Ons" uuid="e755a23e-4e16-425a-b183-431e419ba0ef">
+		<queryString language="SQL">
+			<![CDATA[SELECT ho.nombre, ha.numero_habitacion, e.descripcion
+	FROM habitacion ha
+    INNER JOIN hotel ho on ho.id_hotel = ha.hotel_id_hotel
+    INNER JOIN tipo_habitacion t on ha.fk_tipo = t.id_tipo_habitacion
+    INNER JOIN estado_habitacion e on ha.estado_habitacion_id_estado = e.id_estado
+	WHERE e.id_estado = 2 and ho.id_hotel = 1]]>
+		</queryString>
+		<field name="nombre" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="numero_habitacion" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="descripcion" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<group name="nombre">
+			<groupExpression><![CDATA[$F{nombre}]]></groupExpression>
+		</group>
+		<group name="numero_habitacion">
+			<groupExpression><![CDATA[$F{numero_habitacion}]]></groupExpression>
+		</group>
+		<group name="descripcion">
+			<groupExpression><![CDATA[$F{descripcion}]]></groupExpression>
+		</group>
+	</subDataset>
+	<parameter name="hotIn" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\juan\\Documents\\NetBeansProjects\\hotel\\pruebaHotel\\src\\main\\webapp\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT ho.nombre as nomHotel, ha.numero_habitacion, hu.nombre, hu.apellido, e.descripcion
+	FROM habitacion ha
+    INNER JOIN hotel ho on ho.id_hotel = ha.hotel_id_hotel
+    INNER JOIN tipo_habitacion t on ha.fk_tipo = t.id_tipo_habitacion
+    INNER JOIN reserva r on ha.id_habitacion = r.fk_habitacion
+    INNER JOIN huesped hu on r.fk_huesped = hu.id_huesped
+    INNER JOIN estado_habitacion e on ha.estado_habitacion_id_estado = e.id_estado
+    WHERE e.id_estado = 1 and ho.id_hotel = $P{hotIn};]]>
+	</queryString>
+	<field name="nomHotel" class="java.lang.String"/>
+	<field name="numero_habitacion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="apellido" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descripcion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="207" splitType="Stretch">
+			<image>
+				<reportElement x="182" y="0" width="219" height="160" uuid="21ea09fe-bc56-41a9-a0a4-b5691f6da1e4"/>
+				<imageExpression><![CDATA["C:\\Users\\juan\\Pictures\\dibujo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement style="Title" x="0" y="177" width="272" height="30" forecolor="#666666" uuid="276f2351-0759-4220-bc94-b38d1dde10c1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="17"/>
+				</textElement>
+				<text><![CDATA[Habitaciones en uso:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="45" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="35" width="555" height="1" uuid="ef630589-9d26-45bf-9794-130d07ae1ed6"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="Column header" x="111" y="19" width="111" height="15" uuid="fd6d1023-7aa0-4adb-9f53-440b3b925190"/>
+				<text><![CDATA[Nro habitación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="222" y="19" width="111" height="15" uuid="4f4003d8-c68c-4522-8aa3-e120d89e8cfc"/>
+				<text><![CDATA[Nombre huesped]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="0" y="19" width="111" height="15" uuid="484afe27-9b28-4447-beea-897e87e53449"/>
+				<text><![CDATA[Hotel]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="333" y="19" width="111" height="15" uuid="aba75397-202e-4114-a409-3928747a8f1a"/>
+				<text><![CDATA[Apellido huesped]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="444" y="19" width="111" height="15" uuid="027c0938-915a-4057-b196-d260dcb6e197"/>
+				<text><![CDATA[descripcion]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="66" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="40" width="555" height="1" uuid="d83bd0b4-015c-4ee7-9acd-f594018c936b"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="Detail" x="0" y="0" width="111" height="15" uuid="a3a9c37a-7c36-498c-bbd7-1786bebdd3f6"/>
+				<textFieldExpression><![CDATA[$F{nomHotel}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="111" y="0" width="111" height="15" uuid="4db37427-7b1a-440d-9e0c-b62526d1406b"/>
+				<textFieldExpression><![CDATA[$F{numero_habitacion}]]></textFieldExpression>
+			</textField>
+			<elementGroup/>
+			<textField>
+				<reportElement style="Detail" x="333" y="0" width="111" height="15" uuid="e285bdc7-52f6-42b1-b8bf-0f4d816f5639"/>
+				<textFieldExpression><![CDATA[$F{apellido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="222" y="0" width="111" height="15" uuid="96543fce-c1db-44b7-bf63-a1de4a53f48b"/>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Detail" x="444" y="0" width="83" height="15" uuid="de424fb2-a32b-40ff-b3ec-fdcb8e980367"/>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="41" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="f2ee1636-0096-4a36-9a3f-001c8c57c66f"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="0bafe037-d451-4473-b396-5b4117ac7943"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="978cfe1e-5356-41a4-b9f2-5499fe89a017"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="0" y="0" width="197" height="20" uuid="ab241d00-8282-49d7-a065-bb3d62761f17"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

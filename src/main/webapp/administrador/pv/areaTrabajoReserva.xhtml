@@ -34,19 +34,19 @@
                         </p:column>
 
                         <p:column headerText="Fecha ingreso" filterBy="#{r.fechaIngreso}" filterMatchMode="contains" >
-                      
+
                             <h:outputText value="#{r.fechaIngreso}"  >
                                 <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss"/>
                             </h:outputText>
-                                    
+
                         </p:column>
 
                         <p:column headerText="Fecha salida" filterBy="#{r.fechaSalida}" filterMatchMode="contains" >
-                            
+
                             <h:outputText value="#{r.fechaSalida}"  >
-                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss"/>
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss"/>
                             </h:outputText>
-                                
+
                         </p:column>
 
                         <p:column headerText="Empleado" filterBy="#{r.fkEmpleado}" filterMatchMode="contains" >
@@ -56,6 +56,18 @@
                     </p:dataTable>
                 </h:form>
             </div>
+            <h:form>
+                    Reporte de reservas del mes:
+                    <p:calendar id="fechaSolicitud" value="#{reservaView.mesIn}" pattern="MM/dd/yyyy HH:mm:ss"/>
+                    <br/>
+                    <p:dialog modal="true" resizable="false" header="Values" widgetVar="dlg" showEffect="fold">
+                        <h:outputText value="Datetime:"/>
+                        <h:outputText value="#{calendarView.date10}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss"/>
+                        </h:outputText>
+                    </p:dialog>
+                    <h:commandButton action="#{reservaView.generarArchivoReservaFecha('pdf')}"  class=" m-2 btn btn-sm btn-dark" value=".pdf"></h:commandButton>
+                </h:form>
         </div>
 
 

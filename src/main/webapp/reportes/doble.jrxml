@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c6341882-6dc7-431a-843d-17a5815fc1a9">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[select COUNT(*) as conteo, t.descripcion , ho.nombre
+	FROM reserva r
+	INNER JOIN habitacion h ON h.id_habitacion = r.fk_habitacion
+    INNER JOIN tipo_habitacion t ON t.id_tipo_habitacion = h.fk_tipo
+    INNER JOIN hotel ho ON ho.id_hotel = h.hotel_id_hotel
+WHERE MONTH(r.fechaRegistro) = MONTH(CURRENT_DATE()) 
+ and h.fk_tipo = 3
+GROUP BY ho.id_hotel;]]>
+	</queryString>
+	<field name="conteo" class="java.lang.Long"/>
+	<field name="descripcion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="333" splitType="Stretch">
+			<pieChart>
+				<chart>
+					<reportElement x="0" y="0" width="555" height="333" uuid="ba897fe4-28c1-4e1f-a35f-25dae243264a"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset/>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+			<textField>
+				<reportElement x="419" y="79" width="100" height="20" uuid="552e0ba1-7a2e-4d79-b252-5eb0fc2fcf2f"/>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

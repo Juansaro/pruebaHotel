@@ -5,7 +5,8 @@
       xmlns:html5="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:composition>
         <div class="card m-4">
             <div class="card-header">
@@ -14,6 +15,47 @@
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrar">
                     Registrar usuario.
                 </button>
+
+                <h:form>
+                    Reporte de reservas del mes:
+                    <p>Habitaciones normales</p>
+                    <h:commandButton action="#{hotelView.generarArchivoEstadistico('pdf')}"  class=" m-2 btn btn-sm btn-dark" value=".pdf"></h:commandButton>
+                    <h:commandButton action="#{hotelView.generarArchivoEstadistico('xlsx')}"  class=" m-2 btn btn-sm btn-dark" value=".xlsx"></h:commandButton>
+                    <h:commandButton action="#{hotelView.generarArchivoEstadistico('docx')}"  class=" m-2 btn btn-sm btn-dark" value=".docx"></h:commandButton>
+                   <br/>
+                   <p>Habitaciones suite</p>
+                   <h:commandButton action="#{hotelView.generarArchivoEstadisticoSuite('pdf')}"  class=" m-2 btn btn-sm btn-dark" value=".pdf"></h:commandButton>
+                    <h:commandButton action="#{hotelView.generarArchivoEstadisticoSuite('xlsx')}"  class=" m-2 btn btn-sm btn-dark" value=".xlsx"></h:commandButton>
+                    <h:commandButton action="#{hotelView.generarArchivoEstadisticoSuite('docx')}"  class=" m-2 btn btn-sm btn-dark" value=".docx"></h:commandButton>
+                    <p>Habitaciones dobles</p>
+                    <h:commandButton action="#{hotelView.generarArchivoEstadisticoDoble('pdf')}"  class=" m-2 btn btn-sm btn-dark" value=".pdf"></h:commandButton>
+                    <h:commandButton action="#{hotelView.generarArchivoEstadisticoDoble('xlsx')}"  class=" m-2 btn btn-sm btn-dark" value=".xlsx"></h:commandButton>
+                    <h:commandButton action="#{hotelView.generarArchivoEstadisticoDoble('docx')}"  class=" m-2 btn btn-sm btn-dark" value=".docx"></h:commandButton>
+                </h:form>
+                <hr/>
+                <p>Reporte de huespedes que no han ingresado:</p>
+                <h:form>
+                    
+                    <p:outputLabel for="popup" value="Fecha inicio:"/>
+                    <p:calendar id="popup" value="#{reservaView.fechaInicio}"/>
+                    <p:outputLabel for="popup1" value="Fecha fin:"/>
+                    <p:calendar id="popup1" value="#{reservaView.fechaFin}"/>
+                    <h:commandButton action="#{reservaView.generarArchivoReservaFecha('pdf')}"  class=" m-2 btn btn-sm btn-dark" value=".pdf"></h:commandButton>
+                </h:form>
+                <hr/>
+                <p>Reporte habitaciones:</p>
+                <h:form>
+                    <h:commandButton class="btn btn-outline-dark"
+                                     html5:data-bs-toggle="modal"
+                                     html5:data-bs-target="#hoteles"
+                                     value="Elegir hotel" >
+                        <f:ajax render=":formActualizar"> </f:ajax>
+                    </h:commandButton>
+                    <p>Hotel seleccionado = <b>#{hotelView.hotelTemporal.nombre}</b></p>
+                    <p>Habitaciones:</p>
+                    <h:commandButton action="#{hotelView.generarArchivoHabitacionOcupada('pdf')}"  class=" m-2 btn btn-sm btn-dark" value="Ocupadas"></h:commandButton>
+                    <h:commandButton action="#{hotelView.generarArchivoHabitacionTotal('pdf')}"  class=" m-2 btn btn-sm btn-dark" value="Disponibles"></h:commandButton>
+                </h:form>
             </div>
             <div class="card-body">
                 <h:form id="frmPrincipal" styleClass="jsfcrud_list_form" enctype="multipart/form-data">
@@ -21,7 +63,7 @@
                     <p:dataTable id="tabla" emptyMessage="Ninguna usuario registrado" value="#{usuarioSesion.usuarios}" 
                                  var="u" paginator="true"  rows="10" rowSelectMode="add" paginatorPosition="bottom"
                                  >
-                        
+
                         <p:column headerText="Nombre" filterBy="#{u.nombre}" filterMatchMode="contains" >
                             <h:outputText value="#{u.nombre}"  /> 
                         </p:column>
@@ -45,7 +87,7 @@
                         <p:column headerText="Documento:" filterBy="#{u.documento}" filterMatchMode="contains" >
                             <h:outputText value="#{u.documento}"  /> 
                         </p:column>
-                        
+
                         <p:column headerText="Estado:" filterMatchMode="contains" >
                             <h:commandButton action="#{usuarioSesion.cambiarEstado(u)}" class="btn btn-block btn-outline-primary btn-xs" value="C/E" />
                             <img height="24px" width="24px" src="#{request.contextPath}/assets/img/#{u.estado == '1'?'si':'no'}.png" alt=""/>
@@ -142,6 +184,50 @@
                         </div>
                     </h:form>
 
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="hoteles" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Hoteles</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <h:form id="formActualizar">
+                        <div class="modal-body">
+                            <div class="row">                                
+                                <c:forEach items="#{reservaView.hoteles}" var="hot" varStatus="act">
+                                    <div class="col-lg-4">
+                                        <h:commandLink
+                                            html5:data-bs-toggle="modal"
+                                            html5:data-bs-target="#exampleModalComprar" 
+                                            action="#{hotelView.guardarTemporal(hot)}"
+                                            >
+                                            <div class="card text-dark">
+
+                                                <div class="card-header border-0">
+                                                    <h3 class="card-title">#{hot.nombre}</h3>
+                                                </div>
+                                                <div class="card-header border-0">
+                                                    <h3 class="card-title">#{hot.fkCiudad.descripcion}</h3>
+                                                </div>
+                                                <div class="card-body">
+                                                    <!--No olvidar colocar foto aquí-->
+                                                    <h6>#{hot.direccion}</h6>
+                                                </div>
+                                            </div>
+                                        </h:commandLink>
+                                    </div>
+                                </c:forEach>
+
+                            </div>
+
+                        </div>
+                    </h:form>
                 </div>
             </div>
         </div>

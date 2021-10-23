@@ -19,8 +19,11 @@ import com.hotel.model.Huesped;
 import com.hotel.model.Reserva;
 import com.hotel.model.Usuario;
 import com.hotel.utilidades.ReservaMail;
+import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -28,14 +31,33 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import javax.sql.DataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.export.SimpleDocxExporterConfiguration;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 
 @Named(value = "reservaView")
 @ViewScoped
@@ -74,12 +96,18 @@ public class ReservaView implements Serializable {
     @Inject
     private UsuarioSesion u;
 
+    @Resource(lookup = "jdbc/hoteles")
+    DataSource dataSource;
+
     private int fk_huesped;
     private int fk_habitacion;
     private int fk_usuario;
     private int fk_hotel;
     private int fk_estado;
     private boolean[] outs;
+    private Part archivoCarga;
+    private Date fechaFin;
+    private Date fechaInicio;
 
     private List<Reserva> reservas;
     private List<Reserva> hueReservas;
@@ -100,9 +128,10 @@ public class ReservaView implements Serializable {
     @PostConstruct
     public void init() {
         reservas = reservaFacadeLocal.leerTodos();
+        //Hacer filtro de empleados
         reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
         //habitaciones = habitacionFacadeLocal.findAll();
-        //Hacer filtro de empleados
+
         empleados = usuarioFacadeLocal.findAll();
         hoteles = hotelFacadeLocal.findAll();
         estados = estadoReservaFacadeLocal.findAll();
@@ -151,36 +180,31 @@ public class ReservaView implements Serializable {
         boolean outEnt = reservaFacadeLocal.validarFechaEntrada(resReg.getFechaIngreso());
         boolean outFin = reservaFacadeLocal.validarFechaSalida(resReg.getFechaIngreso(), resReg.getFechaSalida());
 
-        if (validarReservaRepetida()) {
-            if (outEnt) {
-                if (outFin) {
-                    if (reservaFacadeLocal.registrarReserva(resReg, huesped.getIdHuesped(), habitacion.getIdHabitacion(), u.getUsuLog().getDocumento(), hotTemporal.getIdHotel())) {
-                        //Cambiar estado de la habitación
-                        habitacionFacadeLocal.actualizarHabitacionReserva(habitacion.getIdHabitacion());
-                        //Leer huesped para enviar al correo
-                        hueIn = huespedFacadeLocal.leerHuesped(huesped.getIdHuesped());
-                        //Leer tipo habitacion para enviar al correo
-                        habIn = habitacionFacadeLocal.leerTipoHabitacion(habitacion.getIdHabitacion());
-                        //Leer hotel para enviar el correo
-                        hotIn = hotelFacadeLocal.leerHotel(hotTemporal.getIdHotel());
+        if (outEnt) {
+            if (outFin) {
+                if (reservaFacadeLocal.registrarReserva(resReg, huesped.getIdHuesped(), habitacion.getIdHabitacion(), u.getUsuLog().getDocumento(), hotTemporal.getIdHotel())) {
+                    //Cambiar estado de la habitación
+                    habitacionFacadeLocal.actualizarHabitacionReserva(habitacion.getIdHabitacion());
+                    //Leer huesped para enviar al correo
+                    hueIn = huespedFacadeLocal.leerHuesped(huesped.getIdHuesped());
+                    //Leer tipo habitacion para enviar al correo
+                    habIn = habitacionFacadeLocal.leerTipoHabitacion(habitacion.getIdHabitacion());
+                    //Leer hotel para enviar el correo
+                    hotIn = hotelFacadeLocal.leerHotel(hotTemporal.getIdHotel());
 
-                        ReservaMail.correoReserva(
-                                hueIn.getNombre(),
-                                hueIn.getApellido(),
-                                hueIn.getCorreo(),
-                                hotIn.getNombre(),
-                                habIn.getFkTipo().getDescripcion(),
-                                resReg.getFechaIngreso(),
-                                resReg.getFechaSalida(),
-                                resReg.getPrecio()
-                        );
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva registrada", "Reserva registrada"));
-                        limpiezaReserva();
-                        FacesContext.getCurrentInstance().getExternalContext().redirect("/pruebaHotel/faces/empleado/reserva.xhtml");
-                    } else {
-                        limpiezaReserva();
-                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
-                    }
+                    ReservaMail.correoReserva(
+                            hueIn.getNombre(),
+                            hueIn.getApellido(),
+                            hueIn.getCorreo(),
+                            hotIn.getNombre(),
+                            habIn.getFkTipo().getDescripcion(),
+                            resReg.getFechaIngreso(),
+                            resReg.getFechaSalida(),
+                            resReg.getPrecio()
+                    );
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva registrada", "Reserva registrada"));
+                    limpiezaReserva();
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/pruebaHotel/faces/empleado/reserva.xhtml");
                 } else {
                     limpiezaReserva();
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
@@ -191,7 +215,7 @@ public class ReservaView implements Serializable {
             }
         } else {
             limpiezaReserva();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Acabaste de reservar un huesped, espera 45 min", "Acabaste de reservar un huesped, espera 45 min"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
         }
 
     }
@@ -203,6 +227,7 @@ public class ReservaView implements Serializable {
         habitacion = new Habitacion();
         listaUltimaFecha = new ArrayList<>();
         hueReservas = new ArrayList<>();
+        //Reservas por cada empleado
         reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
     }
 
@@ -219,11 +244,11 @@ public class ReservaView implements Serializable {
         try {
             reservaFacadeLocal.actualizarReserva(resTemporal, fk_estado);
 
-                    habitacionFacadeLocal.actualizarHabitacionReservaEliminada(resTemporal.getFkHabitacion().getIdHabitacion());
-                    reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
-                    reservas = reservaFacadeLocal.leerTodos();
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva editado", "Reserva editado"));
-              
+            habitacionFacadeLocal.actualizarHabitacionReservaEliminada(resTemporal.getFkHabitacion().getIdHabitacion());
+            reservasEmpleados = reservaFacadeLocal.leerReservasEmpleado(u.getUsuLog());
+            reservas = reservaFacadeLocal.leerTodos();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Reserva editado", "Reserva editado"));
+
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de edición", "Error de edición"));
         }
@@ -247,6 +272,143 @@ public class ReservaView implements Serializable {
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de eliminación", "Error de eliminación"));
         }
+    }
+
+    public void generarArchivo(String tipoArchivo) throws JRException, IOException {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext context = facesContext.getExternalContext();
+        HttpServletResponse response = (HttpServletResponse) context.getResponse();
+        File jasper = new File(context.getRealPath("/reportes/estadisticoTipoHab.jasper"));
+        try {
+            JasperPrint jp = JasperFillManager.fillReport(jasper.getPath(), new HashMap(), dataSource.getConnection());
+            switch (tipoArchivo) {
+                case "pdf":
+                    response.setContentType("application/pdf");
+                    response.addHeader("Content-disposition", "attachment; filename=Lista servicios.pdf");
+                    OutputStream os = response.getOutputStream();
+                    JasperExportManager.exportReportToPdfStream(jp, os);
+                    os.flush();
+                    os.close();
+                    break;
+
+                case "xlsx":
+                    response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    response.addHeader("Content-disposition", "attachment; filename=Lista reservas.xlsx");
+
+                    JRXlsxExporter exporter = new JRXlsxExporter(); // initialize exporter 
+                    exporter.setExporterInput(new SimpleExporterInput(jp)); // set compiled report as input
+                    exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
+
+                    SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+                    configuration.setOnePagePerSheet(true); // setup configuration
+                    configuration.setDetectCellType(true);
+                    configuration.setSheetNames(new String[]{"estadisticoTipoHab"});
+                    exporter.setConfiguration(configuration); // set configuration    
+                    exporter.exportReport();
+                    break;
+
+                case "docx":
+                    response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+                    response.addHeader("Content-disposition", "attachment; filename=Lista servicios.docx");
+
+                    JRDocxExporter exporterDoc = new JRDocxExporter(); // initialize exporter 
+                    exporterDoc.setExporterInput(new SimpleExporterInput(jp)); // set compiled report as input
+                    exporterDoc.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
+
+                    SimpleDocxExporterConfiguration configurationDoc = new SimpleDocxExporterConfiguration();
+                    configurationDoc.setMetadataAuthor("Hoteles."); // setup configuration
+                    configurationDoc.setMetadataTitle("Reporte de reservas");
+                    configurationDoc.setMetadataSubject("Listado de reservas");
+
+                    exporterDoc.setConfiguration(configurationDoc); // set configuration    
+                    exporterDoc.exportReport();
+                    break;
+
+                default:
+                    System.err.println(" No se encontro este caso :: CategoriaView::generarArchivo");
+                    break;
+
+            }
+            facesContext.responseComplete();
+
+        } catch (SQLException ex) {
+            //Logger.getLogger(CategoriaView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void generarArchivoReservaFecha(String tipoArchivo) throws JRException, IOException {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext context = facesContext.getExternalContext();
+        HttpServletResponse response = (HttpServletResponse) context.getResponse();
+        String nombreReporte = "";
+        String nombreReporteDescarga = "";
+
+        try {
+
+            Map parametros = new HashMap();
+
+            parametros.put("fechaInicio", fechaInicio);
+            parametros.put("fechaFin", fechaFin);
+            nombreReporte = "hueNoIngresados";
+
+            File jasper = new File(context.getRealPath("/reportes/" + nombreReporte + ".jasper"));
+
+            JasperPrint jp = JasperFillManager.fillReport(jasper.getPath(), parametros, dataSource.getConnection());
+            switch (tipoArchivo) {
+                case "pdf":
+                    response.setContentType("application/pdf");
+                    response.addHeader("Content-disposition", "attachment; filename=" + nombreReporte + ".pdf");
+                    OutputStream os = response.getOutputStream();
+                    JasperExportManager.exportReportToPdfStream(jp, os);
+                    os.flush();
+                    os.close();
+                    break;
+
+                case "xlsx":
+                    response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    response.addHeader("Content-disposition", "attachment; filename=Lista usuarios.xlsx");
+
+                    JRXlsxExporter exporter = new JRXlsxExporter(); // initialize exporter 
+                    exporter.setExporterInput(new SimpleExporterInput(jp)); // set compiled report as input
+                    exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
+
+                    SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+                    configuration.setOnePagePerSheet(true); // setup configuration
+                    configuration.setDetectCellType(true);
+                    configuration.setSheetNames(new String[]{"noIngreso"});
+                    exporter.setConfiguration(configuration); // set configuration    
+                    exporter.exportReport();
+                    break;
+
+                case "docx":
+                    response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+                    response.addHeader("Content-disposition", "attachment; filename=Lista usuarios.docx");
+
+                    JRDocxExporter exporterDoc = new JRDocxExporter(); // initialize exporter 
+                    exporterDoc.setExporterInput(new SimpleExporterInput(jp)); // set compiled report as input
+                    exporterDoc.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
+
+                    SimpleDocxExporterConfiguration configurationDoc = new SimpleDocxExporterConfiguration();
+                    configurationDoc.setMetadataAuthor("Descanso y placer."); // setup configuration
+                    configurationDoc.setMetadataTitle("Reporte de no ingresos");
+                    configurationDoc.setMetadataSubject("Listado de reservas");
+
+                    exporterDoc.setConfiguration(configurationDoc); // set configuration    
+                    exporterDoc.exportReport();
+                    break;
+
+                default:
+                    System.err.println(" No se encontro este caso :: CategoriaView::generarArchivo");
+                    break;
+
+            }
+            facesContext.responseComplete();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ReservaView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public List<Reserva> reservasEmpleado() {
@@ -427,6 +589,22 @@ public class ReservaView implements Serializable {
 
     public void setHotTemporal(Hotel hotTemporal) {
         this.hotTemporal = hotTemporal;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
 
 }

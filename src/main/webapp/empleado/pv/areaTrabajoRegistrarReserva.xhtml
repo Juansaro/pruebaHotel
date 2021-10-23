@@ -30,7 +30,7 @@
                             </h:selectOneMenu>
                             Habitacion
                             <h:selectOneMenu class="form-control" id="habitacion" value="#{reservaView.habitacion.idHabitacion}" required="true">
-                                <f:selectItems value="#{reservaView.habitaciones}" var="hab" itemLabel="Tipo: #{hab.fkTipo.descripcion} Estado: #{hab.estadoHabitacionIdEstado.descripcion}" itemValue="#{hab.idHabitacion}"/>
+                                <f:selectItems value="#{reservaView.habitaciones}" var="hab" itemLabel="Tipo: #{hab.fkTipo.descripcion} Estado: #{hab.estadoHabitacionIdEstado.descripcion} / Telefono: #{hab.telefono == 1?'si':'no'} / Baño: #{hab.bano == 1?'si':'no'} / Calefacción: #{hab.calefaccion == 1?'si':'no'}" itemValue="#{hab.idHabitacion}"/>
                             </h:selectOneMenu>
                             Fecha entrada:
                             <br/>
@@ -89,12 +89,6 @@
                                             action="#{reservaView.guardarHotelTemporal(hot)}"
                                             >
                                             <div class="card text-dark">
-
-                                                <h:graphicImage
-                                                    style="height: 32px; width: 32px"
-                                                    class="img-circle elevation-2"
-                                                    value="/ImgProServlet/#{hot.hotelFoto}">
-                                                </h:graphicImage>
 
                                                 <div class="card-header border-0">
                                                     <h3 class="card-title">#{hot.nombre}</h3>

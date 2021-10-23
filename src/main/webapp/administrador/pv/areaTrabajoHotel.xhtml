@@ -21,16 +21,7 @@
                     <p:growl id="growl" life="3000"/>
                     <p:dataTable id="tabla" emptyMessage="Ningun hotel registrado" value="#{hotelView.hoteles}" 
                                  var="h" paginator="true"  rows="10" rowSelectMode="add" paginatorPosition="bottom"
-                                 >
-                        
-                        <p:column headerText="Foto" filterMatchMode="contains" >
-                            <h:graphicImage
-                                style="height: 42px; width: 42px"
-                                class="img-circle elevation-2"
-                                id="fotoPerfil"
-                                value="/ImgServlet/#{h.hotelFoto}">
-                            </h:graphicImage>
-                        </p:column>
+                                 >                 
                         
                         <p:column headerText="Nombre" filterBy="#{h.nombre}" filterMatchMode="contains" >
                             <h:outputText value="#{h.nombre}"  /> 
@@ -59,14 +50,6 @@
                         <p:column headerText=" " exportable="false" >
 
                             <h:commandLink class="btn btn-danger" action="#{hotelView.eliminarHotel(h)}" value="Eliminar"/>
-
-                            <h:commandButton html5:data-bs-toggle="modal"
-                                             html5:data-bs-target="#exampleModalFoto" 
-                                             action="#{hotelView.guardarTemporal(h)}" 
-                                             class="btn btn-primary" 
-                                             value="Foto" >
-                                <f:ajax render=":formActualizarFoto"> </f:ajax>
-                            </h:commandButton>
 
                         </p:column>  
 

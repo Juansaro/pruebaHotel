@@ -10,21 +10,42 @@ import com.hotel.ejb.HotelFacadeLocal;
 import com.hotel.model.Ciudad;
 import com.hotel.model.Hotel;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Part;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.export.SimpleDocxExporterConfiguration;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 import org.primefaces.PrimeFaces;
 import org.primefaces.shaded.commons.io.FilenameUtils;
 
@@ -45,6 +66,9 @@ public class HotelView implements Serializable{
     
     private List<Hotel> hoteles;
     private List<Ciudad> ciudades;
+    
+    @Resource(lookup = "jdbc/hoteles")
+    DataSource dataSource;
     
     private Hotel hotelReg = new Hotel();
     private Hotel hotelTemporal = new Hotel();
@@ -134,7 +158,370 @@ public class HotelView implements Serializable{
 
     }
 
+    public void generarArchivoHabitacionOcupada(String tipoArchivo) throws JRException, IOException {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext context = facesContext.getExternalContext();
+        HttpServletResponse response = (HttpServletResponse) context.getResponse();
+        String nombreReporte = "";
+        String nombreReporteDescarga = "";
 
+        try {
+
+            Map parametros = new HashMap();
+
+            parametros.put("hotIn", hotelTemporal.getIdHotel());
+            nombreReporte = "habitacionesOff";
+
+            File jasper = new File(context.getRealPath("/reportes/" + nombreReporte + ".jasper"));
+
+            JasperPrint jp = JasperFillManager.fillReport(jasper.getPath(), parametros, dataSource.getConnection());
+            switch (tipoArchivo) {
+                case "pdf":
+                    response.setContentType("application/pdf");
+                    response.addHeader("Content-disposition", "attachment; filename=" + nombreReporte + ".pdf");
+                    OutputStream os = response.getOutputStream();
+                    JasperExportManager.exportReportToPdfStream(jp, os);
+                    os.flush();
+                    os.close();
+                    break;
+
+                case "xlsx":
+                    response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    response.addHeader("Content-disposition", "attachment; filename=Lista habitaciones.xlsx");
+
+                    JRXlsxExporter exporter = new JRXlsxExporter(); // initialize exporter 
+                    exporter.setExporterInput(new SimpleExporterInput(jp)); // set compiled report as input
+                    exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
+
+                    SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+                    configuration.setOnePagePerSheet(true); // setup configuration
+                    configuration.setDetectCellType(true);
+                    configuration.setSheetNames(new String[]{"habitaciones"});
+                    exporter.setConfiguration(configuration); // set configuration    
+                    exporter.exportReport();
+                    break;
+
+                case "docx":
+                    response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+                    response.addHeader("Content-disposition", "attachment; filename=Lista usuarios.docx");
+
+                    JRDocxExporter exporterDoc = new JRDocxExporter(); // initialize exporter 
+                    exporterDoc.setExporterInput(new SimpleExporterInput(jp)); // set compiled report as input
+                    exporterDoc.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
+
+                    SimpleDocxExporterConfiguration configurationDoc = new SimpleDocxExporterConfiguration();
+                    configurationDoc.setMetadataAuthor("Descanso y placer."); // setup configuration
+                    configurationDoc.setMetadataTitle("Reporte de no ingresos");
+                    configurationDoc.setMetadataSubject("Listado de habitaciones");
+
+                    exporterDoc.setConfiguration(configurationDoc); // set configuration    
+                    exporterDoc.exportReport();
+                    break;
+
+                default:
+                    System.err.println(" No se encontro este caso :: CategoriaView::generarArchivo");
+                    break;
+
+            }
+            facesContext.responseComplete();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ReservaView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void generarArchivoHabitacionTotal(String tipoArchivo) throws JRException, IOException {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext context = facesContext.getExternalContext();
+        HttpServletResponse response = (HttpServletResponse) context.getResponse();
+        String nombreReporte = "";
+        String nombreReporteDescarga = "";
+
+        try {
+
+            Map parametros = new HashMap();
+
+            parametros.put("hotIn", hotelTemporal.getIdHotel());
+            nombreReporte = "habitacionesOn";
+
+            File jasper = new File(context.getRealPath("/reportes/" + nombreReporte + ".jasper"));
+
+            JasperPrint jp = JasperFillManager.fillReport(jasper.getPath(), parametros, dataSource.getConnection());
+            switch (tipoArchivo) {
+                case "pdf":
+                    response.setContentType("application/pdf");
+                    response.addHeader("Content-disposition", "attachment; filename=" + nombreReporte + ".pdf");
+                    OutputStream os = response.getOutputStream();
+                    JasperExportManager.exportReportToPdfStream(jp, os);
+                    os.flush();
+                    os.close();
+                    break;
+
+                case "xlsx":
+                    response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    response.addHeader("Content-disposition", "attachment; filename=Lista habitaciones.xlsx");
+
+                    JRXlsxExporter exporter = new JRXlsxExporter(); // initialize exporter 
+                    exporter.setExporterInput(new SimpleExporterInput(jp)); // set compiled report as input
+                    exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
+
+                    SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+                    configuration.setOnePagePerSheet(true); // setup configuration
+                    configuration.setDetectCellType(true);
+                    configuration.setSheetNames(new String[]{"habitaciones"});
+                    exporter.setConfiguration(configuration); // set configuration    
+                    exporter.exportReport();
+                    break;
+
+                case "docx":
+                    response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+                    response.addHeader("Content-disposition", "attachment; filename=Lista usuarios.docx");
+
+                    JRDocxExporter exporterDoc = new JRDocxExporter(); // initialize exporter 
+                    exporterDoc.setExporterInput(new SimpleExporterInput(jp)); // set compiled report as input
+                    exporterDoc.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
+
+                    SimpleDocxExporterConfiguration configurationDoc = new SimpleDocxExporterConfiguration();
+                    configurationDoc.setMetadataAuthor("Descanso y placer."); // setup configuration
+                    configurationDoc.setMetadataTitle("Reporte de no ingresos");
+                    configurationDoc.setMetadataSubject("Listado de habitaciones");
+
+                    exporterDoc.setConfiguration(configurationDoc); // set configuration    
+                    exporterDoc.exportReport();
+                    break;
+
+                default:
+                    System.err.println(" No se encontro este caso :: CategoriaView::generarArchivo");
+                    break;
+
+            }
+            facesContext.responseComplete();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ReservaView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    
+    public void generarArchivoEstadistico(String tipoArchivo) throws JRException, IOException {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext context = facesContext.getExternalContext();
+        HttpServletResponse response = (HttpServletResponse) context.getResponse();
+        String nombreReporte = "";
+        String nombreReporteDescarga = "";
+
+        try {
+
+            Map parametros = new HashMap();
+
+            parametros.put("hotIn", hotelTemporal.getIdHotel());
+            nombreReporte = "estadisticoTipoHab";
+
+            File jasper = new File(context.getRealPath("/reportes/" + nombreReporte + ".jasper"));
+
+            JasperPrint jp = JasperFillManager.fillReport(jasper.getPath(), parametros, dataSource.getConnection());
+            switch (tipoArchivo) {
+                case "pdf":
+                    response.setContentType("application/pdf");
+                    response.addHeader("Content-disposition", "attachment; filename=" + nombreReporte + ".pdf");
+                    OutputStream os = response.getOutputStream();
+                    JasperExportManager.exportReportToPdfStream(jp, os);
+                    os.flush();
+                    os.close();
+                    break;
+
+                case "xlsx":
+                    response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    response.addHeader("Content-disposition", "attachment; filename=Lista habitaciones.xlsx");
+
+                    JRXlsxExporter exporter = new JRXlsxExporter(); // initialize exporter 
+                    exporter.setExporterInput(new SimpleExporterInput(jp)); // set compiled report as input
+                    exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
+
+                    SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+                    configuration.setOnePagePerSheet(true); // setup configuration
+                    configuration.setDetectCellType(true);
+                    configuration.setSheetNames(new String[]{"habitaciones"});
+                    exporter.setConfiguration(configuration); // set configuration    
+                    exporter.exportReport();
+                    break;
+
+                case "docx":
+                    response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+                    response.addHeader("Content-disposition", "attachment; filename=Lista usuarios.docx");
+
+                    JRDocxExporter exporterDoc = new JRDocxExporter(); // initialize exporter 
+                    exporterDoc.setExporterInput(new SimpleExporterInput(jp)); // set compiled report as input
+                    exporterDoc.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
+
+                    SimpleDocxExporterConfiguration configurationDoc = new SimpleDocxExporterConfiguration();
+                    configurationDoc.setMetadataAuthor("Descanso y placer."); // setup configuration
+                    configurationDoc.setMetadataTitle("Reporte de no ingresos");
+                    configurationDoc.setMetadataSubject("Listado de habitaciones");
+
+                    exporterDoc.setConfiguration(configurationDoc); // set configuration    
+                    exporterDoc.exportReport();
+                    break;
+
+                default:
+                    System.err.println(" No se encontro este caso :: CategoriaView::generarArchivo");
+                    break;
+
+            }
+            facesContext.responseComplete();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ReservaView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    public void generarArchivoEstadisticoSuite(String tipoArchivo) throws JRException, IOException {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext context = facesContext.getExternalContext();
+        HttpServletResponse response = (HttpServletResponse) context.getResponse();
+        String nombreReporte = "";
+        String nombreReporteDescarga = "";
+
+        try {
+
+            Map parametros = new HashMap();
+
+            parametros.put("hotIn", hotelTemporal.getIdHotel());
+            nombreReporte = "suite";
+
+            File jasper = new File(context.getRealPath("/reportes/" + nombreReporte + ".jasper"));
+
+            JasperPrint jp = JasperFillManager.fillReport(jasper.getPath(), parametros, dataSource.getConnection());
+            switch (tipoArchivo) {
+                case "pdf":
+                    response.setContentType("application/pdf");
+                    response.addHeader("Content-disposition", "attachment; filename=" + nombreReporte + ".pdf");
+                    OutputStream os = response.getOutputStream();
+                    JasperExportManager.exportReportToPdfStream(jp, os);
+                    os.flush();
+                    os.close();
+                    break;
+
+                case "xlsx":
+                    response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    response.addHeader("Content-disposition", "attachment; filename=Lista habitaciones.xlsx");
+
+                    JRXlsxExporter exporter = new JRXlsxExporter(); // initialize exporter 
+                    exporter.setExporterInput(new SimpleExporterInput(jp)); // set compiled report as input
+                    exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
+
+                    SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+                    configuration.setOnePagePerSheet(true); // setup configuration
+                    configuration.setDetectCellType(true);
+                    configuration.setSheetNames(new String[]{"habitaciones"});
+                    exporter.setConfiguration(configuration); // set configuration    
+                    exporter.exportReport();
+                    break;
+
+                case "docx":
+                    response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+                    response.addHeader("Content-disposition", "attachment; filename=Lista usuarios.docx");
+
+                    JRDocxExporter exporterDoc = new JRDocxExporter(); // initialize exporter 
+                    exporterDoc.setExporterInput(new SimpleExporterInput(jp)); // set compiled report as input
+                    exporterDoc.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
+
+                    SimpleDocxExporterConfiguration configurationDoc = new SimpleDocxExporterConfiguration();
+                    configurationDoc.setMetadataAuthor("Descanso y placer."); // setup configuration
+                    configurationDoc.setMetadataTitle("Reporte de no ingresos");
+                    configurationDoc.setMetadataSubject("Listado de habitaciones");
+
+                    exporterDoc.setConfiguration(configurationDoc); // set configuration    
+                    exporterDoc.exportReport();
+                    break;
+
+                default:
+                    System.err.println(" No se encontro este caso :: CategoriaView::generarArchivo");
+                    break;
+
+            }
+            facesContext.responseComplete();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ReservaView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void generarArchivoEstadisticoDoble(String tipoArchivo) throws JRException, IOException {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext context = facesContext.getExternalContext();
+        HttpServletResponse response = (HttpServletResponse) context.getResponse();
+        String nombreReporte = "";
+        String nombreReporteDescarga = "";
+
+        try {
+
+            Map parametros = new HashMap();
+
+            parametros.put("hotIn", hotelTemporal.getIdHotel());
+            nombreReporte = "doble";
+
+            File jasper = new File(context.getRealPath("/reportes/" + nombreReporte + ".jasper"));
+
+            JasperPrint jp = JasperFillManager.fillReport(jasper.getPath(), parametros, dataSource.getConnection());
+            switch (tipoArchivo) {
+                case "pdf":
+                    response.setContentType("application/pdf");
+                    response.addHeader("Content-disposition", "attachment; filename=" + nombreReporte + ".pdf");
+                    OutputStream os = response.getOutputStream();
+                    JasperExportManager.exportReportToPdfStream(jp, os);
+                    os.flush();
+                    os.close();
+                    break;
+
+                case "xlsx":
+                    response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                    response.addHeader("Content-disposition", "attachment; filename=Lista habitaciones.xlsx");
+
+                    JRXlsxExporter exporter = new JRXlsxExporter(); // initialize exporter 
+                    exporter.setExporterInput(new SimpleExporterInput(jp)); // set compiled report as input
+                    exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
+
+                    SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+                    configuration.setOnePagePerSheet(true); // setup configuration
+                    configuration.setDetectCellType(true);
+                    configuration.setSheetNames(new String[]{"habitaciones"});
+                    exporter.setConfiguration(configuration); // set configuration    
+                    exporter.exportReport();
+                    break;
+
+                case "docx":
+                    response.setContentType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+                    response.addHeader("Content-disposition", "attachment; filename=Lista usuarios.docx");
+
+                    JRDocxExporter exporterDoc = new JRDocxExporter(); // initialize exporter 
+                    exporterDoc.setExporterInput(new SimpleExporterInput(jp)); // set compiled report as input
+                    exporterDoc.setExporterOutput(new SimpleOutputStreamExporterOutput(response.getOutputStream()));
+
+                    SimpleDocxExporterConfiguration configurationDoc = new SimpleDocxExporterConfiguration();
+                    configurationDoc.setMetadataAuthor("Descanso y placer."); // setup configuration
+                    configurationDoc.setMetadataTitle("Reporte de no ingresos");
+                    configurationDoc.setMetadataSubject("Listado de habitaciones");
+
+                    exporterDoc.setConfiguration(configurationDoc); // set configuration    
+                    exporterDoc.exportReport();
+                    break;
+
+                default:
+                    System.err.println(" No se encontro este caso :: CategoriaView::generarArchivo");
+                    break;
+
+            }
+            facesContext.responseComplete();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ReservaView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public Ciudad getCiudad() {
         return ciudad;
     }

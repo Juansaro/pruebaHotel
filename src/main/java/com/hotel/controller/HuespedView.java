@@ -80,6 +80,8 @@ public class HuespedView implements Serializable {
         } catch (Exception e) {
         }
     }
+    
+    
 
     public Ciudad getCiudad() {
         return ciudad;
