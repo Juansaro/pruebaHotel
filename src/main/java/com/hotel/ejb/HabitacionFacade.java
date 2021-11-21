@@ -88,7 +88,6 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
         } catch (Exception e) {
             return false;
         }
-
     }
     
     @Override

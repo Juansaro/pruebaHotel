@@ -12,7 +12,9 @@
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registrar">
+                <button type="button" class="btn btn-success" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#registrar">
                     Registrar usuario.
                 </button>
 
@@ -199,7 +201,7 @@
                     </div>
                     <h:form id="formActualizar">
                         <div class="modal-body">
-                            <div class="row">                                
+                            <div class="row">           
                                 <c:forEach items="#{reservaView.hoteles}" var="hot" varStatus="act">
                                     <div class="col-lg-4">
                                         <h:commandLink
