@@ -68,27 +68,24 @@ public class HabitacionView implements Serializable {
     public void registrarHabitacion() {
 
         try {
-            int res = 0;
-            listaHabitaciones = habitacionFacadeLocal.leerNumeroHabitacion(fk_hotel);
-            for (Habitacion hab : listaHabitaciones) {
-                if (hab.getNumeroHabitacion() == habReg.getNumeroHabitacion()) {
-                    res = 1;
-                } else {
-                    res = 0;
-                }
-            }
-
-            if (res == 0) {
+            habTemporal = habitacionFacadeLocal.leerNumeroHabitacion(fk_hotel, habReg.getNumeroHabitacion());
+     
+            if (habTemporal == null) {
                 if (habitacionFacadeLocal.crearHabitacion(habReg, fk_tipo_habitacion, fk_hotel)) {
                     habReg = new Habitacion();
-
+                    habTemporal = new Habitacion();
                     habitaciones = habitacionFacadeLocal.findAll();
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Habitación registrada", "Habitación registrada"));
                 } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
+                    habReg = new Habitacion();
+                    habTemporal = new Habitacion();
+                    habitaciones = habitacionFacadeLocal.findAll();
                 }
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Número de habitación repetido", "Número de habitación repetido"));
+                habReg = new Habitacion();
+                habitaciones = habitacionFacadeLocal.findAll();
             }
 
         } catch (Exception e) {
@@ -99,12 +96,10 @@ public class HabitacionView implements Serializable {
 
     public void eliminarHabitacion(Habitacion ha) {
         try {
-            if (habitacionFacadeLocal.eliminarHabitacion(ha.getIdHabitacion())) {
-                habitaciones = habitacionFacadeLocal.leerTodos();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Habitación Eliminada", "Habitación eliminada"));
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
-            }
+            habitacionFacadeLocal.remove(ha);
+            habitaciones = habitacionFacadeLocal.leerTodos();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Habitación Eliminada", "Habitación eliminada"));
+
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error del componente", "Error del componente"));
         }

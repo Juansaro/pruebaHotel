@@ -41,5 +41,7 @@ public interface UsuarioFacadeLocal {
     public Usuario validarUsuario(int docIn, String claveIn);
 
     public List<Usuario> leerTodos();
+
+    public Usuario encontrarUsuarioCorreo(String correo);
     
 }

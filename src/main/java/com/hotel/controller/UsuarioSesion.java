@@ -154,25 +154,33 @@ public class UsuarioSesion implements Serializable {
 
     public void registrarUsuario() {
         usuReg.setContrasena(generatePassayPassword());
-        if (usuarioFacadeLocal.registrarUsuario(usuReg, fk_rol)) {
-            usuClaveMail.correoReserva(
-                    usuReg.getNombre(),
-                    usuReg.getApellido(),
-                    usuReg.getCorreo(),
-                    usuReg.getDocumento(),
-                    usuReg.getContrasena()
-            );
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-                    "Usuario registrado",
-                    "Usuario registrado"
-            ));
-            usuReg = new Usuario();
-            usuarios = usuarioFacadeLocal.leerTodos();
+        usuTemporal = usuarioFacadeLocal.encontrarUsuarioCorreo(usuReg.getCorreo());
+        if (usuTemporal == null) {
+            if (usuarioFacadeLocal.registrarUsuario(usuReg, fk_rol)) {
+                usuClaveMail.correoReserva(
+                        usuReg.getNombre(),
+                        usuReg.getApellido(),
+                        usuReg.getCorreo(),
+                        usuReg.getDocumento(),
+                        usuReg.getContrasena()
+                );
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "Usuario registrado",
+                        "Usuario registrado"
+                ));
+                usuReg = new Usuario();
+                usuarios = usuarioFacadeLocal.leerTodos();
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                        "Error de registro",
+                        "Error de registro"
+                ));
+            }
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL,
-                    "Error de registro",
-                    "Error de registro"
-            ));
+                        "Error de registro",
+                        "Error de registro"
+                ));
         }
     }
 
@@ -201,7 +209,7 @@ public class UsuarioSesion implements Serializable {
     public void eliminarUsuario(Usuario u) {
         try {
             if (usuarioFacadeLocal.eliminarUsuario(u)) {
-                usuarios = usuarioFacadeLocal.findAll();
+                usuarios = usuarioFacadeLocal.leerTodos();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
                         "Usuario eliminado",
                         "Usuario eliminado"

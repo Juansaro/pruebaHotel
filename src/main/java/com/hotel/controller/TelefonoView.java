@@ -47,7 +47,7 @@ public class TelefonoView implements Serializable {
 
     public void registrarTelefono() {
         if (telefonoFacadeLocal.registrarTelefono(telReg, fk_hotel)) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Hotel registrado", "Hotel registrado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Teléfono registrado", "Teléfono registrado"));
             telReg = new Telefono();
             telefonos = telefonoFacadeLocal.leerTodos();
         } else {
@@ -79,7 +79,7 @@ public class TelefonoView implements Serializable {
         try {
             if (telefonoFacadeLocal.eliminarTelefono(t.getIdTelefono())) {
                 telefonos = telefonoFacadeLocal.leerTodos();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Hotel eliminado", "Hotel eliminado"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Teléfono eliminado", "Teléfono eliminado"));
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de eliminación", "Error de eliminación"));
             }

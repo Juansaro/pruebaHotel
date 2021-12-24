@@ -36,9 +36,10 @@ public class HotelFacade extends AbstractFacade<Hotel> implements HotelFacadeLoc
     @Override
     public boolean registrarHotel(Hotel hotIn, int fk_ciudad) {
         try {
-            Query qr = em.createNativeQuery("INSERT INTO hotel (nombre, fk_ciudad) VALUES (?, ?)");
+            Query qr = em.createNativeQuery("INSERT INTO hotel (nombre, fk_ciudad, direccion) VALUES (?, ?, ?)");
             qr.setParameter(1, hotIn.getNombre());
             qr.setParameter(2, fk_ciudad);
+            qr.setParameter(3, hotIn.getDireccion());
             qr.executeUpdate();
             return true;
         } catch (Exception e) {

@@ -104,6 +104,13 @@
                                 <f:ajax render=":formEditar"> </f:ajax>
                             </h:commandButton>
                         </p:column>
+                        
+                        <p:column headerText=" " exportable="false" >
+                            <h:commandButton class="btn btn-danger"
+                                             action="#{usuarioSesion.eliminarUsuario(u)}" 
+                                             value="Eliminar" >
+                            </h:commandButton>
+                        </p:column>
 
                     </p:dataTable>
                 </h:form>

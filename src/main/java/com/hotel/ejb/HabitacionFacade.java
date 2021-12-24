@@ -190,12 +190,13 @@ public class HabitacionFacade extends AbstractFacade<Habitacion> implements Habi
     
     
     @Override
-    public List<Habitacion> leerNumeroHabitacion(int h){
+    public Habitacion leerNumeroHabitacion(int h, int numIn){
         try {
             em.getEntityManagerFactory().getCache().evictAll();
-            Query q = em.createQuery("SELECT ha FROM Habitacion ha WHERE ha.hotelIdHotel.idHotel = :h");
+            Query q = em.createQuery("SELECT ha FROM Habitacion ha WHERE ha.hotelIdHotel.idHotel = :h AND ha.numeroHabitacion = :numero");
             q.setParameter("h", h);
-            return q.getResultList();
+            q.setParameter("numero", numIn);
+            return (Habitacion) q.getSingleResult();
         } catch (Exception e) {
             return null;
         }

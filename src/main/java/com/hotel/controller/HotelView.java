@@ -84,9 +84,10 @@ public class HotelView implements Serializable{
     
     public void registrarHotel(){
         if(hotelFacadeLocal.registrarHotel(hotelReg, fk_ciudad)){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Hotel registrado", "Hotel registrado"));
-            hotelReg = new Hotel();
+            
             hoteles = hotelFacadeLocal.leerTodos();
+            hotelReg = new Hotel();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Hotel registrado", "Hotel registrado"));
         }else{
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Error de registro", "Error de registro"));
         }

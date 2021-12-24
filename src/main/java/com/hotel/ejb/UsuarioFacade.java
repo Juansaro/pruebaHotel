@@ -124,5 +124,17 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
             return null;
         }
     }
+    
+    @Override
+    public Usuario encontrarUsuarioCorreo(String correo){
+        Query q = em.createNamedQuery("Usuario.findByCorreo", Usuario.class).setParameter("correo", correo);
+        
+        List<Usuario> listado = q.getResultList();
+        
+        if(!listado.isEmpty()){
+            return listado.get(0);
+        }
+        return null;
+    }
 
 }
